@@ -26,6 +26,8 @@ int main() {
 	size_t bufsize = 256;
 	size_t characters;
 
+	char *exit_char = "exit\n";
+
 
 	/* Main Function Variables */
 	line_buffer = (char *)malloc(bufsize * sizeof(char));
@@ -41,8 +43,8 @@ int main() {
 		printf(">>>\n");
 		characters = getline(&line_buffer, &bufsize, stdin);
 		
-		if !(strcmp('exit', buffer)){
-			exit(0)
+		if (!strcmp(exit_char, line_buffer)){
+			exit(0);
 		}
 		
 		printf(" you typed %zu characters \n", characters);
