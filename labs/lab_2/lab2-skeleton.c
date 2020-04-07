@@ -12,6 +12,7 @@ https://c-for-dummies.com/blog/?p=1112
 */
 
 /*-------------------------Preprocessor Directives---------------------------*/
+#define  _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
