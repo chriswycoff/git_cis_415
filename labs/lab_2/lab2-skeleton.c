@@ -40,11 +40,11 @@ int main() {
 	while(1){
 		printf(">>>\n");
 		characters = getline(&line_buffer, &bufsize, stdin);
-		/*
+		
 		if !(strcmp('exit', buffer)){
 			exit(0)
 		}
-		*/
+		
 		printf(" you typed %zu characters \n", characters);
 
 		printf("%s ,is what you typed \n", line_buffer);
@@ -55,7 +55,7 @@ int main() {
 		/* Display each token */
 		
 		/* If the user entered <exit> then exit the loop */
-		exit(0);
+		//exit(0);
 	}
 	
 	/*Free the allocated memory*/
