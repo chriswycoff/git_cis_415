@@ -28,15 +28,23 @@ int exit_function(char * line_buffer){
 
 /*-----------------------------Program Main----------------------------------*/
 int main(int argc, char *argv[]) {
+
+	if (argc != 2){
+		printf("USAGE: ./lab_2_file_io <filename> \n");
+		exit(1);
+	}
 	setbuf(stdout, NULL);
 	
 	char *line_buffer;
 	size_t bufsize = 2048;
-	size_t characters;
+	//size_t characters;
 
-	char *exit_char = "exit";
+	//char *exit_char = "exit";
+	// file stuff
+	FILE *fp ;
+	// end file stuff
 
-
+	fp = fopen(argv[1], "r");
 	/* Main Function Variables */
 	line_buffer = (char *)malloc(bufsize * sizeof(char));
 
@@ -46,10 +54,41 @@ int main(int argc, char *argv[]) {
 		printf("ERROR in allocating buffer\n");
 		exit(1);
 	}
+
+
+	while(fgets(line_buffer, bufsize, fp) != NULL) {
+
+		char* token = strtok_r(line_buffer, " ", &line_buffer);
+
+		//char* next_token = "hello";
+
+		int token_counter = 0;
+		
+		if (token != NULL){
+			printf("\n");
+		}
+		
+		while(token != NULL){
+			
+			if (*token == ' '){
+			//printf("T%d%s\n", token_counter, token);
+			token = strtok_r(NULL, " ",&line_buffer);
+			}
+
+			
+			printf("T%d: %s\n", token_counter, token);
+			token = strtok_r(NULL, " ",&line_buffer);
+			//next_token = strtok_r(NULL, " ",&line_buffer);
+			token_counter += 1; 
+		}
+
+	}
+
 	/* Allocate memory for the input buffer. */
 	
 
 	/*main run loop*/
+	/*
 	while(1){
 		printf(">>>");
 
@@ -74,20 +113,7 @@ int main(int argc, char *argv[]) {
 		if (token != NULL){
 			printf("\n");
 		}
-
-		while(token != NULL){
-			flag = 1;
-			if (*token == ' '){
-			//printf("T%d%s\n", token_counter, token);
-			token = strtok_r(NULL, " ",&line_buffer);
-			}
-
-			flag = 1;
-			printf("T%d: %s\n", token_counter, token);
-			token = strtok_r(NULL, " ",&line_buffer);
-			//next_token = strtok_r(NULL, " ",&line_buffer);
-			token_counter += 1; 
-		}
+		*/
 
 		//printf(" you typed %zu characters \n", characters);
 
@@ -100,9 +126,11 @@ int main(int argc, char *argv[]) {
 		
 		/* If the user entered <exit> then exit the loop */
 		//exit(0);
-	}
+	//}
 	
 	/*Free the allocated memory*/
+	fclose (fp); 
+	exit_function(original_line);
 
 	return 1;
 }
