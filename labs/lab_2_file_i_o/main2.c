@@ -27,7 +27,7 @@ int exit_function(char * line_buffer){
 }
 
 /*-----------------------------Program Main----------------------------------*/
-int main() {
+int main(int argc, char *argv[]) {
 	setbuf(stdout, NULL);
 	
 	char *line_buffer;
