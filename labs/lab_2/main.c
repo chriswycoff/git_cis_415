@@ -66,40 +66,28 @@ int main() {
 
 		char* token = strtok_r(line_buffer, " ", &line_buffer);
 
-		//char* next_token = "hello";
+	
 
 		int token_counter = 0;
 
-		int flag = 0;
 		if (token != NULL){
 			printf("\n");
 		}
 
 		while(token != NULL){
-			flag = 1;
 			if (*token == ' '){
-			//printf("T%d%s\n", token_counter, token);
+			
 			token = strtok_r(NULL, " ",&line_buffer);
 			}
 
-			flag = 1;
+			
 			printf("T%d: %s\n", token_counter, token);
 			token = strtok_r(NULL, " ",&line_buffer);
-			//next_token = strtok_r(NULL, " ",&line_buffer);
+			
 			token_counter += 1; 
 		}
 
-		//printf(" you typed %zu characters \n", characters);
 
-		//printf("%s ,is what you typed \n", line_buffer);
-		/* Print >>> then get the input string */
-
-		/* Tokenize the input string */
-
-		/* Display each token */
-		
-		/* If the user entered <exit> then exit the loop */
-		//exit(0);
 	}
 	
 	/*Free the allocated memory*/
