@@ -1,7 +1,7 @@
 sources = $(wildcard *.c)
 objects = $(addsuffix .o, $(basename $(sources)))
 flags = -g -W -Wall -std=c11 -DDEBUG=0 -DTEST=0
-target = lab_2_file_io
+target = main2
 
 
 $(target) : $(objects)

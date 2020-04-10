@@ -22,7 +22,6 @@ https://www.geeksforgeeks.org/strtok-strtok_r-functions-c-examples/
 
 int exit_function(char * line_buffer){
 	free(line_buffer);
-	printf("\n");
 	exit(0);
 }
 
@@ -42,9 +41,14 @@ int main(int argc, char *argv[]) {
 	//char *exit_char = "exit";
 	// file stuff
 	FILE *fp ;
-	// end file stuff
+	FILE *new_file;
 
 	fp = fopen(argv[1], "r");
+
+	new_file = fopen("output.txt", "w");
+
+	// end file stuff
+
 	/* Main Function Variables */
 	line_buffer = (char *)malloc(bufsize * sizeof(char));
 
@@ -64,10 +68,6 @@ int main(int argc, char *argv[]) {
 
 		int token_counter = 0;
 		
-		if (token != NULL){
-			printf("\n");
-		}
-		
 		while(token != NULL){
 			
 			if (*token == ' '){
@@ -76,7 +76,7 @@ int main(int argc, char *argv[]) {
 			}
 
 			
-			printf("T%d: %s\n", token_counter, token);
+			fprintf(new_file,"T%d: %s\n", token_counter, token);
 			token = strtok_r(NULL, " ",&line_buffer);
 			//next_token = strtok_r(NULL, " ",&line_buffer);
 			token_counter += 1; 
@@ -84,49 +84,6 @@ int main(int argc, char *argv[]) {
 
 	}
 
-	/* Allocate memory for the input buffer. */
-	
-
-	/*main run loop*/
-	/*
-	while(1){
-		printf(">>>");
-
-		characters = getline(&line_buffer, &bufsize, stdin);
-
-		if (line_buffer[characters-1] == '\n'){
-			line_buffer[characters-1] = '\0';
-			characters -= 1;
-		}
-		
-		if (!strcmp(exit_char, line_buffer)){
-			exit_function(original_line);
-		}
-
-		char* token = strtok_r(line_buffer, " ", &line_buffer);
-
-		//char* next_token = "hello";
-
-		int token_counter = 0;
-
-		int flag = 0;
-		if (token != NULL){
-			printf("\n");
-		}
-		*/
-
-		//printf(" you typed %zu characters \n", characters);
-
-		//printf("%s ,is what you typed \n", line_buffer);
-		/* Print >>> then get the input string */
-
-		/* Tokenize the input string */
-
-		/* Display each token */
-		
-		/* If the user entered <exit> then exit the loop */
-		//exit(0);
-	//}
 	
 	/*Free the allocated memory*/
 	fclose (fp); 
