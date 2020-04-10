@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
 	}
 
 
-	while(fgets(line_buffer, bufsize, fp) != NULL) {
+	while(getline(&line_buffer, &bufsize, fp) >= 0) {
 
 		char* token = strtok_r(line_buffer, " ", &line_buffer);
 
