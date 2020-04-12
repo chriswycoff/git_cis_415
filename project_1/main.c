@@ -17,6 +17,12 @@ https://www.geeksforgeeks.org/strtok-strtok_r-functions-c-examples/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/syscall.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <errno.h>
 #include "command.h"
 /*---------------------------------------------------------------------------*/
 
@@ -28,6 +34,15 @@ int exit_function(char * line_buffer){
 }
 
 int file_io_mode(int argc, char *argv[]) {
+
+	int fd_1 = open("output.txt", O_CREAT|O_RDWR, 0666);
+
+	dup2(fd_1, 1); 
+
+	//showCurrentDir(); 
+	//listDir(); 
+	makeDir("my_dir");
+	exit(1);
 
 	if (argc != 3){
 		printf("USAGE: ./lab_2_file_io -f <filename> \n");
@@ -71,9 +86,7 @@ int file_io_mode(int argc, char *argv[]) {
 		exit(1);
 	}
 
-
 	while(getline(&line_buffer, &bufsize, fp) >= 0) {
-
 
 		char* token = strtok_r(line_buffer, " ", &line_buffer);
 
@@ -116,34 +129,33 @@ int main(int argc, char *argv[]) {
 
 	char *filename = "file";
 
-	
+	//listDir(); //for the ls command
 
-	listDir(); //for the ls command
+	makeDir("my_dir_1");
+	exit(1);
 
-	/*
+	//showCurrentDir(); //for the pwd command
 
-	showCurrentDir(); //for the pwd command
+	//makeDir(dirName); //for the mkdir command
 
-	makeDir(dirName); //for the mkdir command
+	//changeDir(dirName); //for the cd command
 
-	changeDir(dirName); //for the cd command
+	//copyFile(sourcePath, destinationPath); //for the cp command
 
-	copyFile(sourcePath, destinationPath); //for the cp command
+	//moveFile(sourcePath, destinationPath); //for the mv command
 
-	moveFile(sourcePath, destinationPath); //for the mv command
+	//deleteFile(filename); //for the rm command
 
-	deleteFile(filename); //for the rm command
+	//displayFile(filename); //for the cat command
 
-	displayFile(filename); //for the cat command
-
-	*/
+	file_io_mode(argc, argv);
 
 	if (argc == 3){
 		file_io_mode(argc, argv);
 	}
 
 	if (argc > 3 || argc == 2){
-		printf("USAGE: ./pseudo-shell -f <filename> \nUSAGE: ./pseudo-shell");
+		printf("USAGE: ./pseudo-shell -f <filename> \nUSAGE: ./pseudo-shell\n");
 		exit(1);
 	}
 

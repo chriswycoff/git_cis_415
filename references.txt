@@ -1,0 +1,4 @@
+project 1
+https://cboard.cprogramming.com/linux-programming/101247-redirect-stdout-using-dup.html
+
+https://www.geeksforgeeks.org/c-program-list-files-sub-directories-directory/

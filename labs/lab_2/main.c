@@ -66,7 +66,6 @@ int main() {
 
 		char* token = strtok_r(line_buffer, " ", &line_buffer);
 
-	
 
 		int token_counter = 0;
 
