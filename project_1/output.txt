@@ -1,0 +1,45 @@
+T0: pwd
+T1: ;
+T2: mkdir
+T3: test
+T4: ;
+T5: cd
+T6: test
+
+T0: cd
+T1: ..
+T2: ;
+T3: cd
+T4: test
+T5: ;
+T6: pwd
+
+T0: cp
+T1: ../input.txt
+T2: .
+T3: ;
+T4: ls
+T5: ;
+T6: cat
+T7: input.txt
+
+T0: mv
+T1: input.txt
+T2: del.txt
+T3: ;
+T4: pwd
+T5: ;
+T6: ls
+
+T0: rm
+T1: del.txt
+T2: ;
+T3: ls
+
+T0: cd
+T1: ..
+T2: ;
+T3: pwd
+
+T0: ls
+
