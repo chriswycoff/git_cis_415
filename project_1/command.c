@@ -8,6 +8,7 @@ Questions:
 mkdir: path required?? or just cwd?
 path relative??
 any forking required?
+cd relative
 
 */
 
@@ -109,8 +110,7 @@ void makeDir(char *dirName){
 
 /*for the cd command*/
 void changeDir(char *dirName){
-	printf("running changeDir: %s\n", dirName);
-
+	chdir(dirName);
 }
 
 /*for the cp command*/

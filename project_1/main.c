@@ -121,24 +121,20 @@ int file_io_mode(int argc, char *argv[]) {
 /*-----------------------------Program Main----------------------------------*/
 int main(int argc, char *argv[]) {
 
-	char *dirName = "hello";
-
-	char *sourcePath = "src";
-
-	char *destinationPath = "dst";
-
-	char *filename = "file";
 
 	//listDir(); //for the ls command
 
-	makeDir("my_dir_1");
-	exit(1);
+	//makeDir("my_dir_1");  //for the mkdir command
 
 	//showCurrentDir(); //for the pwd command
 
-	//makeDir(dirName); //for the mkdir command
+	showCurrentDir();
 
-	//changeDir(dirName); //for the cd command
+	changeDir("../.."); //for the cd command
+
+	showCurrentDir();
+
+	exit(1);
 
 	//copyFile(sourcePath, destinationPath); //for the cp command
 
