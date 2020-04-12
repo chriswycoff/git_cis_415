@@ -37,6 +37,7 @@ int file_io_mode(int argc, char *argv[]) {
 	char* file_string = "-f";
 
 	if (strcmp(file_string, argv[1])){
+			printf("USAGE: ./lab_2_file_io -f <filename> \n");
 			exit(1);
 		}
 
@@ -115,29 +116,34 @@ int main(int argc, char *argv[]) {
 
 	char *filename = "file";
 
-	listDir(); /*for the ls command*/
+	
 
-	showCurrentDir(); /*for the pwd command*/
+	listDir(); //for the ls command
 
-	makeDir(dirName); /*for the mkdir command*/
+	/*
 
-	changeDir(dirName); /*for the cd command*/
+	showCurrentDir(); //for the pwd command
 
-	copyFile(sourcePath, destinationPath); /*for the cp command*/
+	makeDir(dirName); //for the mkdir command
 
-	moveFile(sourcePath, destinationPath); /*for the mv command*/
+	changeDir(dirName); //for the cd command
 
-	deleteFile(filename); /*for the rm command*/
+	copyFile(sourcePath, destinationPath); //for the cp command
 
-	displayFile(filename); /*for the cat command*/
+	moveFile(sourcePath, destinationPath); //for the mv command
 
+	deleteFile(filename); //for the rm command
+
+	displayFile(filename); //for the cat command
+
+	*/
 
 	if (argc == 3){
 		file_io_mode(argc, argv);
 	}
 
 	if (argc > 3 || argc == 2){
-		printf("USAGE: ./lab_2_file_io -f <filename> \n");
+		printf("USAGE: ./pseudo-shell -f <filename> \nUSAGE: ./pseudo-shell");
 		exit(1);
 	}
 
