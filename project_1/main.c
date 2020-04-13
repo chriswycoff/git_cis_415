@@ -128,16 +128,15 @@ int main(int argc, char *argv[]) {
 
 	//showCurrentDir(); //for the pwd command
 
-	showCurrentDir();
+	// showCurrentDir();
 
-	changeDir("../.."); //for the cd command
+	// changeDir("../.."); //for the cd command
 
-	showCurrentDir();
+	// showCurrentDir();
+
+	copyFile(sourcePath, destinationPath); //for the cp command
 
 	exit(1);
-
-	//copyFile(sourcePath, destinationPath); //for the cp command
-
 	//moveFile(sourcePath, destinationPath); //for the mv command
 
 	//deleteFile(filename); //for the rm command

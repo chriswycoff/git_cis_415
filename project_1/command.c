@@ -115,7 +115,17 @@ void changeDir(char *dirName){
 
 /*for the cp command*/
 void copyFile(char *sourcePath, char *destinationPath){
-	printf("running copyFile: %s -> %s \n", sourcePath, destinationPath);
+	char the_buffer;
+
+	int source_file = open(sourcePath, O_RDONLY);
+	int destination_file = open(destinationPath, O_CREAT|O_RDWR, 0666);
+
+	while((read(source_file, &the_buffer, 1))!= -1){
+		write(destination_file,&the_buffer,1);
+	}
+	close(source_file);
+	close(destination_file);
+
 }
 
 /*for the mv command*/

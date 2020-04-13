@@ -4,3 +4,5 @@ https://cboard.cprogramming.com/linux-programming/101247-redirect-stdout-using-d
 https://www.geeksforgeeks.org/c-program-list-files-sub-directories-directory/
 
 https://www.geeksforgeeks.org/chdir-in-c-language-with-examples/
+
+https://www.unix.com/programming/105575-copy-file-using-unix-system-calls.html
