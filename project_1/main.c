@@ -35,7 +35,7 @@ int exit_function(char * line_buffer){
 
 int file_io_mode(int argc, char *argv[]) {
 
-	int fd_1 = open("output.txt", O_CREAT|O_RDWR, 0666);
+	int fd_1 = open("output.txt", O_CREAT|O_RDWR, 0777);
 
 	dup2(fd_1, 1); 
 
@@ -128,20 +128,21 @@ int main(int argc, char *argv[]) {
 
 	//showCurrentDir(); //for the pwd command
 
-	// showCurrentDir();
+	//showCurrentDir();
 
-	// changeDir("../.."); //for the cd command
+	//changeDir("../.."); //for the cd command
 
-	// showCurrentDir();
+	//showCurrentDir();
 
-	copyFile(sourcePath, destinationPath); //for the cp command
+	//copyFile("test.txt","test_dest.txt"); //for the cp command
+
+	//moveFile("test.txt", "../test.txt"); //for the mv command
+
+	//deleteFile("test.txt"); //for the rm command
+
+	//displayFile("input.txt"); //for the cat command
 
 	exit(1);
-	//moveFile(sourcePath, destinationPath); //for the mv command
-
-	//deleteFile(filename); //for the rm command
-
-	//displayFile(filename); //for the cat command
 
 	file_io_mode(argc, argv);
 

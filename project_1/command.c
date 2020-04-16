@@ -10,6 +10,8 @@ path relative??
 any forking required?
 cd relative
 
+scr vs destination specificity?
+
 */
 
 #define  _GNU_SOURCE
@@ -33,7 +35,6 @@ int read_string(char* the_string){
 		counter+=1;
 		current_char = the_string[counter];
 	}
-
 	return counter;
 }
 
@@ -65,7 +66,6 @@ void listDir(){
 	write(1,"\n",1);
 	closedir(this_directory);
 	return;
-
 
 } 
 
@@ -117,11 +117,15 @@ void changeDir(char *dirName){
 void copyFile(char *sourcePath, char *destinationPath){
 	char the_buffer;
 
-	int source_file = open(sourcePath, O_RDONLY);
-	int destination_file = open(destinationPath, O_CREAT|O_RDWR, 0666);
+	int char_int;
 
-	while((read(source_file, &the_buffer, 1))!= -1){
+	int source_file = open(sourcePath, O_RDONLY);
+	int destination_file = open(destinationPath, O_CREAT|O_RDWR, 0777);
+
+	int stop_counter = 0;
+	while((char_int = read(source_file, &the_buffer, 1) != 0)){
 		write(destination_file,&the_buffer,1);
+		stop_counter += 1;
 	}
 	close(source_file);
 	close(destination_file);
@@ -130,18 +134,31 @@ void copyFile(char *sourcePath, char *destinationPath){
 
 /*for the mv command*/
 void moveFile(char *sourcePath, char *destinationPath){
-	printf("running moveFile: %s -> %s \n", sourcePath, destinationPath);
+
+	rename(sourcePath,destinationPath);
+
 }
+
 /*for the rm command*/
 void deleteFile(char *filename){
-	printf("running deleteFile: %s \n", filename);
+	unlink(filename);
 
 }
 
 /*for the cat command*/
 void displayFile(char *filename){
-	printf("running displayFile: %s \n", filename);
+	char the_buffer;
 
+	int char_int;
+
+	int source_file = open(filename, O_RDONLY);
+
+	int stop_counter = 0;
+	while((char_int = read(source_file, &the_buffer, 1) != 0) && stop_counter < 200 ){
+		write(1,&the_buffer,1);
+		stop_counter += 1;
+	}
+	close(source_file);
 
 }
 

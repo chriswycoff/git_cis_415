@@ -45,17 +45,19 @@ legal_commands command_lookup[] = {
 	{ "lfcat", LFCAT }, {";", SEMICOLON} 
 };
 
-int number_of_keys = 3;
+int number_of_keys = 2;
 
-int get_value_from_string_key(char *key)
+int get_value_from_string_key(char *a_key)
 {
-    
+	
     for (int i=0; i < number_of_keys; i++) {
         legal_commands *sym = &command_lookup[i];
-        if (strcmp(sym->key, key) == 0)
+        if (strcmp(sym->key, a_key) == 0){
             return sym->value;
+        }
     }
     // if gets to here there was no return thus return -1
+   
     return INVALID;
 }
 
@@ -140,7 +142,7 @@ int file_io_mode(int argc, char *argv[]) {
 
 		//gather tokens below
 		while(token != NULL){
-			printf("T%d: %s\n", token_counter, token);
+			//printf("T%d: %s\n", token_counter, token);
 			token = strtok_r(NULL, " ",&line_buffer);
 			token_counter += 1; 
 			tokens[token_counter]= token;
@@ -267,7 +269,7 @@ int main(int argc, char *argv[]) {
 
 		//gather tokens below
 		while(token != NULL){
-			printf("T%d: %s\n", token_counter, token);
+			//printf("T%d: %s\n", token_counter, token);
 			token = strtok_r(NULL, " ",&line_buffer);
 			token_counter += 1; 
 			tokens[token_counter]= token;
@@ -276,6 +278,7 @@ int main(int argc, char *argv[]) {
 		// gathered tokens analysed below
 		//
 		for(int i = 0; i < token_counter; ++i){
+			
 			// other attemp without switch below
 			//printf("token%d: %s\n", i, tokens[i]);
 			//if tokens[i]
@@ -288,6 +291,7 @@ int main(int argc, char *argv[]) {
 			// end other attempt
 
 			switch(get_value_from_string_key(tokens[i])){
+				printf("getting here\n");
 				case LFCAT:
 					lfcat();
 					break;
