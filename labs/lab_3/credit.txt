@@ -1,0 +1,3 @@
+credit
+
+https://stackoverflow.com/questions/4014827/best-way-to-switch-on-a-string-in-c
