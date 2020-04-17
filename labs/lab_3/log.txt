@@ -1,5 +1,9 @@
-gettin here
-
+==2908== Memcheck, a memory error detector
+==2908== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==2908== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==2908== Command: ./lab3
+==2908== 
+>>>
 File: 1_poem.txt
 --------------------------------------------------------------------------------
 I loved you first: but afterwards your love
@@ -407,7 +411,13 @@ Hör wie's schreit!
 
 ~ Rammstien "Ich tu' dir weh"
 
-
-=======
-
-
+>>>
+==2908== 
+==2908== HEAP SUMMARY:
+==2908==     in use at exit: 0 bytes in 0 blocks
+==2908==   total heap usage: 3 allocs, 3 frees, 35,888 bytes allocated
+==2908== 
+==2908== All heap blocks were freed -- no leaks are possible
+==2908== 
+==2908== For counts of detected and suppressed errors, rerun with: -v
+==2908== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
