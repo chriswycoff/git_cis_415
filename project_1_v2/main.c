@@ -28,7 +28,7 @@ https://www.geeksforgeeks.org/strtok-strtok_r-functions-c-examples/
 /*-----------------define command keys----------------------------------------------------*/
 
 #define SEMICOLON 1
-#define LFCAT 2
+#define LS 2
 #define INVALID -1
 
 
@@ -42,14 +42,14 @@ typedef struct{
 
 
 legal_commands command_lookup[] = {
-	{ "lfcat", LFCAT }, {";", SEMICOLON} 
+	{ "ls", LS }, {";", SEMICOLON},  
 };
 
 int number_of_keys = 2;
 
 int get_value_from_string_key(char *a_key)
 {
-	//printf("getting here\n");
+	printf("getting here\n");
     for (int i=0; i < number_of_keys; i++) {
         legal_commands *sym = &command_lookup[i];
         if (strcmp(sym->key, a_key) == 0){
@@ -163,14 +163,8 @@ int file_io_mode(int argc, char *argv[]) {
 			// end other attempt
 
 			switch(get_value_from_string_key(tokens[i])){
-				case LFCAT:
-					if (tokens[i+1] != NULL){
-						if (get_value_from_string_key(tokens[i+1]) == -1){
-							printf("Error! unsupported parameter!\n");
-							exit_function(original_line);
-						}
-					}
-					lfcat();
+				case LS:
+					listDir();
 					break;
 				case SEMICOLON:
 					if (tokens[i+1] == NULL){
@@ -297,15 +291,13 @@ int main(int argc, char *argv[]) {
 			// end other attempt
 
 			switch(get_value_from_string_key(tokens[i])){
-				//printf("getting here\n");
-				case LFCAT:
-					if (tokens[i+1] != NULL){
-						if (get_value_from_string_key(tokens[i+1]) == -1){
-							printf("Error! unsupported parameter!\n");
-							exit_function(original_line);
-						}
+				case LS:
+					printf("HERE1\n");
+					if (get_value_from_string_key(tokens[i+1]) == -1){
+						printf("Error! unsupported parameter!\n");
+						exit_function(original_line);
 					}
-					lfcat();
+					listDir();
 					break;
 				case SEMICOLON:
 					if (tokens[i+1] == NULL){
