@@ -1,0 +1,12 @@
+#define A_NULL 0
+#define SEMICOLON 1
+#define LS 2
+#define PWD 3
+#define RM 4
+#define CAT 5
+#define MKDIR 6
+#define CD 7
+#define CP 8
+#define MV 9
+
+#define INVALID -1

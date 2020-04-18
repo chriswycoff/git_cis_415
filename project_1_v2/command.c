@@ -82,6 +82,7 @@ void showCurrentDir(){
 void makeDir(char *dirName){
 
 	//printf("running makeDir: %s\n", dirName);
+	/*
 	char this_dir[2048];
 	getcwd(this_dir, 2048);
 	int the_string_size_max = read_string(this_dir);
@@ -103,24 +104,116 @@ void makeDir(char *dirName){
 
 	this_dir[the_string_size_max] = '\0';
 
-
-	mkdir(this_dir,0777);
+*/
+	mkdir(dirName,0777);
 
 }
 
 /*for the cd command*/
 void changeDir(char *dirName){
-	chdir(dirName);
+	int success = 0;
+	success = chdir(dirName);
+
+	char * error_message = "could_not_open_directory";
+
+	int error_message_len = read_string(error_message);
+
+	if (success == -1){
+		write(1,error_message,error_message_len);
+		return;
+	}
 }
 
 /*for the cp command*/
 void copyFile(char *sourcePath, char *destinationPath){
+
+	int relative_or_not = 0; 
+
+	int len_of_source = read_string(sourcePath);
+
+	int len_of_dest = read_string(destinationPath);
+
+	char new_dest_name[2048];
+
+
+	for(int i = 0; i<len_of_source; i++){
+		if (sourcePath[i] == '/'){
+			relative_or_not = i;
+		}
+	}
+
+	char parsed_name[2048];
+
+	if (relative_or_not){
+		int j = 0; 
+		for(int i = relative_or_not; i<len_of_source; i++){
+			parsed_name[j] = sourcePath[i];
+			j += 1;
+		}
+		parsed_name[j] = '\0';
+	}
+	else{
+		for(int i = 0; i < len_of_source; i++){
+			parsed_name[i] = sourcePath[i];
+		}
+		parsed_name[len_of_source+1] = '\0';
+
+	}
+
+	for(int i = 0; i<len_of_dest; i++){
+		new_dest_name[i] = destinationPath[i];
+	}
+
+	int new_dest_name_len;
+
+	if(destinationPath[len_of_dest-1] != '/'){
+		new_dest_name_len = read_string(new_dest_name);
+		new_dest_name[new_dest_name_len] = '/';
+		new_dest_name[new_dest_name_len + 1] = '\0';
+	}	
+
+	new_dest_name_len = read_string(new_dest_name);
+
+	int parsed_name_len = read_string(parsed_name);
+
+	
+	for(int i = 0; i < parsed_name_len; i++){
+		new_dest_name[new_dest_name_len] = parsed_name[i];
+		new_dest_name_len += 1;
+	}
+	new_dest_name[new_dest_name_len] = '\0';
+	
+
+	printf("%s\n",new_dest_name);
+
+	//printf("%s\n",parsed_name);
+
+	
+	char * error_message1 = "file not found";
+	char * error_message2 = "file not able to open";
+	int error_message_len1 = read_string(error_message1);
+	int error_message_len2 = read_string(error_message2);
+
 	char the_buffer;
+
+	//int success;
 
 	int char_int;
 
 	int source_file = open(sourcePath, O_RDONLY);
-	int destination_file = open(destinationPath, O_CREAT|O_RDWR, 0777);
+	if (source_file == -1){
+		write(1,error_message1,error_message_len1);
+		return;
+	}
+
+	//printf("%d\n", success);
+	
+	int destination_file = open(new_dest_name, O_CREAT|O_RDWR, 0777);
+		if (destination_file == -1){
+		write(1,error_message2,error_message_len2);
+		return;
+	}
+	
 
 	int stop_counter = 0;
 	while((char_int = read(source_file, &the_buffer, 1) != 0)){
@@ -134,8 +227,20 @@ void copyFile(char *sourcePath, char *destinationPath){
 
 /*for the mv command*/
 void moveFile(char *sourcePath, char *destinationPath){
+	int success = 0;
 
-	rename(sourcePath,destinationPath);
+	success = rename(sourcePath,destinationPath);
+
+	char * error_message = "could_not_open_directory";
+
+	int error_message_len = read_string(error_message);
+
+	if (success == -1){
+		write(1,error_message,error_message_len);
+		return;
+	}
+
+	
 
 }
 

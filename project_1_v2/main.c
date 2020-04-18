@@ -27,9 +27,19 @@ https://www.geeksforgeeks.org/strtok-strtok_r-functions-c-examples/
 
 /*-----------------define command keys----------------------------------------------------*/
 
+#define A_NULL 0
 #define SEMICOLON 1
 #define LS 2
+#define PWD 3
+#define RM 4
+#define CAT 5
+#define MKDIR 6
+#define CD 7
+#define CP 8
+#define MV 9
+
 #define INVALID -1
+
 
 
 
@@ -42,14 +52,18 @@ typedef struct{
 
 
 legal_commands command_lookup[] = {
-	{ "ls", LS }, {";", SEMICOLON},  
+	{";", SEMICOLON}, { "ls", LS }, { "pwd", PWD }, { "rm", RM },
+	{ "cat", CAT }, { "mkdir", MKDIR }, { "cd", CD }, 
+	{ "cp", CP }, { "mv", MV }
 };
 
-int number_of_keys = 2;
+int number_of_keys = 9;
 
 int get_value_from_string_key(char *a_key)
 {
-	printf("getting here\n");
+	if (a_key == NULL){
+		return A_NULL;
+	}
     for (int i=0; i < number_of_keys; i++) {
         legal_commands *sym = &command_lookup[i];
         if (strcmp(sym->key, a_key) == 0){
@@ -118,15 +132,21 @@ int file_io_mode(int argc, char *argv[]) {
 		printf("ERROR in allocating buffer\n");
 		exit(1);
 	}
+	int characters = 0;
 
-	while(getline(&line_buffer, &bufsize, fp) >= 0) {
-		printf("gettin here\n");
+	while((characters = getline(&line_buffer, &bufsize, fp)) >= 0) {
+		//printf("gettin here\n");
+		if (line_buffer[characters-1] == '\n'){
+			line_buffer[characters-1] = '\0';
+			characters -= 1;
+		}
+
 
 
 		char* tokens[2048];
 
 		for(int i = 0; i<2048; i++){
-			tokens[i] = NULL;
+			tokens[i] = "invalid";
 		}
 
 		char *token = strtok_r(line_buffer, " ", &line_buffer);
@@ -164,6 +184,11 @@ int file_io_mode(int argc, char *argv[]) {
 
 			switch(get_value_from_string_key(tokens[i])){
 				case LS:
+					if (get_value_from_string_key(tokens[i+1]) == -1 || 
+						get_value_from_string_key(tokens[i+1]) > 1){
+						printf("Error! unsupported parameter!\n");
+						exit_function(original_line);
+					}
 					listDir();
 					break;
 				case SEMICOLON:
@@ -175,6 +200,8 @@ int file_io_mode(int argc, char *argv[]) {
 						printf("Error unrecognized command!\n");
 						exit_function(original_line);
 					}
+					break;
+				case A_NULL:
 					break;
 				default:
 					printf("Error unrecognized command\n");
@@ -254,7 +281,7 @@ int main(int argc, char *argv[]) {
 		char* tokens[2048];
 
 		for(int i = 0; i<2048; i++){
-			tokens[i] = NULL;
+			tokens[i] = "invalid";
 		}
 
 		char *token = strtok_r(line_buffer, " ", &line_buffer);
@@ -289,16 +316,26 @@ int main(int argc, char *argv[]) {
 			else if (!strcmp(tokens[i],lfcat_string))
 			*/
 			// end other attempt
+			//for (int j = 0 ; j< 10; j++){
+				//printf("i: %d : %s\n",i, tokens[j]);
+			//}
+
+
+			//printf("%d\n", token_counter);
 
 			switch(get_value_from_string_key(tokens[i])){
 				case LS:
-					printf("HERE1\n");
 					if (get_value_from_string_key(tokens[i+1]) == -1){
 						printf("Error! unsupported parameter!\n");
 						exit_function(original_line);
 					}
+					if (get_value_from_string_key(tokens[i+1]) > 1){
+						printf(" Error! Incorrect syntax. No control code found \n");
+						exit_function(original_line);
+					}
 					listDir();
-					break;
+					break; ///////////////////////////////////////////////////
+
 				case SEMICOLON:
 					if (tokens[i+1] == NULL){
 						printf("Error unrecognized command!\n");
@@ -308,9 +345,154 @@ int main(int argc, char *argv[]) {
 						printf("Error unrecognized command!\n");
 						exit_function(original_line);
 					}
-					break;
+					break; ///////////////////////////////////////////////////
+
+				case PWD:
+					if (get_value_from_string_key(tokens[i+1]) == -1 || 
+						get_value_from_string_key(tokens[i+1]) > 1){
+						printf("Error! unsupported parameter!\n");
+						exit_function(original_line);
+					}
+					showCurrentDir();
+					break; ///////////////////////////////////////////////////
+
+				case MKDIR:
+					if ((get_value_from_string_key(tokens[i+1]) == 0) || 
+					(get_value_from_string_key(tokens[i+1]) == 1)){
+						printf("Error! No parameter given!\n");
+						exit_function(original_line);
+					}
+					if (get_value_from_string_key(tokens[i+1]) > 1) {
+						printf("Error! unsupported parameter!\n");
+						exit_function(original_line);
+					}
+					if (get_value_from_string_key(tokens[i+2]) > 1) {
+						printf(" Error! Incorrect syntax. No control code found \n");
+						exit_function(original_line);
+					}
+
+					makeDir(tokens[i+1]);
+					i += 1; // increment i an extra increment
+					break; ///////////////////////////////////////////////////
+
+				case RM:
+					if ((get_value_from_string_key(tokens[i+1]) == 0) || 
+					(get_value_from_string_key(tokens[i+1]) == 1)){
+						printf("Error! No parameter given!\n");
+						exit_function(original_line);
+					}
+					if (get_value_from_string_key(tokens[i+1]) > 1) {
+						printf("Error! unsupported parameter!\n");
+						exit_function(original_line);
+					}
+					if (get_value_from_string_key(tokens[i+2]) > 1) {
+						printf(" Error! Incorrect syntax. No control code found \n");
+						exit_function(original_line);
+					}
+
+					deleteFile(tokens[i+1]);
+					i += 1; // increment i an extra increment
+					break; ///////////////////////////////////////////////////
+
+				case CAT:
+					if ((get_value_from_string_key(tokens[i+1]) == 0) || 
+					(get_value_from_string_key(tokens[i+1]) == 1)){
+						printf("Error! No parameter given!\n");
+						exit_function(original_line);
+					}
+					if (get_value_from_string_key(tokens[i+1]) > 1) {
+						printf("Error! unsupported parameter!\n");
+						exit_function(original_line);
+					}
+					if (get_value_from_string_key(tokens[i+2]) > 1) {
+						printf(" Error! Incorrect syntax. No control code found \n");
+						exit_function(original_line);
+					}
+
+					displayFile(tokens[i+1]);
+					i += 1; // increment i an extra increment
+					break; ///////////////////////////////////////////////////
+
+				case CD:
+					if ((get_value_from_string_key(tokens[i+1]) == 0) || 
+					(get_value_from_string_key(tokens[i+1]) == 1)){
+						printf("Error! No parameter given!\n");
+						exit_function(original_line);
+					}
+					if (get_value_from_string_key(tokens[i+1]) > 1) {
+						printf(" Error! Incorrect syntax. No control code found \n");
+						exit_function(original_line);
+					}
+					if (get_value_from_string_key(tokens[i+2]) > 1) {
+						printf(" Error! Incorrect syntax. No control code found \n");
+						exit_function(original_line);
+					}
+
+					changeDir(tokens[i+1]);
+					i += 1; // increment i an extra increment
+					break; ///////////////////////////////////////////////////
+
+				case CP:
+					if ((get_value_from_string_key(tokens[i+1]) == 0) || 
+					(get_value_from_string_key(tokens[i+1]) == 1)){
+						printf("Error! No 1st parameter given!\n");
+						exit_function(original_line);
+					}
+					if ((get_value_from_string_key(tokens[i+2]) == 0) || 
+					(get_value_from_string_key(tokens[i+2]) == 1)){
+						printf("Error! No 2nd parameter given!\n");
+						exit_function(original_line);
+					}
+					if (get_value_from_string_key(tokens[i+1]) > 1) {
+						printf(" Error! Incorrect syntax. No control code found \n");
+						exit_function(original_line);
+					}
+					if (get_value_from_string_key(tokens[i+2]) > 1) {
+						printf(" Error! Incorrect syntax. No control code found \n");
+						exit_function(original_line);
+					}
+					if (get_value_from_string_key(tokens[i+3]) > 1) {
+						printf(" Error! Incorrect syntax. No control code found \n");
+						exit_function(original_line);
+					}
+
+					copyFile(tokens[i+1],tokens[i+2]);
+					i += 2; // increment i an extra increment
+					break; ///////////////////////////////////////////////////
+
+				case MV:
+					if ((get_value_from_string_key(tokens[i+1]) == 0) || 
+					(get_value_from_string_key(tokens[i+1]) == 1)){
+						printf("Error! No 1st parameter given!\n");
+						exit_function(original_line);
+					}
+					if ((get_value_from_string_key(tokens[i+2]) == 0) || 
+					(get_value_from_string_key(tokens[i+2]) == 1)){
+						printf("Error! No 2nd parameter given!\n");
+						exit_function(original_line);
+					}
+					if (get_value_from_string_key(tokens[i+1]) > 1) {
+						printf(" Error! Incorrect syntax. No control code found \n");
+						exit_function(original_line);
+					}
+					if (get_value_from_string_key(tokens[i+2]) > 1) {
+						printf(" Error! Incorrect syntax. No control code found \n");
+						exit_function(original_line);
+					}
+					if (get_value_from_string_key(tokens[i+3]) > 1) {
+						printf(" Error! Incorrect syntax. No control code found \n");
+						exit_function(original_line);
+					}
+					printf("moving file\n");
+					moveFile(tokens[i+1],tokens[i+2]);
+					i += 2; // increment i an extra increment
+					break; ///////////////////////////////////////////////////
+
+				case A_NULL:
+					break; ///////////////////////////////////////////////////
+
 				default:
-					printf("Error unrecognized command\n");
+					printf("Error unrecognized command!!!!!!!\n");
 					exit_function(original_line);
 
 			}
