@@ -10,3 +10,72 @@
 #define MV 9
 
 #define INVALID -1
+
+
+	/*
+	int relative_or_not = 0; 
+
+	int len_of_source = read_string(sourcePath);
+
+	int len_of_dest = read_string(destinationPath);
+
+	char new_dest_name[2048];
+
+	for(int i = 0; i<len_of_source; i++){
+		if (sourcePath[i] == '/'){
+			relative_or_not = i;
+		}
+	}
+
+	printf("%d\n",relative_or_not );
+
+	char parsed_name[2048];
+
+	if (relative_or_not){
+		int j = 0; 
+		for(int i = relative_or_not; i<len_of_source; i++){
+			parsed_name[j] = sourcePath[i];
+			j += 1;
+		}
+		parsed_name[j] = '\0';
+	}
+	else{
+		for(int i = 0; i < len_of_source; i++){
+			parsed_name[i] = sourcePath[i];
+		}
+		parsed_name[len_of_source+1] = '\0';
+
+	}
+
+	int new_dest_name_len = 0;
+
+	if (relative_or_not){
+		for(int i = 0; i<len_of_dest; i++){
+			new_dest_name[i] = destinationPath[i];
+		}
+		new_dest_name_len = read_string(new_dest_name);
+	}
+	
+	if(destinationPath[len_of_dest-1] != '/'){
+		new_dest_name[new_dest_name_len] = '.';
+		new_dest_name[new_dest_name_len + 1 ] = '/';
+		new_dest_name[new_dest_name_len + 2] = '\0';
+	}	
+
+	new_dest_name_len = read_string(new_dest_name);
+
+	int parsed_name_len = read_string(parsed_name);
+
+	
+	for(int i = 0; i < parsed_name_len; i++){
+		new_dest_name[new_dest_name_len] = parsed_name[i];
+		new_dest_name_len += 1;
+	}
+	new_dest_name[new_dest_name_len] = '\0';
+	
+
+	printf("1: %s \n",new_dest_name);
+
+	printf("2: %s\n",parsed_name);
+
+	*/

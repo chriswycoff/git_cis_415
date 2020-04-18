@@ -38,6 +38,28 @@ int read_string(char* the_string){
 	return counter;
 }
 
+void add_slash_and_name(char* name, char* name_to_add){
+
+	int the_string_size_max = read_string(name);
+
+	int char_counter = 0;
+	char character_to_add = name_to_add[char_counter];
+
+	name[the_string_size_max] = '/';
+	the_string_size_max += 1;
+
+	while(character_to_add != '\0'){
+		name[the_string_size_max] = character_to_add;
+
+		char_counter += 1;
+		character_to_add = name_to_add[char_counter];
+
+		the_string_size_max += 1;
+	}
+
+	name[the_string_size_max] = '\0';
+}
+
 /*for the ls command*/
 void listDir(){
 	//printf("running listDir\n");
@@ -78,6 +100,9 @@ void showCurrentDir(){
 	write(1,"\n",1);
 }
 
+
+
+
  /*for the mkdir command*/
 void makeDir(char *dirName){
 
@@ -114,7 +139,7 @@ void changeDir(char *dirName){
 	int success = 0;
 	success = chdir(dirName);
 
-	char * error_message = "could_not_open_directory";
+	char * error_message = "could_not_open_directory1";
 
 	int error_message_len = read_string(error_message);
 
@@ -127,22 +152,33 @@ void changeDir(char *dirName){
 /*for the cp command*/
 void copyFile(char *sourcePath, char *destinationPath){
 
-	int relative_or_not = 0; 
+	char * error_message1 = "file not found";
+	char * error_message2 = "file not able to open";
+	int error_message_len1 = read_string(error_message1);
+	int error_message_len2 = read_string(error_message2);
 
 	int len_of_source = read_string(sourcePath);
 
 	int len_of_dest = read_string(destinationPath);
 
-	char new_dest_name[2048];
+	char the_buffer;
 
+	int char_int;
 
+	struct stat sb;
+
+	char copy_of_destination_path[2048];
+	///
+
+	char parsed_name[2048];
+
+	int relative_or_not = 0; 
+	
 	for(int i = 0; i<len_of_source; i++){
 		if (sourcePath[i] == '/'){
 			relative_or_not = i;
 		}
 	}
-
-	char parsed_name[2048];
 
 	if (relative_or_not){
 		int j = 0; 
@@ -153,67 +189,55 @@ void copyFile(char *sourcePath, char *destinationPath){
 		parsed_name[j] = '\0';
 	}
 	else{
-		for(int i = 0; i < len_of_source; i++){
-			parsed_name[i] = sourcePath[i];
+		parsed_name[0]= '/';
+		int counter_for_source = 0;
+		for(int i = 1; i < len_of_source+1; i++){
+			parsed_name[i] = sourcePath[counter_for_source];
+			counter_for_source += 1;
 		}
 		parsed_name[len_of_source+1] = '\0';
 
 	}
 
-	for(int i = 0; i<len_of_dest; i++){
-		new_dest_name[i] = destinationPath[i];
+	//printf("1%s\n", parsed_name);
+
+	int len_of_parsed_name = read_string(parsed_name);
+
+	///
+	for(int i = 0; i < len_of_dest; i++){
+			copy_of_destination_path[i] = destinationPath[i];
+		}
+		
+	for(int i = 0; i < len_of_parsed_name; i++){
+		copy_of_destination_path[len_of_dest] = parsed_name[i];
+		len_of_dest+= 1;
+	}
+	copy_of_destination_path[len_of_dest] = '\0';
+
+	//printf("2%s\n", copy_of_destination_path);
+
+	///
+
+	if (stat(destinationPath, &sb) == 0 && S_ISDIR(sb.st_mode))
+	{
+    // printf("yup directory\n");
+    destinationPath = copy_of_destination_path;
+
 	}
 
-	int new_dest_name_len;
-
-	if(destinationPath[len_of_dest-1] != '/'){
-		new_dest_name_len = read_string(new_dest_name);
-		new_dest_name[new_dest_name_len] = '/';
-		new_dest_name[new_dest_name_len + 1] = '\0';
-	}	
-
-	new_dest_name_len = read_string(new_dest_name);
-
-	int parsed_name_len = read_string(parsed_name);
-
-	
-	for(int i = 0; i < parsed_name_len; i++){
-		new_dest_name[new_dest_name_len] = parsed_name[i];
-		new_dest_name_len += 1;
-	}
-	new_dest_name[new_dest_name_len] = '\0';
-	
-
-	printf("%s\n",new_dest_name);
-
-	//printf("%s\n",parsed_name);
-
-	
-	char * error_message1 = "file not found";
-	char * error_message2 = "file not able to open";
-	int error_message_len1 = read_string(error_message1);
-	int error_message_len2 = read_string(error_message2);
-
-	char the_buffer;
-
-	//int success;
-
-	int char_int;
-
+	///
 	int source_file = open(sourcePath, O_RDONLY);
 	if (source_file == -1){
 		write(1,error_message1,error_message_len1);
 		return;
 	}
-
-	//printf("%d\n", success);
 	
-	int destination_file = open(new_dest_name, O_CREAT|O_RDWR, 0777);
+	int destination_file = open(destinationPath, O_CREAT|O_RDWR, 0777);
 		if (destination_file == -1){
+		close(source_file);
 		write(1,error_message2,error_message_len2);
 		return;
 	}
-	
 
 	int stop_counter = 0;
 	while((char_int = read(source_file, &the_buffer, 1) != 0)){
@@ -222,11 +246,85 @@ void copyFile(char *sourcePath, char *destinationPath){
 	}
 	close(source_file);
 	close(destination_file);
-
+	///
 }
 
 /*for the mv command*/
 void moveFile(char *sourcePath, char *destinationPath){
+	////
+
+	int len_of_source = read_string(sourcePath);
+
+	int len_of_dest = read_string(destinationPath);
+
+
+	struct stat sb;
+
+	char copy_of_destination_path[2048];
+	///
+
+	char parsed_name[2048];
+
+	int relative_or_not = 0; 
+	
+	for(int i = 0; i<len_of_source; i++){
+		if (sourcePath[i] == '/'){
+			relative_or_not = i;
+		}
+	}
+
+	if (relative_or_not){
+		int j = 0; 
+		for(int i = relative_or_not; i<len_of_source; i++){
+			parsed_name[j] = sourcePath[i];
+			j += 1;
+		}
+		parsed_name[j] = '\0';
+	}
+	else{
+		parsed_name[0]= '/';
+		int counter_for_source = 0;
+		for(int i = 1; i < len_of_source+1; i++){
+			parsed_name[i] = sourcePath[counter_for_source];
+			counter_for_source += 1;
+		}
+		parsed_name[len_of_source+1] = '\0';
+
+	}
+
+	//printf("1%s\n", parsed_name);
+
+	int len_of_parsed_name = read_string(parsed_name);
+
+	///
+	for(int i = 0; i < len_of_dest; i++){
+			copy_of_destination_path[i] = destinationPath[i];
+		}
+
+		
+	for(int i = 0; i < len_of_parsed_name; i++){
+		copy_of_destination_path[len_of_dest] = parsed_name[i];
+		len_of_dest+= 1;
+	}
+	copy_of_destination_path[len_of_dest] = '\0';
+
+	//printf("2%s\n", copy_of_destination_path);
+
+	///
+
+	if (stat(destinationPath, &sb) == 0 && S_ISDIR(sb.st_mode))
+	{
+    //printf("yup directory\n");
+    destinationPath = copy_of_destination_path;
+
+	}
+
+	//printf("11: %s\n",destinationPath);
+
+	///
+
+
+	////
 	int success = 0;
 
 	success = rename(sourcePath,destinationPath);
@@ -239,8 +337,6 @@ void moveFile(char *sourcePath, char *destinationPath){
 		write(1,error_message,error_message_len);
 		return;
 	}
-
-	
 
 }
 
@@ -257,9 +353,13 @@ void displayFile(char *filename){
 	int char_int;
 
 	int source_file = open(filename, O_RDONLY);
+	if (source_file == -1){
+		printf("file not found\n");
+		return;
+		}
 
 	int stop_counter = 0;
-	while((char_int = read(source_file, &the_buffer, 1) != 0) && stop_counter < 200 ){
+	while((char_int = read(source_file, &the_buffer, 1) != 0)){
 		write(1,&the_buffer,1);
 		stop_counter += 1;
 	}
