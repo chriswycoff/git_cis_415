@@ -8,3 +8,5 @@ https://www.geeksforgeeks.org/chdir-in-c-language-with-examples/
 https://www.unix.com/programming/105575-copy-file-using-unix-system-calls.html
 
 https://www.cs.rutgers.edu/~pxk/416/notes/c-tutorials/dup2.html
+
+https://stackoverflow.com/questions/3828192/checking-if-a-directory-exists-in-unix-system-call
