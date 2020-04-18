@@ -1,9 +1,9 @@
 
-/Users/christopherwycoff/UO/spring_2020/cis_415/git_for_share/git_cis_415/project_1_v2
+/home/cwycoff/cis-415/git_cis_415/project_1_v2
 
-/Users/christopherwycoff/UO/spring_2020/cis_415/git_for_share/git_cis_415/project_1_v2/test
+/home/cwycoff/cis-415/git_cis_415/project_1_v2/test
 
- . .. input.txt
+ .. input.txt .
 pwd ; mkdir test ; cd test
 cd .. ; cd test ; pwd
 cp ../input.txt . ; ls ; cat input.txt
@@ -12,14 +12,12 @@ rm del.txt ; ls
 cd .. ; pwd
 ls
 
-2del.txt/input.txt
-11: del.txt
-/Users/christopherwycoff/UO/spring_2020/cis_415/git_for_share/git_cis_415/project_1_v2/test
- . .. del.txt
+/home/cwycoff/cis-415/git_cis_415/project_1_v2/test
+ .. del.txt .
 
- . ..
+ .. .
 
-/Users/christopherwycoff/UO/spring_2020/cis_415/git_for_share/git_cis_415/project_1_v2
+/home/cwycoff/cis-415/git_cis_415/project_1_v2
 
- . .. .DS_Store command.c command.h command.o copy1.txt del.txt fake fake1 fakehere1.txt input.txt main.c main.o Makefile my_dir_1 output.txt pseudo-shell reference.txt test test_dest.txt
+ output.txt .. main.o command.h copy1.txt input.txt del.txt test_dest.txt Makefile fakehere1.txt pseudo-shell test fake1 . main.c command.c command.o fake reference.txt
 
