@@ -27,7 +27,6 @@ int main(){
 
 		printf("This is the child process, my pid is %d, my parent pid is %d\n", getpid(), getppid());
 		printf("My status is  %d\n",pid );
-		sleep(10);
 		char * args[] = {"ls", "-la", NULL};
 		if (execvp("ls", args)<0){
 			perror("execvp");
