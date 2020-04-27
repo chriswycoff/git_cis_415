@@ -6,6 +6,7 @@ int main(int argc, char **argv) {
     long long i;
     int minutes = 1, j;
     char name[128];
+    int amount = 300000; // 30000000000
 
 /*
  * process environment variable and command line arguments
@@ -23,7 +24,7 @@ int main(int argc, char **argv) {
         }
     }
     for (j = 0; j < minutes; j++) {
-        for (i = 0; i < 30000000000; i++) {
+        for (i = 0; i < amount; i++) {
             ;
         }
     }
