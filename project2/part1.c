@@ -230,7 +230,7 @@ int main(int argc, char *argv[]) {
 			strcpy(copy_of_args[program_number][i], the_args[program_number][i]);
 		}
 
-		copy_of_args[program_number][num_args] = NULL;
+		//copy_of_args[program_number][num_args] = NULL;
 
 	}
 
