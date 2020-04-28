@@ -34,6 +34,9 @@ int exit_function(char * line_buffer, char ***the_args, char** the_programs,
 
 
 	// freeing the programs
+	for (int i = 0; i < number_of_programs; i++){
+	free(the_programs[i]);
+	}
 	free(the_programs);
 
 	// free line buffer
