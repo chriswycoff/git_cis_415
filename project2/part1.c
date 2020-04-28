@@ -16,6 +16,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <sys/wait.h>
 
 
 int exit_function(char * line_buffer, char ***the_args, char** the_programs, 

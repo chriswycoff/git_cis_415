@@ -18,7 +18,6 @@ int main(){
 
 	pid_t pid;
 
-
 	printf("Main starting, m pid is %d\n\n", getpid());
 
 	pid = fork();
