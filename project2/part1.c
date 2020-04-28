@@ -19,11 +19,11 @@
 
 
 int exit_function(char * line_buffer, char ***the_args, char** the_programs, 
-	int * arguments_per_program, int number_of_programs){
+	int * arguments_per_program, int number_of_programs, char*** copy_of_args){
 
 	
 	printf("getting here no prob\n");
-	// freeing the arguments
+	// freeing the arguments 
 	for (int i = 0; i < number_of_programs; i++){
 		for(int j = 0; j < (arguments_per_program[i]); j++){
 			free(the_args[i][j]);
@@ -32,6 +32,13 @@ int exit_function(char * line_buffer, char ***the_args, char** the_programs,
 	}
 	free(the_args);
 
+	for (int i = 0; i < number_of_programs; i++){
+		for(int j = 0; j < (arguments_per_program[i]); j++){
+			free(copy_of_args[i][j]);
+		}
+		free(copy_of_args[i]);
+	}
+	free(copy_of_args);
 
 	// freeing the programs
 	for (int i = 0; i < number_of_programs; i++){
@@ -45,7 +52,6 @@ int exit_function(char * line_buffer, char ***the_args, char** the_programs,
 	printf("\n");
 	exit(0);
 }
-
 
 
 int main(int argc, char *argv[]) {
@@ -84,6 +90,8 @@ int main(int argc, char *argv[]) {
 	line_buffer = (char *)malloc(bufsize * sizeof(char));
 	the_args = (char ***)malloc(256 * sizeof(char**));
 	the_programs = (char **)malloc(256 * sizeof(char*));
+
+
 	/*
 	// allocate for arguments
 	the_args = (char ***)malloc(2048 * sizeof(char **));
@@ -151,7 +159,7 @@ int main(int argc, char *argv[]) {
 		}
 
 
-		// malloc inner array of strings for tokens
+		// malloc inner array of strings for tokens   
 		the_args[current_program] = (char **)malloc(token_counter * sizeof(char*));
 
 		// malloc strings for arguments
@@ -181,7 +189,6 @@ int main(int argc, char *argv[]) {
 
 	
 	int number_of_programs = current_program;
-
 	
 	printf("Num Programs: %d\n",number_of_programs);
 	
@@ -190,7 +197,6 @@ int main(int argc, char *argv[]) {
 		for(int j = 0; j < arguments_per_program[i]; j++){
 			printf("ARGs for PRG%d:  %s\n", i, the_args[i][j]);
 		}
-		
 	}
 
 	printf("\n");
@@ -199,11 +205,87 @@ int main(int argc, char *argv[]) {
 	printf("Program %d %s\n", i, the_programs[i]);
 	}
 
+	// malloc a copy of arguments ////////////////////////////////////////////
+
+	int  num_args;
+
+	// num_args = arguments_per_program[0];
+
+	//char **copy_of_args;
+	char ***copy_of_args;
+
+	///// the_args = (char ***)malloc(256 * sizeof(char**)); assign new args
+
+	copy_of_args = (char ***)malloc( (number_of_programs) * sizeof(char**));
+
+	for (int program_number = 0; program_number < number_of_programs; program_number++){
+
+		num_args = arguments_per_program[program_number];
+
+		copy_of_args[program_number] = (char **)malloc( (num_args) * sizeof(char*));
+
+		for (int i = 0; i < num_args; i++){
+			copy_of_args[program_number][i] = (char *)malloc( 256 * sizeof(char));
+			strcpy(copy_of_args[program_number][i], the_args[program_number][i]);
+		}
+
+		copy_of_args[program_number][num_args] = NULL;
+
+	}
+
+	/*
+	copy_of_args = (char **)malloc( (num_args) * sizeof(char*));
+
+
+	for (int i = 0; i < num_args; i++){
+		copy_of_args[i] = (char *)malloc( 256 * sizeof(char));
+		strcpy(copy_of_args[i], the_args[0][i]);
+	}
+
+	copy_of_args[num_args+1] = NULL;
+	*/
+
+
+	// end malloc ////////////////////////////////////////////
+
+/////// BEGIN FORKING //////////////////////////////////////////////////////////////////////
+	pid_t pid;
+
+	printf("MAIN LOGIC starting, m pid is %d\n\n", getpid());
+
+
+
+	printf("\n");
+
+	pid = fork();
+
+	if (pid == 0){
+
+		printf("This is the child process, my pid is %d, my parent pid is %d\n", getpid(), getppid());
+		printf("My status is  %d\n",pid );
+
+		
+		if ( execvp("ls", copy_of_args[0]) < 0){
+			perror("execvp");
+		}
+		exit(0);
+
+	}
+
+	else{
+		//waitpid(); 
+		wait(0);
+		printf("Child finished, main exiting, my pid is %d \n", getpid());
+	}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
 
 
 	/// exiting
 	fclose (fp); 
-	exit_function(original_line, the_args, the_programs, arguments_per_program, number_of_programs);
+	exit_function(original_line, the_args, the_programs, arguments_per_program, number_of_programs,
+		copy_of_args);
 
 	//free(line_buffer);
 	//exit(0);
