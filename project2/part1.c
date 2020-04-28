@@ -160,7 +160,7 @@ int main(int argc, char *argv[]) {
 			strcpy(the_args[current_program][i],tokens[i]);
 		}
 		// alloc for NULL terminator for exec
-		the_args[current_program][token_counter] = (char *)malloc(256 * sizeof(char));
+		//the_args[current_program][token_counter] = (char *)malloc(256 * sizeof(char));
 
 		the_args[current_program][token_counter] = NULL;
 
