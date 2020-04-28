@@ -167,17 +167,16 @@ int main(int argc, char *argv[]) {
 		// malloc inner array of strings for tokens
 		the_args[current_program] = (char **)malloc(token_counter * sizeof(char*));
 
-		// malloc strings
+		// malloc strings for arguments
 		for (int i = 0; i< token_counter; i++){
 			the_args[current_program][i] = (char *)malloc(256 * sizeof(char));
 			strcpy(the_args[current_program][i],tokens[i]);
 
 		}
 
-		for (int i = 0; i< token_counter; i++){
-			//printf("%s \n", the_args[current_program][i]);
+		the_programs[current_program] = (char *)malloc(256 * sizeof(char));
 
-		}
+		strcpy(the_programs[current_program], tokens[0]);
 
 		arguments_per_program[current_program] = token_counter;
 
@@ -210,7 +209,12 @@ int main(int argc, char *argv[]) {
 		}
 		
 	}
-	
+
+	printf("\n");
+
+	for(int i = 0; i < number_of_programs; i++ ){
+	printf("Program %d %s\n", i, the_programs[i]);
+	}
 
 	/// exiting
 	fclose (fp); 
@@ -221,3 +225,12 @@ int main(int argc, char *argv[]) {
 	return 1;
 
 }
+
+
+
+
+
+
+
+
+
