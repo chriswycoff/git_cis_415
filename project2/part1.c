@@ -25,7 +25,7 @@ int exit_function(char * line_buffer, char ***the_args, char** the_programs,
 	printf("getting here no prob\n");
 	// freeing the arguments
 	for (int i = 0; i < number_of_programs; i++){
-		for(int j = 0; j < arguments_per_program[i]+1; j++){
+		for(int j = 0; j < ((arguments_per_program[i]) + 1); j++){
 			free(the_args[i][j]);
 		}
 		free(the_args[i]);
