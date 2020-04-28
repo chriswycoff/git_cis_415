@@ -23,7 +23,7 @@ int exit_function(char * line_buffer, char ***the_args, char** the_programs,
 	int * arguments_per_program, int number_of_programs, char*** copy_of_args){
 
 	
-	printf("getting here no prob\n");
+	//printf("getting here no prob\n");
 	// freeing the arguments 
 	for (int i = 0; i < number_of_programs; i++){
 		for(int j = 0; j < (arguments_per_program[i]); j++){
@@ -254,36 +254,39 @@ int main(int argc, char *argv[]) {
 
 	printf("MAIN LOGIC starting, m pid is %d\n\n", getpid());
 
-
-
 	printf("\n");
 
-	pid = fork();
+	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 
-	if (pid == 0){
+		pid = fork();
 
-		printf("This is the child process, my pid is %d, my parent pid is %d\n", getpid(), getppid());
-		printf("My status is  %d\n",pid );
+		if (pid == 0){
 
-		
-		if ( execvp("ls", copy_of_args[0]) < 0){
-			perror("execvp");
+			printf("This is the child process, my pid is %d, my parent pid is %d\n", getpid(), getppid());
+			printf("My status is  %d\n",pid );
+
+			
+			if ( execvp(the_programs[fork_iterator], copy_of_args[fork_iterator]) < 0){
+				perror("execvp");
+			}
+			exit(0);
+
 		}
-		exit(0);
 
-	}
+		else{
+			//waitpid();
+			wait(0);
+			printf("Child finished, control back to parent: my pid is %d \n", getpid());
+		}
 
-	else{
-		//waitpid(); 
-		wait(0);
-		printf("Child finished, main exiting, my pid is %d \n", getpid());
-	}
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 
 	/// exiting
+	printf("All Processing Finished: parent exiting: my pid is %d \n", getpid());
 	fclose (fp); 
 	exit_function(original_line, the_args, the_programs, arguments_per_program, number_of_programs,
 		copy_of_args);
