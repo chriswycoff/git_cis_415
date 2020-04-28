@@ -34,7 +34,7 @@ int exit_function(char * line_buffer, char ***the_args, char** the_programs,
 	free(the_args);
 
 	for (int i = 0; i < number_of_programs; i++){
-		for(int j = 0; j < (arguments_per_program[i]); j++){
+		for(int j = 0; j < (arguments_per_program[i]+1); j++){
 			free(copy_of_args[i][j]);
 		}
 		free(copy_of_args[i]);
@@ -217,13 +217,13 @@ int main(int argc, char *argv[]) {
 
 	///// the_args = (char ***)malloc(256 * sizeof(char**)); assign new args
 
-	copy_of_args = (char ***)malloc( (number_of_programs+1) * sizeof(char**));
+	copy_of_args = (char ***)malloc( (number_of_programs) * sizeof(char**));
 
 	for (int program_number = 0; program_number < number_of_programs; program_number++){
 
 		num_args = arguments_per_program[program_number];
 
-		copy_of_args[program_number] = (char **)malloc( (num_args) * sizeof(char*));
+		copy_of_args[program_number] = (char **)malloc( (num_args+1) * sizeof(char*));
 
 		for (int i = 0; i < num_args; i++){
 			copy_of_args[program_number][i] = (char *)malloc( 256 * sizeof(char));
