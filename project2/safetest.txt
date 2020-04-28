@@ -1,5 +1,5 @@
 ls -a -r -s
-sleep 1
+sleep 5
 invalid name
 cat input.txt
 pwd

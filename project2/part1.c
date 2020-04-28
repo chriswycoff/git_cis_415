@@ -43,7 +43,7 @@ int exit_function(char * line_buffer, char ***the_args, char** the_programs,
 
 	// freeing the programs
 	for (int i = 0; i < number_of_programs; i++){
-	free(the_programs[i]);
+		free(the_programs[i]);
 	}
 	free(the_programs);
 
@@ -269,10 +269,14 @@ int main(int argc, char *argv[]) {
 			
 			if ( execvp(the_programs[fork_iterator], copy_of_args[fork_iterator]) < 0){
 				perror("execvp");
-				_exit(-1);
+				//exit(-1);
+				exit_function(original_line, the_args, the_programs, arguments_per_program, number_of_programs,
+				copy_of_args);
 			}
 
-			_exit(0);
+			//exit(0);
+			exit_function(original_line, the_args, the_programs, arguments_per_program, number_of_programs,
+			copy_of_args);
 
 		}
 
@@ -286,7 +290,7 @@ int main(int argc, char *argv[]) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-
+	
 	/// exiting
 	printf("All Processing Finished: parent exiting: my pid is %d \n", getpid());
 	fclose (fp); 
