@@ -217,7 +217,7 @@ int main(int argc, char *argv[]) {
 
 	///// the_args = (char ***)malloc(256 * sizeof(char**)); assign new args
 
-	copy_of_args = (char ***)malloc( (number_of_programs) * sizeof(char**));
+	copy_of_args = (char ***)malloc( (number_of_programs+1) * sizeof(char**));
 
 	for (int program_number = 0; program_number < number_of_programs; program_number++){
 
