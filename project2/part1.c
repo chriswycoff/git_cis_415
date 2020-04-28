@@ -177,6 +177,7 @@ int main(int argc, char *argv[]) {
 
 		strcpy(the_programs[current_program], tokens[0]);
 
+
 		arguments_per_program[current_program] = token_counter;
 
 		current_program+=1;
@@ -270,15 +271,11 @@ int main(int argc, char *argv[]) {
 			if ( execvp(the_programs[fork_iterator], copy_of_args[fork_iterator]) < 0){
 				perror("execvp");
 				//exit(-1);
-				fclose (fp); 
-				exit_function(original_line, the_args, the_programs, arguments_per_program, number_of_programs,
-				copy_of_args);
+				exit(-1);
 			}
 
 			//exit(0);
-			fclose (fp); 
-			exit_function(original_line, the_args, the_programs, arguments_per_program, number_of_programs,
-			copy_of_args);
+			exit(-1);
 
 		}
 
