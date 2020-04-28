@@ -271,11 +271,11 @@ int main(int argc, char *argv[]) {
 			if ( execvp(the_programs[fork_iterator], copy_of_args[fork_iterator]) < 0){
 				perror("execvp");
 				//exit(-1);
-				exit(-1);
+				exit(EXIT_FAILURE);
 			}
 
 			//exit(0);
-			exit(-1);
+			exit(0);
 
 		}
 
