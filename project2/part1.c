@@ -208,7 +208,7 @@ int main(int argc, char *argv[]) {
 	
 
 	/// exiting
-
+	fclose (fp); 
 	exit_function(line_buffer,the_args,the_programs,arguments_per_program,number_of_programs);
 
 	//free(line_buffer);
