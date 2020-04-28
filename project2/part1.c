@@ -71,6 +71,8 @@ int main(int argc, char *argv[]) {
 
 	// allocations
 	// allocate for lines
+
+	// potentially read the number of arguments
 	line_buffer = (char *)malloc(bufsize * sizeof(char));
 	the_args = (char ***)malloc(256 * sizeof(char**));
 	the_programs = (char **)malloc(256 * sizeof(char*));
