@@ -263,7 +263,8 @@ int main(int argc, char *argv[]) {
 		if (pid == 0){
 
 			printf("This is the child process, my pid is %d, my parent pid is %d\n", getpid(), getppid());
-			printf("My status is  %d\n",pid );
+			printf("My status is  %d\n\n",pid );
+			printf("//////////////////////////////////////////////////////////\n");
 
 			
 			if ( execvp(the_programs[fork_iterator], copy_of_args[fork_iterator]) < 0){
@@ -276,7 +277,7 @@ int main(int argc, char *argv[]) {
 		else{
 			//waitpid();
 			wait(0);
-			printf("Child finished, control back to parent: my pid is %d \n", getpid());
+			printf("Child finished, control back to parent: my pid is %d \n\n", getpid());
 		}
 
 }
