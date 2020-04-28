@@ -25,7 +25,7 @@ int exit_function(char * line_buffer, char ***the_args, char** the_programs,
 	printf("getting here no prob\n");
 	// freeing the arguments
 	for (int i = 0; i < number_of_programs; i++){
-		for(int j = 0; j < ((arguments_per_program[i]) + 1); j++){
+		for(int j = 0; j < (arguments_per_program[i]); j++){
 			free(the_args[i][j]);
 		}
 		free(the_args[i]);
@@ -161,8 +161,8 @@ int main(int argc, char *argv[]) {
 		}
 		// alloc for NULL terminator for exec
 		the_args[current_program][token_counter] = (char *)malloc(256 * sizeof(char));
-		the_args[current_program][token_counter] = NULL;
 
+		the_args[current_program][token_counter] = NULL;
 
 		the_programs[current_program] = (char *)malloc(256 * sizeof(char));
 
