@@ -25,7 +25,7 @@ int exit_function(char * line_buffer, char ***the_args, char** the_programs,
 	printf("getting here no prob\n");
 	// freeing the arguments
 	for (int i = 0; i < number_of_programs; i++){
-		for(int j = 0; j < arguments_per_program[i]; j++){
+		for(int j = 0; j < arguments_per_program[i]+1; j++){
 			free(the_args[i][j]);
 		}
 		free(the_args[i]);
@@ -150,22 +150,6 @@ int main(int argc, char *argv[]) {
 			tokens[token_counter]= token;
 		}
 
-		
-		/*
-		for (int i = 0; i< token_counter; i++){
-			printf(" hello %s\n",tokens[i]);
-
-		}
-		*/
-
-		// printed tokens for debugging
-
-
-		// add a NULL to tokens?
-		
-		//token_counter += 1; 
-		//tokens[token_counter]= NULL;
-		////////
 
 		// malloc inner array of strings for tokens
 		the_args[current_program] = (char **)malloc(token_counter * sizeof(char*));
@@ -174,8 +158,11 @@ int main(int argc, char *argv[]) {
 		for (int i = 0; i< token_counter; i++){
 			the_args[current_program][i] = (char *)malloc(256 * sizeof(char));
 			strcpy(the_args[current_program][i],tokens[i]);
-
 		}
+		// alloc for NULL terminator for exec
+		the_args[current_program][token_counter] = (char *)malloc(256 * sizeof(char));
+		the_args[current_program][token_counter] = NULL;
+
 
 		the_programs[current_program] = (char *)malloc(256 * sizeof(char));
 
@@ -183,13 +170,6 @@ int main(int argc, char *argv[]) {
 
 		arguments_per_program[current_program] = token_counter;
 
-		/*
-		the_args[current_program] = tokens;
-
-		printf("THIS: %s\n",the_args[current_program][0]);
-
-		the_programs[current_program] = the_args[current_program][0];
-		*/
 		current_program+=1;
 		
 
@@ -218,6 +198,8 @@ int main(int argc, char *argv[]) {
 	for(int i = 0; i < number_of_programs; i++ ){
 	printf("Program %d %s\n", i, the_programs[i]);
 	}
+
+
 
 	/// exiting
 	fclose (fp); 
