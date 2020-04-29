@@ -325,7 +325,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 			printf("Attempting to run: %s\n", the_programs[fork_iterator]);
 
-
+			/*
 			if ( execvp(the_programs[fork_iterator], copy_of_args[fork_iterator]) < 0){
 
 				perror("execvp");
@@ -333,6 +333,11 @@ From Grayson Guan to Everyone: (01:53 PM)
 					fclose (fp); 
 					exit_function(-1, original_line, the_args, the_programs, arguments_per_program, number_of_programs,
 					copy_of_args);
+			}
+			*/
+			while(1){
+				printf("looping here\n");
+				sleep(1);
 			}
 			printf("succes\n"); // why does this not show up?
 
@@ -345,7 +350,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 
 	}
-
+	sleep(2);
 	/// for loop to bring children back to life
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 		kill(the_ids[fork_iterator],SIGUSR1);
