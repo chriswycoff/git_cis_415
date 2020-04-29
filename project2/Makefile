@@ -1,7 +1,6 @@
 all : part1.out part2.out part3.out part4.out part5.out
 
-sources = $(wildcard *.c)
-objects = $(addsuffix .o, $(basename $(sources)))
+flags = -g -W -Wall -std=c11 -DDEBUG=0 -DTEST=0	
 
 part1.out : part1.c
 	gcc -o part1.out part1.c
