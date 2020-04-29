@@ -1,4 +1,3 @@
-sources =
 
 
 all : part1.out part2.out part3.out part4.out part5.out
