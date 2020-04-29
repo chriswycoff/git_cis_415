@@ -1,0 +1,5 @@
+ls -a -r -s
+sleep 1
+invalid name
+./mac_test/iobound_mac -minutes 1
+./mac_test/cpubound_mac -minutes 1
