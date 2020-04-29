@@ -272,11 +272,13 @@ int main(int argc, char *argv[]) {
 			if ( execvp(the_programs[fork_iterator], copy_of_args[fork_iterator]) < 0){
 				perror("execvp");
 				//exit(-1);
-				exit_function(-1);
+					exit_function(1, original_line, the_args, the_programs, arguments_per_program, number_of_programs,
+					copy_of_args);
 			}
 
 			//exit(0);
-			exit_function(0);
+				exit_function(0, original_line, the_args, the_programs, arguments_per_program, number_of_programs,
+				copy_of_args);
 
 		}
 
@@ -298,7 +300,7 @@ int main(int argc, char *argv[]) {
 
 
 	fclose (fp); 
-	exit_function(status, original_line, the_args, the_programs, arguments_per_program, number_of_programs,
+	exit_function(0, original_line, the_args, the_programs, arguments_per_program, number_of_programs,
 		copy_of_args);
 
 	//free(line_buffer);
