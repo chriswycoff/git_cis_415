@@ -59,7 +59,6 @@ int exit_function(int status, char * line_buffer, char ***the_args, char** the_p
 
 void handler_function_1(int sig, siginfo_t *siginfo, void *context){
 
-
 	printf("SIGNAL RECIEVED!\n");
 
 	sigset_t sigset;
