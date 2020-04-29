@@ -1,8 +1,8 @@
-
+sources = $(wildcard *.c)
+objects = $(addsuffix .o, $(basename $(sources)))
+flags = -g -W -Wall -std=c11 
 
 all : part1.out part2.out part3.out part4.out part5.out
-
-flags = -g -W -Wall -std=c11 
 
 part1.out : part1.o
 	gcc -o part1.out part1.o
@@ -23,4 +23,4 @@ part5.out : part5.o
 	gcc -c $(flags) $< -o $@
 
 clean :
-	rm part1.out part2.out part3.out part4.out part5.out 
+	rm part1.out part2.out part3.out part4.out part5.out $(objects)
