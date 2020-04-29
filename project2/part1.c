@@ -19,7 +19,7 @@
 #include <sys/wait.h>
 
 
-int exit_function(char * line_buffer, char ***the_args, char** the_programs, 
+int exit_function(int status, char * line_buffer, char ***the_args, char** the_programs, 
 	int * arguments_per_program, int number_of_programs, char*** copy_of_args){
 
 	
@@ -51,7 +51,7 @@ int exit_function(char * line_buffer, char ***the_args, char** the_programs,
 	free(line_buffer);
 
 	printf("\n");
-	exit(0);
+	exit(status);
 }
 
 
@@ -272,11 +272,11 @@ int main(int argc, char *argv[]) {
 			if ( execvp(the_programs[fork_iterator], copy_of_args[fork_iterator]) < 0){
 				perror("execvp");
 				//exit(-1);
-				exit(EXIT_FAILURE);
+				exit_function(-1);
 			}
 
 			//exit(0);
-			exit(0);
+			exit_function(0);
 
 		}
 
@@ -298,7 +298,7 @@ int main(int argc, char *argv[]) {
 
 
 	fclose (fp); 
-	exit_function(original_line, the_args, the_programs, arguments_per_program, number_of_programs,
+	exit_function(status, original_line, the_args, the_programs, arguments_per_program, number_of_programs,
 		copy_of_args);
 
 	//free(line_buffer);
