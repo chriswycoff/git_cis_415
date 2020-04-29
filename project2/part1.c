@@ -67,6 +67,8 @@ int main(int argc, char *argv[]) {
 	char*** the_args;
 	char** the_programs;
 
+
+
 	int arguments_per_program[256];
 
 	for(int i = 0; i < 256; i++){
@@ -288,13 +290,23 @@ int main(int argc, char *argv[]) {
 
 		}
 
+
+	}
+	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
+
+		if (pid == 0){
+			printf("BIG ISSUE CHILD DID NOT EXIT\n");
+			exit_function(-1, original_line, the_args, the_programs, arguments_per_program, number_of_programs,
+			copy_of_args);
+		}
+		
 		else{
 			//waitpid();
 			wait(0);
 			printf("Child finished, control back to parent: my pid is %d \n\n", getpid());
 		}
 
-}
+	}
 
 
 	

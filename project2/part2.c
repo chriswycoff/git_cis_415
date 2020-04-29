@@ -17,6 +17,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <sys/wait.h>
+#include <signal.h>
 
 
 int exit_function(int status, char * line_buffer, char ***the_args, char** the_programs, 
@@ -263,17 +264,20 @@ int main(int argc, char *argv[]) {
 	printf("**********************************************************************\n");
 	printf("\n");
 
-	int the_ids[256];
+	//////////// create process array /////////////
+	pid_t the_ids[256];
+	//////////// end create process array /////////////
 
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 
-		pid = fork();
-		printf("just forked... current processs: %d \n", pid);
+		the_ids[fork_iterator] = fork();
+		printf("just forked... current processs: %d \n", the_ids[fork_iterator]);
 
-		if (pid == 0){
+		if (the_ids[fork_iterator] == 0){
+
 
 			printf("This is the child process, my pid is %d, my parent pid is %d\n", getpid(), getppid());
-			printf("My status is  %d\n\n",pid );
+			printf("My status is  %d\n\n",the_ids[fork_iterator] );
 			printf("//////////////////////////////////////////////////////////\n");
 
 			printf("Attempting to run: %s\n", the_programs[fork_iterator]);
@@ -293,15 +297,23 @@ int main(int argc, char *argv[]) {
 
 		}
 
+
+	}
+	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
+
+		if (the_ids[fork_iterator] == 0){
+			printf("BIG ISSUE CHILD DID NOT EXIT\n");
+			exit_function(-1, original_line, the_args, the_programs, arguments_per_program, number_of_programs,
+			copy_of_args);
+		}
+		
 		else{
 			//waitpid();
-			printf("Waiting for child \n");
 			wait(0);
 			printf("Child finished, control back to parent: my pid is %d \n\n", getpid());
-			printf("//////////////////////////////////////////////////////////\n");
 		}
 
-}
+	}
 
 	
 	/// exiting
