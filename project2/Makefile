@@ -1,21 +1,27 @@
+sources =
+
+
 all : part1.out part2.out part3.out part4.out part5.out
 
-flags = -g -W -Wall -std=c11 -DDEBUG=0 -DTEST=0	
+flags = -g -W -Wall -std=c11 
 
-part1.out : part1.c
-	gcc -o part1.out part1.c
+part1.out : part1.o
+	gcc -o part1.out part1.o
 
-part2.out : part2.c
-	gcc -o part2.out part2.c
+part2.out : part2.o
+	gcc -o part2.out part2.o
 
-part3.out : part3.c
-	gcc -o part3.out part3.c
+part3.out : part3.o
+	gcc -o part3.out part3.o
 
-part4.out : part4.c
-	gcc -o part4.out part4.c
+part4.out : part4.o
+	gcc -o part4.out part4.o
 
-part5.out : part5.c
-	gcc -o part5.out part5.c
+part5.out : part5.o
+	gcc -o part5.out part5.o
+
+%.o : %.c
+	gcc -c $(flags) $< -o $@
 
 clean :
 	rm part1.out part2.out part3.out part4.out part5.out 
