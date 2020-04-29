@@ -292,7 +292,7 @@ int main(int argc, char *argv[]) {
 
 			//exit(0);
 				fclose (fp); 
-				exit_function(0, original_line, the_args, the_programs, arguments_per_program, number_of_programs,
+				exit_function(-1, original_line, the_args, the_programs, arguments_per_program, number_of_programs,
 				copy_of_args);
 
 		}
