@@ -192,6 +192,8 @@ int main(int argc, char *argv[]) {
 	
 	int number_of_programs = current_program;
 	
+
+	/*
 	printf("Num Programs: %d\n",number_of_programs);
 	
 
@@ -206,6 +208,7 @@ int main(int argc, char *argv[]) {
 	for(int i = 0; i < number_of_programs; i++ ){
 	printf("Program %d %s\n", i, the_programs[i]);
 	}
+	*/
 
 	// malloc a copy of arguments ////////////////////////////////////////////
 
@@ -283,7 +286,7 @@ int main(int argc, char *argv[]) {
 				copy_of_args);
 
 		}
-
+		
 		else{
 			//waitpid();
 			wait(0);
