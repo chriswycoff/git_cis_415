@@ -251,6 +251,7 @@ int main(int argc, char *argv[]) {
 	// end malloc ////////////////////////////////////////////
 
 /////// BEGIN FORKING //////////////////////////////////////////////////////////////////////
+	/*
 	pid_t pid;
 
 	printf("MAIN LOGIC starting, m pid is %d\n\n", getpid());
@@ -287,11 +288,15 @@ int main(int argc, char *argv[]) {
 
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
 
 	
 	/// exiting
 	printf("All Processing Finished: parent exiting: my pid is %d \n", getpid());
+	
+////////////////////////////////////////////////////////////////////////////////////////////
+	*/
+
+	
 	fclose (fp); 
 	exit_function(original_line, the_args, the_programs, arguments_per_program, number_of_programs,
 		copy_of_args);
