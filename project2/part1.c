@@ -39,6 +39,7 @@ int exit_function(int status, char * line_buffer, char ***the_args, char** the_p
 		}
 		free(copy_of_args[i]);
 	}
+
 	free(copy_of_args);
 
 	// freeing the programs
@@ -50,7 +51,7 @@ int exit_function(int status, char * line_buffer, char ***the_args, char** the_p
 	// free line buffer
 	free(line_buffer);
 
-	printf("\n");
+	//printf("\n");
 	exit(status);
 }
 
@@ -171,7 +172,7 @@ int main(int argc, char *argv[]) {
 		// alloc for NULL terminator for exec
 		//the_args[current_program][token_counter] = (char *)malloc(256 * sizeof(char));
 
-		the_args[current_program][token_counter] = NULL;
+		//the_args[current_program][token_counter] = NULL;
 
 		the_programs[current_program] = (char *)malloc(256 * sizeof(char));
 
@@ -276,7 +277,7 @@ int main(int argc, char *argv[]) {
 				perror("execvp");
 				//exit(-1);
 					fclose (fp); 
-					exit_function(1, original_line, the_args, the_programs, arguments_per_program, number_of_programs,
+					exit_function(-1, original_line, the_args, the_programs, arguments_per_program, number_of_programs,
 					copy_of_args);
 			}
 
@@ -286,7 +287,7 @@ int main(int argc, char *argv[]) {
 				copy_of_args);
 
 		}
-		
+
 		else{
 			//waitpid();
 			wait(0);
