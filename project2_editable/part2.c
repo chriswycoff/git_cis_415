@@ -335,7 +335,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 		if (the_ids[fork_iterator] == 0){
 
 
-			printf("stoping the child\n");
+			printf("stoping the child: %d \n", getpid());
 			//if (the_ids[fork_iterator] == 0){
 				sigwait(&sigset, &signumber);
 			//}
