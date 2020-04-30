@@ -327,12 +327,13 @@ From Grayson Guan to Everyone: (01:53 PM)
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 
 		the_ids[fork_iterator] = fork();
-		printf("just forked... current processs: %d \n", the_ids[fork_iterator]);
+	
 
 		// stop child //
 		
 
 		if (the_ids[fork_iterator] == 0){
+			printf("just forked... current processs: %d \n", the_ids[fork_iterator]);
 
 
 			printf("stoping the child: %d \n", getpid());
@@ -396,6 +397,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 		
 		else{
 			//waitpid();
+			printf("Waiting \n");
 			wait(0);//waitpid(the_ids[fork_iterator], NULL, __WALL);
 			printf("Child finished, control back to parent: my pid is %d \n\n", getpid());
 		}
