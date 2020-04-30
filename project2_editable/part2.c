@@ -63,7 +63,7 @@ void handler_function_1(int sig, siginfo_t *siginfo, void *context){
 
 	printf("SIGNAL RECIEVED!\n");
 
-	/*
+	
 	sigset_t sigset;
 	sigemptyset(&sigset);
 	sigaddset(&sigset, SIGUSR1);
@@ -74,7 +74,7 @@ void handler_function_1(int sig, siginfo_t *siginfo, void *context){
 	if (sigwait(&sigset, &sig) == 0){
 		printf("Unblocking here\n");
 	}
-	*/
+	
 
 }
 
@@ -322,9 +322,9 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 
 			printf("stoping the child\n");
-			if (the_ids[fork_iterator] == 0){
-				kill(the_ids[fork_iterator],SIGUSR1);
-			}
+			//if (the_ids[fork_iterator] == 0){
+				kill(the_ids[fork_iterator], SIGUSR1);
+			//}
 
 
 			printf("This is the child process, my pid is %d, my parent pid is %d\n", getpid(), getppid());
