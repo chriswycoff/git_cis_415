@@ -315,9 +315,9 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 
 	/// this will unblock if blocked
-	if (sigwait(&sigset, &sig) == 0){
-		printf("Unblocking here\n");
-	}
+	//if (sigwait(&sigset, &signumber) == 0){
+	//	printf("Unblocking here\n");
+	//}
 
 	//signal_action_struct.sa_sigaction = &handler_function_1;
 
