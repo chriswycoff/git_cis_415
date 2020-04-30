@@ -63,6 +63,7 @@ void handler_function_1(int sig, siginfo_t *siginfo, void *context){
 
 	printf("SIGNAL RECIEVED!\n");
 
+	/*
 	sigset_t sigset;
 	sigemptyset(&sigset);
 	sigaddset(&sigset, SIGUSR1);
@@ -73,6 +74,7 @@ void handler_function_1(int sig, siginfo_t *siginfo, void *context){
 	if (sigwait(&sigset, &sig) == 0){
 		printf("Unblocking here\n");
 	}
+	*/
 
 }
 
@@ -319,8 +321,8 @@ From Grayson Guan to Everyone: (01:53 PM)
 		if (the_ids[fork_iterator] == 0){
 
 
-			printf("Process %d is about to be killed \n", getpid());
-			if (the_ids[fork_iterator] != 0){
+			printf("stoping the child\n");
+			if (the_ids[fork_iterator] == 0){
 				kill(the_ids[fork_iterator],SIGUSR1);
 			}
 
@@ -332,7 +334,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 			printf("Attempting to run: %s\n", the_programs[fork_iterator]);
 
 
-			sleep(5);
+			sleep(2);
 
 			
 			if ( execvp(the_programs[fork_iterator], copy_of_args[fork_iterator]) < 0){
@@ -378,7 +380,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 		
 		else{
 			//waitpid();
-			wait(0);
+			waitpid(number_of_programs, NULL, __WALL);
 			printf("Child finished, control back to parent: my pid is %d \n\n", getpid());
 		}
 
