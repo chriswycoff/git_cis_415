@@ -63,7 +63,7 @@ void handler_function_1(int sig, siginfo_t *siginfo, void *context){
 
 	printf("SIGNAL RECIEVED!\n");
 
-	
+	/*
 	sigset_t sigset;
 	sigemptyset(&sigset);
 	sigaddset(&sigset, SIGUSR1);
@@ -74,9 +74,11 @@ void handler_function_1(int sig, siginfo_t *siginfo, void *context){
 	if (sigwait(&sigset, &sig) == 0){
 		printf("Unblocking here\n");
 	}
+	*/
 	
 
 }
+
 
 
 
@@ -302,13 +304,25 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 	//////////// create sig struct and handler /////////////
 
-	struct sigaction signal_action_struct;
-	memset (&signal_action_struct, '\0', sizeof(signal_action_struct));
+	// struct sigaction signal_action_struct;
+	// memset (&signal_action_struct, '\0', sizeof(signal_action_struct));
 
-	signal_action_struct.sa_sigaction = &handler_function_1;
+	int signumber; 
+	sigset_t sigset;
+	sigemptyset(&sigset);
+	sigaddset(&sigset, SIGUSR1);
+	sigprocmask(SIG_BLOCK, &sigset, NULL);
+
+
+	/// this will unblock if blocked
+	if (sigwait(&sigset, &sig) == 0){
+		printf("Unblocking here\n");
+	}
+
+	//signal_action_struct.sa_sigaction = &handler_function_1;
 
 	//////////// end create sig struct /////////////
-	sigaction(SIGUSR1,&signal_action_struct,NULL);
+	//sigaction(SIGUSR1,&signal_action_struct,NULL);
 
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 
@@ -323,7 +337,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 			printf("stoping the child\n");
 			//if (the_ids[fork_iterator] == 0){
-				kill(the_ids[fork_iterator], SIGUSR1);
+				sigwait(&sigset, &signumber);
 			//}
 
 
@@ -356,9 +370,11 @@ From Grayson Guan to Everyone: (01:53 PM)
 			//printf("succes\n"); // why does this not show up?
 
 			//exit(0);
+			
 				fclose (fp); 
 				exit_function(0, original_line, the_args, the_programs, arguments_per_program, number_of_programs,
 				copy_of_args);
+			
 
 		}
 
@@ -380,7 +396,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 		
 		else{
 			//waitpid();
-			waitpid(number_of_programs, NULL, __WALL);
+			wait(0);//waitpid(the_ids[fork_iterator], NULL, __WALL);
 			printf("Child finished, control back to parent: my pid is %d \n\n", getpid());
 		}
 
