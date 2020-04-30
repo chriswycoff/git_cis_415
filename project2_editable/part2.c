@@ -349,7 +349,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 			printf("Attempting to run: %s\n", the_programs[fork_iterator]);
 
 
-			sleep(2);
+			//sleep(5);
 
 			
 			if ( execvp(the_programs[fork_iterator], copy_of_args[fork_iterator]) < 0){
@@ -383,6 +383,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 	//sleep(2);
 	/// for loop to bring children back to life
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
+		printf("starting child back up %d\n", the_ids[fork_iterator]);
 		kill(the_ids[fork_iterator],SIGUSR1);
 	}
 
