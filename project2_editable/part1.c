@@ -17,7 +17,6 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <sys/wait.h>
-#include <signal.h>
 
 
 int exit_function(int status, char * line_buffer, char ***the_args, char** the_programs, 
@@ -57,24 +56,6 @@ int exit_function(int status, char * line_buffer, char ***the_args, char** the_p
 }
 
 
-void handler_function_1(int sig, siginfo_t *siginfo, void *context){
-
-	printf("SIGNAL RECIEVED!\n");
-
-	sigset_t sigset;
-	sigemptyset(&sigset);
-	sigaddset(&sigset, SIGUSR1);
-	sigprocmask(SIG_BLOCK, &sigset, NULL);
-
-
-	/// this will unblock if blocked
-	if (sigwait(&sigset, &sig) == 0){
-		printf("Unblocking here\n");
-	}
-
-}
-
-
 int main(int argc, char *argv[]) {
 
 	printf("RUNNING PART 1\n");
@@ -86,6 +67,8 @@ int main(int argc, char *argv[]) {
 	char*** the_args;
 	char** the_programs;
 
+
+
 	int arguments_per_program[256];
 
 	for(int i = 0; i < 256; i++){
@@ -93,7 +76,7 @@ int main(int argc, char *argv[]) {
 	}
 
 
-	size_t bufsize = 1000;
+	size_t bufsize = 10000;
 	FILE *fp ;
 
 	fp = fopen(argv[1], "r");
@@ -277,71 +260,28 @@ int main(int argc, char *argv[]) {
 
 	pid_t pid;
 
-	printf("**********************************************************************\n");
 	printf("MAIN LOGIC starting, m pid is %d\n\n", getpid());
-	printf("**********************************************************************\n");
+
 	printf("\n");
-
-	//////////// create process array /////////////
-	pid_t the_ids[256];
-	//////////// end create process array /////////////
-
-
-	/*
-	From Grayson Guan to Everyone: (01:39 PM)
- https://www.linuxprogrammingblog.com/code-examples/sigaction 
-From Grayson Guan to Everyone: (01:53 PM)
- https://stackoverflow.com/questions/6326290/about-the-ambiguous-description-of-sigwait in main declear sigaction struct set function pointer inside struct to be your sighandler inside handler function, set block action, set sigwait
-	*/
-
-
-	//////////// create sig struct and handler /////////////
-
-	struct sigaction signal_action_struct;
-	memset (&signal_action_struct, '\0', sizeof(signal_action_struct));
-
-	signal_action_struct.sa_sigaction = &handler_function_1;
-
-	//////////// end create sig struct /////////////
-	sigaction(SIGUSR1,&signal_action_struct,NULL);
 
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 
-		the_ids[fork_iterator] = fork();
-		printf("just forked... current processs: %d \n", the_ids[fork_iterator]);
+		pid = fork();
 
-		// stop child //
-		if (the_ids[fork_iterator] != 0){
-			kill(the_ids[fork_iterator],SIGUSR1);
-		}
-
-		if (the_ids[fork_iterator] == 0){
-
+		if (pid == 0){
 
 			printf("This is the child process, my pid is %d, my parent pid is %d\n", getpid(), getppid());
-			printf("My status is  %d\n\n",the_ids[fork_iterator] );
+			printf("My status is  %d\n\n",pid );
 			printf("//////////////////////////////////////////////////////////\n");
-
-			printf("Attempting to run: %s\n", the_programs[fork_iterator]);
 
 			
 			if ( execvp(the_programs[fork_iterator], copy_of_args[fork_iterator]) < 0){
-
 				perror("execvp");
 				//exit(-1);
 					fclose (fp); 
 					exit_function(-1, original_line, the_args, the_programs, arguments_per_program, number_of_programs,
 					copy_of_args);
 			}
-			
-
-			/*
-			while(1){
-				printf("looping here\n");
-				sleep(1);
-			}
-			*/
-			printf("succes\n"); // why does this not show up?
 
 			//exit(0);
 				fclose (fp); 
@@ -352,16 +292,9 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 
 	}
-	//sleep(2);
-	/// for loop to bring children back to life
-	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
-		kill(the_ids[fork_iterator],SIGUSR1);
-	}
-
-	// for loop to wait for the children 
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 
-		if (the_ids[fork_iterator] == 0){
+		if (pid == 0){
 			printf("BIG ISSUE CHILD DID NOT EXIT\n");
 			exit_function(-1, original_line, the_args, the_programs, arguments_per_program, number_of_programs,
 			copy_of_args);
@@ -375,11 +308,10 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 	}
 
+
 	
 	/// exiting
 	printf("All Processing Finished: parent exiting: my pid is %d \n", getpid());
-
-	printf("//////////////////////////////////////////////////////////\n");
 	
 ////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -394,6 +326,12 @@ From Grayson Guan to Everyone: (01:53 PM)
 	return 1;
 
 }
+
+
+
+
+
+
 
 
 

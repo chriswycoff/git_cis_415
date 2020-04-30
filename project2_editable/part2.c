@@ -57,6 +57,8 @@ int exit_function(int status, char * line_buffer, char ***the_args, char** the_p
 }
 
 
+
+
 void handler_function_1(int sig, siginfo_t *siginfo, void *context){
 
 	printf("SIGNAL RECIEVED!\n");
@@ -73,6 +75,7 @@ void handler_function_1(int sig, siginfo_t *siginfo, void *context){
 	}
 
 }
+
 
 
 int main(int argc, char *argv[]) {
@@ -282,7 +285,7 @@ int main(int argc, char *argv[]) {
 	printf("**********************************************************************\n");
 	printf("\n");
 
-	//////////// create process array /////////////
+	//////////// create process array /////////////////
 	pid_t the_ids[256];
 	//////////// end create process array /////////////
 
