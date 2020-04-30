@@ -333,7 +333,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 		
 
 		if (the_ids[fork_iterator] == 0){
-			printf("just forked... current processs: %d \n", the_ids[fork_iterator]);
+			printf("just forked... current processs: %d \n", getpid());
 
 
 			printf("stoping the child: %d \n", getpid());
@@ -343,7 +343,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 
 			printf("This is the child process, my pid is %d, my parent pid is %d\n", getpid(), getppid());
-			printf("My status is  %d\n\n",the_ids[fork_iterator] );
+			// printf("My status is  %d\n\n",the_ids[fork_iterator] );
 			printf("//////////////////////////////////////////////////////////\n");
 
 			printf("Attempting to run: %s\n", the_programs[fork_iterator]);
@@ -380,9 +380,12 @@ From Grayson Guan to Everyone: (01:53 PM)
 		}
 
 	}
+
+
 	//sleep(2);
 	/// for loop to bring children back to life
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
+		sleep(1);
 		printf("starting child back up %d\n", the_ids[fork_iterator]);
 		kill(the_ids[fork_iterator],SIGUSR1);
 	}
@@ -399,7 +402,6 @@ From Grayson Guan to Everyone: (01:53 PM)
 		else{
 			//waitpid();
 			printf("Waiting for child... \n");
-			sleep(1);
 			wait(0);//waitpid(the_ids[fork_iterator], NULL, __WALL);
 			printf("Child finished, control back to parent: my pid is %d \n\n", getpid());
 		}
