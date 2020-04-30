@@ -61,8 +61,8 @@ int exit_function(int status, char * line_buffer, char ***the_args, char** the_p
 
 void handler_function_1(int sig, siginfo_t *siginfo, void *context){
 
-	printf("SIGNAL RECIEVED!\n");
-
+	//printf("SIGNAL RECIEVED!\n");
+/*
 	sigset_t sigset;
 	sigemptyset(&sigset);
 	sigaddset(&sigset, SIGUSR1);
@@ -71,9 +71,9 @@ void handler_function_1(int sig, siginfo_t *siginfo, void *context){
 
 	/// this will unblock if blocked
 	if (sigwait(&sigset, &sig) == 0){
-		printf("Unblocking here\n");
+		//printf("Unblocking here\n");
 	}
-
+*/
 }
 
 
@@ -348,7 +348,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 				sleep(1);
 			}
 			*/
-			printf("succes\n"); // why does this not show up?
+			//printf("succes\n"); // why does this not show up?
 
 			//exit(0);
 				fclose (fp); 
@@ -356,7 +356,6 @@ From Grayson Guan to Everyone: (01:53 PM)
 				copy_of_args);
 
 		}
-
 
 	}
 	//sleep(2);
