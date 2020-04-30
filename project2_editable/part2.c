@@ -327,6 +327,10 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 			printf("Attempting to run: %s\n", the_programs[fork_iterator]);
 
+
+			sleep(2);
+
+			/*
 			
 			if ( execvp(the_programs[fork_iterator], copy_of_args[fork_iterator]) < 0){
 
@@ -336,7 +340,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 					exit_function(-1, original_line, the_args, the_programs, arguments_per_program, number_of_programs,
 					copy_of_args);
 			}
-			
+			*/
 
 			/*
 			while(1){
