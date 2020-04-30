@@ -61,8 +61,8 @@ int exit_function(int status, char * line_buffer, char ***the_args, char** the_p
 
 void handler_function_1(int sig, siginfo_t *siginfo, void *context){
 
-	//printf("SIGNAL RECIEVED!\n");
-/*
+	printf("SIGNAL RECIEVED!\n");
+
 	sigset_t sigset;
 	sigemptyset(&sigset);
 	sigaddset(&sigset, SIGUSR1);
@@ -71,9 +71,9 @@ void handler_function_1(int sig, siginfo_t *siginfo, void *context){
 
 	/// this will unblock if blocked
 	if (sigwait(&sigset, &sig) == 0){
-		//printf("Unblocking here\n");
+		printf("Unblocking here\n");
 	}
-*/
+
 }
 
 
@@ -314,11 +314,15 @@ From Grayson Guan to Everyone: (01:53 PM)
 		printf("just forked... current processs: %d \n", the_ids[fork_iterator]);
 
 		// stop child //
-		if (the_ids[fork_iterator] != 0){
-			kill(the_ids[fork_iterator],SIGUSR1);
-		}
+
+	
+		
 
 		if (the_ids[fork_iterator] == 0){
+
+			if (the_ids[fork_iterator] != 0){
+			kill(the_ids[fork_iterator],SIGUSR1);
+			}
 
 
 			printf("This is the child process, my pid is %d, my parent pid is %d\n", getpid(), getppid());
@@ -330,7 +334,6 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 			sleep(2);
 
-			
 			
 			if ( execvp(the_programs[fork_iterator], copy_of_args[fork_iterator]) < 0){
 
@@ -364,7 +367,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 		kill(the_ids[fork_iterator],SIGUSR1);
 	}
 
-	// for loop to wait for the children 
+	// for loop to wait for the children
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 
 		if (the_ids[fork_iterator] == 0){
@@ -401,5 +404,6 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 }
 
-
+/// sigstop
+/// sigcont
 
