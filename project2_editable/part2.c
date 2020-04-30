@@ -397,7 +397,8 @@ From Grayson Guan to Everyone: (01:53 PM)
 		
 		else{
 			//waitpid();
-			printf("Waiting \n");
+			printf("Waiting for child... \n");
+			sleep(1);
 			wait(0);//waitpid(the_ids[fork_iterator], NULL, __WALL);
 			printf("Child finished, control back to parent: my pid is %d \n\n", getpid());
 		}
