@@ -29,7 +29,6 @@ void signaler_function(pid_t* the_ids, int the_signal){
 	// now terminate everything 
 	for (int i = 0; i < 5; i++ ){
 		sleep(1);
-		printf("Parent process <%d> - Sending Signal: <%d>\n",getpid(), the_signal);
 		kill(the_ids[i],SIGINT);
 	}
 
@@ -68,7 +67,7 @@ int main(int argc, char *argv[]) {
 
 				printf("Child Process <%d> Recieved signal: SIGUSR1... \n", getpid());
 				// executing here
-				if ( execvp(program, &arguments[2] ) < 0){
+				if ( execvp(program, arguments) < 0){
 					printf("PROBLEM STARTIG PROCESS\n");
 
 				}
