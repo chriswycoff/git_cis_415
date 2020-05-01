@@ -308,7 +308,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 	signal_action_struct.sa_handler = handler_function_1;
 
 	sigaction(SIGUSR1,&signal_action_struct,NULL);
-	
+
 	int signumber; 
 	sigset_t sigset;
 	sigemptyset(&sigset);
@@ -379,6 +379,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 		sleep(1);
 		printf("waking up child back up %d\n", the_ids[fork_iterator]);
+		kill(the_ids[fork_iterator],SIGUSR1);
 		kill(the_ids[fork_iterator],SIGUSR1);
 		sleep(3);
 	}
