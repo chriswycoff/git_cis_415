@@ -308,7 +308,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 	signal_action_struct.sa_handler = handler_function_1;
 
 	int result = sigaction(SIGUSR1,&signal_action_struct,NULL);
-	printf("%d\n",result);
+	printf("%d\n",result );
 	int signumber; 
 	sigset_t sigset;
 	sigemptyset(&sigset);
@@ -338,7 +338,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 			printf("sigwaiting the child: %d \n", getpid());
 			//if (the_ids[fork_iterator] == 0){
-				sigwait(&sigset, SIGUSR1);
+				sigwait(&sigset, &signumber);
 
 
 			//}
