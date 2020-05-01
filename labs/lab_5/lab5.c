@@ -11,6 +11,13 @@
 #include <sys/wait.h>
 #include <signal.h>
 
+/*
+Notes in lab:
+
+*/
+
+
+
 
 void process_tester(){
 	while(1){
@@ -68,11 +75,10 @@ int main(int argc, char *argv[]) {
 
 				printf("Child Process <%d> Recieved signal: SIGUSR1... \n", getpid());
 				// executing here
-				if ( execvp(program, arguments) < 0){
+				if (execvp(program, arguments) < 0){
 					printf("PROBLEM STARTIG PROCESS\n");
 
 				}
-
 
 			}
 
