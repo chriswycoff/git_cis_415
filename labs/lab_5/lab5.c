@@ -12,6 +12,29 @@
 #include <signal.h>
 
 
+void process_tester(){
+	while(1){
+		printf("process: %d going\n",getpid());
+		sleep(2);
+	}
+}
+
+void signaler_function(pid_t* the_ids, int the_signal){
+	for (int i = 0; i < 5; i++ ){
+		sleep(1);
+		printf("Parent process <%d> - Sending Signal: <%d>\n",getpid(), the_signal);
+		kill(the_ids[i],the_signal);
+		
+	}
+	// now terminate everything 
+	for (int i = 0; i < 5; i++ ){
+		sleep(1);
+		printf("Parent process <%d> - Sending Signal: <%d>\n",getpid(), the_signal);
+		kill(the_ids[i],SIGINT);
+	}
+
+}
+
 int main(int argc, char *argv[]) {
 
 
@@ -38,17 +61,20 @@ int main(int argc, char *argv[]) {
 
 		if (the_ids[process_iterator] == 0){
 
-			if (sigwait(&sigset, &signumber) == 0){
-				printf("Process %d wating now\n", getpid());
 
+			printf("Child Process <%d> wating for SIGUSR1... \n", getpid());
+			if (sigwait(&sigset, &signumber) == 0){
+
+
+				printf("Child Process <%d> Recieved signal: SIGUSR1... \n", getpid());
 				// executing here
 				if ( execvp(program, &arguments[2] ) < 0){
 					printf("PROBLEM STARTIG PROCESS\n");
+
 				}
 
 
 			}
-
 
 			else{
 				printf("Error waiting the process: %d \n", getpid());
@@ -56,11 +82,12 @@ int main(int argc, char *argv[]) {
 
 		}
 
-
 	}
+	// parent to call signaler function here
 
+	signaler_function(the_ids, SIGUSR1);
 
-
+	
 
 }
 
