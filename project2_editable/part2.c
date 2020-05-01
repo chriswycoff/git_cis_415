@@ -424,7 +424,6 @@ From Grayson Guan to Everyone: (01:53 PM)
 		}
 
 	}
-
 	
 	/// exiting
 	printf("All Processing Finished: parent exiting: my pid is %d \n", getpid());

@@ -1,0 +1,4 @@
+./dummyspin
+./dummyspin
+./dummyspin
+./dummyspin
