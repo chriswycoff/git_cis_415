@@ -305,22 +305,25 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 	struct sigaction signal_action_struct;
 	// memset (&signal_action_struct, '\0', sizeof(signal_action_struct));
+	signal_action_struct.sa_handler = handler_function_1;
 
+	sigaction(SIGUSR1,&signal_action_struct,NULL);
+	
 	int signumber; 
 	sigset_t sigset;
 	sigemptyset(&sigset);
 	sigaddset(&sigset, SIGUSR1);
-	//sigprocmask(SIG_BLOCK, &sigset, NULL);
+	sigprocmask(SIG_BLOCK, &sigset, NULL);
 
 	/// this will unblock if blocked
 	//if (sigwait(&sigset, &signumber) == 0){
 	//	printf("Unblocking here\n");
 	//}
 
-	signal_action_struct.sa_handler = handler_function_1;
+	
 
 	//////////// end create sig struct /////////////
-	sigaction(SIGUSR1,&signal_action_struct,NULL);
+	
 
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 
