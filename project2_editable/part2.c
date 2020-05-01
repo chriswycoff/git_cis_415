@@ -399,7 +399,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 		sleep(1);
 		printf("starting child back up %d\n", the_ids[fork_iterator]);
 		kill(the_ids[fork_iterator],SIGSTOP);
-		sleep(1);
+		sleep(20);
 	}
 
 		for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
