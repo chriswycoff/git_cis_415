@@ -310,7 +310,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 	sigset_t sigset;
 	sigemptyset(&sigset);
 	sigaddset(&sigset, SIGUSR1);
-	sigprocmask(SIG_BLOCK, &sigset, NULL);
+	//sigprocmask(SIG_BLOCK, &sigset, NULL);
 
 	/// this will unblock if blocked
 	//if (sigwait(&sigset, &signumber) == 0){
@@ -335,6 +335,8 @@ From Grayson Guan to Everyone: (01:53 PM)
 			printf("sigwaiting the child: %d \n", getpid());
 			//if (the_ids[fork_iterator] == 0){
 				sigwait(&sigset, &signumber);
+
+
 			//}
 
 
