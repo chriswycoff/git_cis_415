@@ -348,10 +348,13 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 			printf("Attempting to run: %s\n", the_programs[fork_iterator]);
 
-
-			//sleep(5);
+			for (int i = 0; i <5; i++){
+				printf("process %d in the rear with the gear \n", getpid() );
+				sleep(2);
+			}
 
 			
+
 			if ( execvp(the_programs[fork_iterator], copy_of_args[fork_iterator]) < 0){
 
 				perror("execvp");
@@ -388,6 +391,22 @@ From Grayson Guan to Everyone: (01:53 PM)
 		sleep(1);
 		printf("starting child back up %d\n", the_ids[fork_iterator]);
 		kill(the_ids[fork_iterator],SIGUSR1);
+		sleep(1);
+	}
+
+	/// for loop to 
+	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
+		sleep(1);
+		printf("starting child back up %d\n", the_ids[fork_iterator]);
+		kill(the_ids[fork_iterator],SIGSTOP);
+		sleep(1);
+	}
+
+		for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
+		sleep(1);
+		printf("starting child back up %d\n", the_ids[fork_iterator]);
+		kill(the_ids[fork_iterator],SIGCONT);
+		sleep(1);
 	}
 
 	// for loop to wait for the children
