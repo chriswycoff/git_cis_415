@@ -336,7 +336,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 			printf("just forked... current processs: %d \n", getpid());
 
 
-			printf("stoping the child: %d \n", getpid());
+			printf("sigwaiting the child: %d \n", getpid());
 			//if (the_ids[fork_iterator] == 0){
 				sigwait(&sigset, &signumber);
 			//}
@@ -389,24 +389,24 @@ From Grayson Guan to Everyone: (01:53 PM)
 	/// for loop to bring children back to life
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 		sleep(1);
-		printf("starting child back up %d\n", the_ids[fork_iterator]);
+		printf("waking up child back up %d\n", the_ids[fork_iterator]);
 		kill(the_ids[fork_iterator],SIGUSR1);
-		sleep(1);
+		sleep(3);
 	}
 
 	/// for loop to 
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 		sleep(1);
-		printf("starting child back up %d\n", the_ids[fork_iterator]);
+		printf("stopping child %d\n", the_ids[fork_iterator]);
 		kill(the_ids[fork_iterator],SIGSTOP);
-		sleep(20);
+		sleep(3);
 	}
 
 		for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 		sleep(1);
-		printf("starting child back up %d\n", the_ids[fork_iterator]);
+		printf("continuing child back up %d\n", the_ids[fork_iterator]);
 		kill(the_ids[fork_iterator],SIGCONT);
-		sleep(1);
+		sleep(3);
 	}
 
 	// for loop to wait for the children
