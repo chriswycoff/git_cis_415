@@ -307,13 +307,14 @@ From Grayson Guan to Everyone: (01:53 PM)
 	// memset (&signal_action_struct, '\0', sizeof(signal_action_struct));
 	signal_action_struct.sa_handler = handler_function_1;
 
-	sigaction(SIGUSR1,&signal_action_struct,NULL);
-
+	int result = sigaction(SIGUSR1,&signal_action_struct,NULL);
+	printf("%d\n",result);
 	int signumber; 
 	sigset_t sigset;
 	sigemptyset(&sigset);
 	sigaddset(&sigset, SIGUSR1);
-	sigprocmask(SIG_BLOCK, &sigset, NULL);
+
+	//sigprocmask(SIG_BLOCK, &sigset, NULL);
 
 	/// this will unblock if blocked
 	//if (sigwait(&sigset, &signumber) == 0){
@@ -337,7 +338,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 			printf("sigwaiting the child: %d \n", getpid());
 			//if (the_ids[fork_iterator] == 0){
-				sigwait(&sigset, &signumber);
+				sigwait(&sigset, SIGUSR1);
 
 
 			//}
