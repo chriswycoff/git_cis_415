@@ -301,7 +301,6 @@ From Grayson Guan to Everyone: (01:53 PM)
  https://stackoverflow.com/questions/6326290/about-the-ambiguous-description-of-sigwait in main declear sigaction struct set function pointer inside struct to be your sighandler inside handler function, set block action, set sigwait
 	*/
 
-
 	//////////// create sig struct and handler /////////////
 
 	// struct sigaction signal_action_struct;
@@ -312,7 +311,6 @@ From Grayson Guan to Everyone: (01:53 PM)
 	sigemptyset(&sigset);
 	sigaddset(&sigset, SIGUSR1);
 	sigprocmask(SIG_BLOCK, &sigset, NULL);
-
 
 	/// this will unblock if blocked
 	//if (sigwait(&sigset, &signumber) == 0){
