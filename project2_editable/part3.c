@@ -59,7 +59,7 @@ int exit_function(int status, char * line_buffer, char ***the_args, char** the_p
 
 
 
-void handler_function_1(int sig, siginfo_t *siginfo, void *context){
+void handler_function_1(int sig){
 
 	write(STDOUT_FILENO, "SIGNAL RECIEVED\n",16);
 
@@ -379,7 +379,6 @@ From Grayson Guan to Everyone: (01:53 PM)
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 		sleep(1);
 		printf("waking up child back up %d\n", the_ids[fork_iterator]);
-		kill(the_ids[fork_iterator],SIGUSR1);
 		kill(the_ids[fork_iterator],SIGUSR1);
 		sleep(3);
 	}
