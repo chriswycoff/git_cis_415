@@ -29,6 +29,7 @@ void signaler_function(pid_t* the_ids, int the_signal){
 	// now terminate everything 
 	for (int i = 0; i < 5; i++ ){
 		sleep(1);
+		printf("terminating: %d\n",the_ids[i]);
 		kill(the_ids[i],SIGINT);
 	}
 
