@@ -317,7 +317,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 	//	printf("Unblocking here\n");
 	//}
 
-	signal_action_struct.sa_handler = &handler_function_1;
+	signal_action_struct.sa_handler = handler_function_1;
 
 	//////////// end create sig struct /////////////
 	sigaction(SIGUSR1,&signal_action_struct,NULL);
