@@ -79,6 +79,11 @@ void handler_function_1(int sig){
 
 }
 
+void signal_handler(int sig, siginfo_t * siginfo, void *context){
+	write(1, "SIGNAL RECIEVED\n",16);
+}
+
+
 
 
 
@@ -304,15 +309,21 @@ From Grayson Guan to Everyone: (01:53 PM)
 	//////////// create sig struct and handler /////////////
 
 	struct sigaction signal_action_struct;
-	// memset (&signal_action_struct, '\0', sizeof(signal_action_struct));
-	signal_action_struct.sa_handler = handler_function_1;
+	memset (&signal_action_struct, '\0', sizeof(signal_action_struct));
 
-	int result = sigaction(SIGUSR1,&signal_action_struct,NULL);
-	printf("%d\n",result );
+	signal_action_struct.sa_sigaction = signal_handler;
+
+
+
 	int signumber; 
+
+
 	sigset_t sigset;
 	sigemptyset(&sigset);
 	sigaddset(&sigset, SIGUSR1);
+
+	int result = sigaction(SIGUSR1,&signal_action_struct,NULL);
+	printf("%d\n",result );
 
 	//sigprocmask(SIG_BLOCK, &sigset, NULL);
 
