@@ -436,7 +436,15 @@ From Grayson Guan to Everyone: (01:53 PM)
 	printf("//////////////////////////////////////////////////////////\n");
 	
 ////////////////////////////////////////////////////////////////////////////////////////////
-		sigprocmask(SIG_UNBLOCK, &sigset, NULL);
+	sigprocmask(SIG_UNBLOCK, &sigset, NULL);
+
+	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
+		//sleep(1);
+		printf("Attempint to signal deap process\n");
+		kill(the_ids[fork_iterator],SIGUSR1);
+		//sleep(1);
+	}	
+	
 	kill(getpid(),SIGUSR1);
 
 
