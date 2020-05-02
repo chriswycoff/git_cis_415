@@ -436,6 +436,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 	printf("//////////////////////////////////////////////////////////\n");
 	
 ////////////////////////////////////////////////////////////////////////////////////////////
+	/*
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 		kill(the_ids[fork_iterator], SIGUSR1);
 	}
@@ -443,11 +444,11 @@ From Grayson Guan to Everyone: (01:53 PM)
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 		kill(the_ids[fork_iterator], SIGUSR1);
 	}
-	
+
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 		kill(the_ids[fork_iterator], SIGUSR1);
 	}
-
+	*/
 	fclose (fp); 
 	exit_function(0, original_line, the_args, the_programs, arguments_per_program, number_of_programs,
 		copy_of_args);
