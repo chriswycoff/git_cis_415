@@ -435,7 +435,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 	
 ////////////////////////////////////////////////////////////////////////////////////////////
 	
-
+	kill(getpid(),SIGUSR1);
 
 	fclose (fp); 
 	exit_function(0, original_line, the_args, the_programs, arguments_per_program, number_of_programs,
