@@ -325,7 +325,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 	int result = sigaction(SIGUSR1,&signal_action_struct,NULL);
 	printf("%d\n",result );
 
-	//sigprocmask(SIG_BLOCK, &sigset, NULL);
+	sigprocmask(SIG_BLOCK, &sigset, NULL);
 
 	/// this will unblock if blocked
 	//if (sigwait(&sigset, &signumber) == 0){
@@ -392,7 +392,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 		sleep(1);
 		printf("waking up child back up %d\n", the_ids[fork_iterator]);
 		kill(the_ids[fork_iterator],SIGUSR1);
-		sleep(3);
+		sleep(1);
 	}
 
 	/// for loop to 
@@ -400,14 +400,14 @@ From Grayson Guan to Everyone: (01:53 PM)
 		sleep(1);
 		printf("stopping child %d\n", the_ids[fork_iterator]);
 		kill(the_ids[fork_iterator],SIGSTOP);
-		sleep(3);
+		sleep(1);
 	}
 
 		for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 		sleep(1);
 		printf("continuing child back up %d\n", the_ids[fork_iterator]);
 		kill(the_ids[fork_iterator],SIGCONT);
-		sleep(3);
+		sleep(1);
 	}
 
 	// for loop to wait for the children
