@@ -346,10 +346,12 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 			printf("Attempting to run: %s\n", the_programs[fork_iterator]);
 
+			/*
 			for (int i = 0; i <5; i++){
 				printf("process %d in the rear with the gear \n", getpid() );
 				sleep(2);
 			}
+			*/
 
 			
 
@@ -432,7 +434,6 @@ From Grayson Guan to Everyone: (01:53 PM)
 	
 ////////////////////////////////////////////////////////////////////////////////////////////
 	
-
 
 	fclose (fp); 
 	exit_function(0, original_line, the_args, the_programs, arguments_per_program, number_of_programs,
