@@ -61,7 +61,7 @@ int exit_function(int status, char * line_buffer, char ***the_args, char** the_p
 
 void handler_function_1(int sig){
 
-	write(STDOUT_FILENO, "SIGNAL RECIEVED\n",16);
+	write(1, "SIGNAL RECIEVED\n",16);
 
 	/*
 	sigset_t sigset;
