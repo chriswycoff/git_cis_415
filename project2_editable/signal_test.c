@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
 
 	sigact.sa_flags = SA_SIGINFO;
 
-	sigaction(SIGUSR1, &signal_action_struct,NULL);
+	sigaction(SIGUSR1, &sigact, NULL);
 
 	for(int i = 0; i < 20; i++){
 			kill(getpid(),SIGUSR1);
