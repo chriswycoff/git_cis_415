@@ -391,25 +391,25 @@ From Grayson Guan to Everyone: (01:53 PM)
 	//sleep(2);
 	/// for loop to bring children back to life
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
-		sleep(1);
+		//sleep(1);
 		printf("waking up child back up %d\n", the_ids[fork_iterator]);
 		kill(the_ids[fork_iterator],SIGUSR1);
-		sleep(1);
+		//sleep(1);
 	}
 
 	/// for loop to 
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
-		sleep(1);
+		//sleep(1);
 		printf("stopping child %d\n", the_ids[fork_iterator]);
 		kill(the_ids[fork_iterator],SIGSTOP);
-		sleep(1);
+		//sleep(1);
 	}
 
 		for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
-		sleep(1);
+		//sleep(1);
 		printf("continuing child back up %d\n", the_ids[fork_iterator]);
 		kill(the_ids[fork_iterator],SIGCONT);
-		sleep(1);
+		//sleep(1);
 	}
 
 	// for loop to wait for the children
@@ -436,8 +436,9 @@ From Grayson Guan to Everyone: (01:53 PM)
 	printf("//////////////////////////////////////////////////////////\n");
 	
 ////////////////////////////////////////////////////////////////////////////////////////////
-	
+		sigprocmask(SIG_UNBLOCK, &sigset, NULL);
 	kill(getpid(),SIGUSR1);
+
 
 	fclose (fp); 
 	exit_function(0, original_line, the_args, the_programs, arguments_per_program, number_of_programs,
