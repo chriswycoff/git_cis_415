@@ -361,12 +361,10 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 			printf("Attempting to run: %s\n", the_programs[fork_iterator]);
 
-			/*
 			for (int i = 0; i <5; i++){
 				printf("process %d in the rear with the gear \n", getpid() );
 				sleep(2);
 			}
-			*/
 
 
 			if ( execvp(the_programs[fork_iterator], copy_of_args[fork_iterator]) < 0){
@@ -391,25 +389,25 @@ From Grayson Guan to Everyone: (01:53 PM)
 	//sleep(2);
 	/// for loop to bring children back to life
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
-		//sleep(1);
+		sleep(1);
 		printf("waking up child back up %d\n", the_ids[fork_iterator]);
 		kill(the_ids[fork_iterator],SIGUSR1);
-		//sleep(3);
+		sleep(3);
 	}
 
 	/// for loop to 
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
-		//sleep(1);
+		sleep(1);
 		printf("stopping child %d\n", the_ids[fork_iterator]);
 		kill(the_ids[fork_iterator],SIGSTOP);
-		//sleep(3);
+		sleep(3);
 	}
 
 		for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
-		//sleep(1);
+		sleep(1);
 		printf("continuing child back up %d\n", the_ids[fork_iterator]);
 		kill(the_ids[fork_iterator],SIGCONT);
-		//sleep(3);
+		sleep(3);
 	}
 
 	// for loop to wait for the children
@@ -436,19 +434,9 @@ From Grayson Guan to Everyone: (01:53 PM)
 	printf("//////////////////////////////////////////////////////////\n");
 	
 ////////////////////////////////////////////////////////////////////////////////////////////
-	/*
-	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
-		kill(the_ids[fork_iterator], SIGUSR1);
-	}
+	
+	kill(getpid(),SIGUSR1);
 
-	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
-		kill(the_ids[fork_iterator], SIGUSR1);
-	}
-
-	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
-		kill(the_ids[fork_iterator], SIGUSR1);
-	}
-	*/
 	fclose (fp); 
 	exit_function(0, original_line, the_args, the_programs, arguments_per_program, number_of_programs,
 		copy_of_args);
