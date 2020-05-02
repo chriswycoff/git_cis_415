@@ -388,7 +388,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 	}
 
 
-	//sleep(2);
+	sleep(2);
 	/// for loop to bring children back to life
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 		//sleep(1);
