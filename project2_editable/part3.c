@@ -325,7 +325,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 	int result = sigaction(SIGUSR1,&signal_action_struct,NULL);
 	printf("%d\n",result );
 
-	sigprocmask(SIG_BLOCK, &sigset, NULL);
+	//sigprocmask(SIG_BLOCK, &sigset, NULL);
 
 	/// this will unblock if blocked
 	//if (sigwait(&sigset, &signumber) == 0){
@@ -398,6 +398,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 		kill(the_ids[fork_iterator],SIGUSR1);
 		//sleep(1);
 	}
+	sleep(2);
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 		//sleep(1);
 		printf("Attempint to signal process: %d \n", the_ids[fork_iterator]);
