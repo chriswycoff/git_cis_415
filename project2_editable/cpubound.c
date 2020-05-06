@@ -6,7 +6,7 @@ int main(int argc, char **argv) {
     long long i;
     int minutes = 1, j;
     char name[128];
-    long int amount = 3000000000; // 30000000000
+    long int amount = 3500000000; // 30000000000
 
 /*
  * process environment variable and command line arguments

@@ -351,7 +351,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 			printf("sigwaiting the child: %d \n", getpid());
 			//if (the_ids[fork_iterator] == 0){
-				sigwait(&sigset, &signumber);
+			sigwait(&sigset, &signumber);
 
 
 			//}
@@ -398,6 +398,12 @@ From Grayson Guan to Everyone: (01:53 PM)
 		kill(the_ids[fork_iterator],SIGUSR1);
 		//sleep(1);
 	}
+	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
+		//sleep(1);
+		printf("Attempint to signal process: %d \n", the_ids[fork_iterator]);
+		kill(the_ids[fork_iterator],SIGUSR1);
+		//sleep(1);
+	}	
 
 	/// for loop to 
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
