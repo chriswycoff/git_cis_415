@@ -325,7 +325,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 	int result = sigaction(SIGUSR1,&signal_action_struct,NULL);
 	printf("%d\n",result );
 
-	//sigprocmask(SIG_BLOCK, &sigset, NULL);
+	sigprocmask(SIG_BLOCK, &sigset, NULL);
 
 	/// this will unblock if blocked
 	//if (sigwait(&sigset, &signumber) == 0){
