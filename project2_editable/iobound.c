@@ -7,7 +7,7 @@
 #include <unistd.h>
 
 int main(int argc, char **argv) {
-    int i, j, minutes = 1, number = 10000000; //600000000;
+    int i, j, minutes = 1, number = 40000000; //600000000;
     char b[1000];
     int fd = open("/dev/null", O_WRONLY);
     char name[128];
