@@ -332,7 +332,9 @@ From Grayson Guan to Everyone: (01:53 PM)
 	//	printf("Unblocking here\n");
 	//}
 
-	
+	//WNOHANG in wait pid
+	//result =waitpid(pid, &status, WNOHANG)
+	////// NOTES ^^^^^^^^^^^^^^
 
 	//////////// end create sig struct /////////////
 	
