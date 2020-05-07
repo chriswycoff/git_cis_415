@@ -75,6 +75,8 @@ void handler_function_1(int sig){
 		printf("Unblocking here\n");
 	}
 	*/
+
+
 	
 
 }
@@ -325,7 +327,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 	int result = sigaction(SIGUSR1,&signal_action_struct,NULL);
 	printf("%d\n",result );
 
-	sigprocmask(SIG_BLOCK, &sigset, NULL);
+	//sigprocmask(SIG_BLOCK, &sigset, NULL);
 
 	/// this will unblock if blocked
 	//if (sigwait(&sigset, &signumber) == 0){
@@ -343,10 +345,17 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 		the_ids[fork_iterator] = fork();
 
+
 		// stop child //
 		
 
 		if (the_ids[fork_iterator] == 0){
+				for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
+						//sleep(1);
+						printf("%d ", the_ids[fork_iterator]);
+					
+						//sleep(1);
+					}
 			printf("just forked... current processs: %d \n", getpid());
 
 			printf("sigwaiting the child: %d \n", getpid());
@@ -388,6 +397,14 @@ From Grayson Guan to Everyone: (01:53 PM)
 		}
 
 	}
+
+	/*
+	int processes_running = 1;
+
+	while(processes_running){
+		alarm(5)
+	}
+	*/
 
 
 	sleep(2);
@@ -455,6 +472,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 		//sleep(1);
 	}	
 	
+	
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 		//sleep(1);
 		printf("%d ", the_ids[fork_iterator]);
@@ -464,7 +482,10 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 	printf("\n");
 
+	pid_t test_process_id = fork();
+
 	kill(getpid(),SIGUSR1);
+
 
 
 	fclose (fp); 
