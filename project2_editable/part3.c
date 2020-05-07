@@ -440,15 +440,19 @@ From Grayson Guan to Everyone: (01:53 PM)
 				first_time = 0;
 			}
 			*/
+
+			printf("NUM PROCESS RUNNING : %d\n", num_process_running);
+			sleep(1);
 			// start a process;
 			kill(the_ids[process_to_start],SIGCONT);
+			int original = process_to_start;
 
 			// check for terminated processes
 			for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 		
 				wno_hang_number = waitpid(the_ids[fork_iterator], NULL, WNOHANG);
 
-				if(wno_hang_number != 0){
+				if((wno_hang_number != 0) && process_status[fork_iterator] != 2){
 					process_status[fork_iterator] = 2; // for terminated
 					num_process_running -= 1;
 
@@ -468,6 +472,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 			// check here to see what process to contiue
 			int incase = 0;
 			int checking = 1;
+
 			if(num_process_running > 0){
 				while(checking){
 
@@ -485,6 +490,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 					if (incase > 300){
 						printf("INCASE EXEPTION\n");
 						checking = 0;
+
 					}
 				}
 			}
@@ -508,7 +514,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 			}
 			*/
 
-			if (num_process_running == 0){
+			if (num_process_running <= 0){
 				processes_running = 0;
 
 			}
