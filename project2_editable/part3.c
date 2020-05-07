@@ -299,6 +299,15 @@ int main(int argc, char *argv[]) {
 	//////////// create process array /////////////////
 	pid_t the_ids[256];
 	//////////// end create process array /////////////
+	int process_status[256];
+	int process_turn;
+
+	for (int i = 0; i < 256; i++ ){
+		process_status[i] = 0;
+	}
+	// make all processes status stopped (0)
+	// 1 will be running
+	// 2 will be terminated
 
 
 	/*
@@ -401,24 +410,87 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 	}
 
+				/// for loop to bring children back to life
+		for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
+				//sleep(1);
+			printf("waking up child back up %d\n", the_ids[fork_iterator]);
+			kill(the_ids[fork_iterator],SIGUSR1);
+			printf("stopping child %d\n", the_ids[fork_iterator]);
+			kill(the_ids[fork_iterator],SIGSTOP);
+				//sleep(1);
+		}
 	
 	int processes_running = 1;
 
+	int num_process_running = number_of_programs;
+
+	int wno_hang_number;
+
+	int process_to_start = 0;
+
+	int first_time = 1;
+
 	while(processes_running){
+
+			/*
+			if (!first_time){
+				kill(the_ids[process_to_start],SIGCONT);
+			}
+			else{
+				first_time = 0;
+			}
+			*/
+			// start a process;
+			kill(the_ids[process_to_start],SIGCONT);
+
+			// check for terminated processes
+			for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
+		
+				wno_hang_number = waitpid(the_ids[fork_iterator], NULL, WNOHANG);
+
+				if(wno_hang_number != 0){
+					process_status[fork_iterator] = 2; // for terminated
+					num_process_running -= 1;
+
+				}
+
+			}
 
 			alarm(5);
 
-			sigwait(&sigset, &signumber);
+			if (num_process_running != 0){
+				sigwait(&sigset, &signumber);
+			} // wait for alarm
 
-			sleep(2);
-			/// for loop to bring children back to life
-			for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
-				//sleep(1);
-				printf("waking up child back up %d\n", the_ids[fork_iterator]);
-				kill(the_ids[fork_iterator],SIGUSR1);
-				//sleep(1);
+			kill(the_ids[process_to_start],SIGSTOP);
+			process_to_start = (process_to_start + 1) % number_of_programs; 
+
+			// check here to see what process to contiue
+			int incase = 0;
+			int checking = 1;
+			if(num_process_running > 0){
+				while(checking){
+
+					if (process_status[process_to_start] != 0){
+						process_to_start = (process_to_start + 1) % number_of_programs;
+					}
+					else{
+						//kill(the_ids[process_to_start],SIGCONT);
+
+						// process_to_start established
+						process_status[process_to_start] = 1;
+						checking = 0;
+					}
+					incase += 1;
+					if (incase > 300){
+						printf("INCASE EXEPTION\n");
+						checking = 0;
+					}
+				}
 			}
 
+
+			/*
 			/// for loop to 
 			for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 				//sleep(1);
@@ -426,7 +498,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 				kill(the_ids[fork_iterator],SIGSTOP);
 				//sleep(1);
 			}
-				sleep(2);
+							//sleep(2);
 
 				for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 				//sleep(1);
@@ -434,9 +506,15 @@ From Grayson Guan to Everyone: (01:53 PM)
 				kill(the_ids[fork_iterator],SIGCONT);
 				//sleep(1);
 			}
+			*/
 
+			if (num_process_running == 0){
+				processes_running = 0;
 
-	}
+			}
+
+	} // end while
+
 
 				// for loop to wait for the children
 		for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
