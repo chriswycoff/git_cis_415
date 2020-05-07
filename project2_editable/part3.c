@@ -323,9 +323,11 @@ From Grayson Guan to Everyone: (01:53 PM)
 	sigset_t sigset;
 	sigemptyset(&sigset);
 	sigaddset(&sigset, SIGUSR1);
+	sigaddset(&sigset,SIGALRM);
 
-	int result = sigaction(SIGUSR1,&signal_action_struct,NULL);
-	printf("%d\n",result );
+
+	sigaction(SIGUSR1,&signal_action_struct,NULL);
+
 
 	//sigprocmask(SIG_BLOCK, &sigset, NULL);
 
@@ -362,7 +364,6 @@ From Grayson Guan to Everyone: (01:53 PM)
 			//if (the_ids[fork_iterator] == 0){
 			sigwait(&sigset, &signumber);
 
-
 			//}
 
 
@@ -398,64 +399,60 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 	}
 
-	/*
+	
 	int processes_running = 1;
 
 	while(processes_running){
-		alarm(5)
+
+			alarm(5);
+
+			sigwait(&sigset, &signumber);
+
+			sleep(2);
+			/// for loop to bring children back to life
+			for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
+				//sleep(1);
+				printf("waking up child back up %d\n", the_ids[fork_iterator]);
+				kill(the_ids[fork_iterator],SIGUSR1);
+				//sleep(1);
+			}
+
+			/// for loop to 
+			for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
+				//sleep(1);
+				printf("stopping child %d\n", the_ids[fork_iterator]);
+				kill(the_ids[fork_iterator],SIGSTOP);
+				//sleep(1);
+			}
+				sleep(2);
+
+				for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
+				//sleep(1);
+				printf("continuing child back up %d\n", the_ids[fork_iterator]);
+				kill(the_ids[fork_iterator],SIGCONT);
+				//sleep(1);
+			}
+
+
 	}
-	*/
 
-
-	sleep(2);
-	/// for loop to bring children back to life
-	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
-		//sleep(1);
-		printf("waking up child back up %d\n", the_ids[fork_iterator]);
-		kill(the_ids[fork_iterator],SIGUSR1);
-		//sleep(1);
-	}
-	sleep(2);
-	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
-		//sleep(1);
-		printf("Attempint to signal process: %d \n", the_ids[fork_iterator]);
-		kill(the_ids[fork_iterator],SIGUSR1);
-		//sleep(1);
-	}	
-
-	/// for loop to 
-	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
-		//sleep(1);
-		printf("stopping child %d\n", the_ids[fork_iterator]);
-		kill(the_ids[fork_iterator],SIGSTOP);
-		//sleep(1);
-	}
-		sleep(5);
-
+				// for loop to wait for the children
 		for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
-		//sleep(1);
-		printf("continuing child back up %d\n", the_ids[fork_iterator]);
-		kill(the_ids[fork_iterator],SIGCONT);
-		//sleep(1);
-	}
 
-	// for loop to wait for the children
-	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
+				if (the_ids[fork_iterator] == 0){
+					printf("BIG ISSUE CHILD DID NOT EXIT\n");
+					exit_function(-1, original_line, the_args, the_programs, arguments_per_program, number_of_programs,
+					copy_of_args);
+				}
+				
+				else{
+					//waitpid();
+					printf("Waiting for child... \n");
+					wait(0);//waitpid(the_ids[fork_iterator], NULL, __WALL);
+					printf("Child finished, control back to parent: my pid is %d \n\n", getpid());
+				}
 
-		if (the_ids[fork_iterator] == 0){
-			printf("BIG ISSUE CHILD DID NOT EXIT\n");
-			exit_function(-1, original_line, the_args, the_programs, arguments_per_program, number_of_programs,
-			copy_of_args);
-		}
-		
-		else{
-			//waitpid();
-			printf("Waiting for child... \n");
-			wait(0);//waitpid(the_ids[fork_iterator], NULL, __WALL);
-			printf("Child finished, control back to parent: my pid is %d \n\n", getpid());
-		}
-
-	}
+			}
 	
 	/// exiting
 	printf("All Processing Finished: parent exiting: my pid is %d \n", getpid());
@@ -485,7 +482,6 @@ From Grayson Guan to Everyone: (01:53 PM)
 	pid_t test_process_id = fork();
 
 	kill(getpid(),SIGUSR1);
-
 
 
 	fclose (fp); 
