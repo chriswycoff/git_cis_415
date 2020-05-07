@@ -314,6 +314,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 	memset (&signal_action_struct, '\0', sizeof(signal_action_struct));
 
 	signal_action_struct.sa_sigaction = signal_handler;
+	signal_action_struct.sa_flags = 0;
 
 
 
@@ -324,6 +325,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 	sigemptyset(&sigset);
 	sigaddset(&sigset, SIGUSR1);
 	sigaddset(&sigset,SIGALRM);
+
 
 
 	sigaction(SIGUSR1,&signal_action_struct,NULL);
