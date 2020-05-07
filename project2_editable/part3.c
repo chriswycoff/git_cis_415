@@ -441,8 +441,10 @@ From Grayson Guan to Everyone: (01:53 PM)
 			}
 			*/
 
+
 			printf("NUM PROCESS RUNNING : %d\n", num_process_running);
 			sleep(1);
+
 			// start a process;
 			kill(the_ids[process_to_start],SIGCONT);
 			int original = process_to_start;
@@ -462,11 +464,14 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 			alarm(5);
 
-			if (num_process_running != 0){
+			
 				sigwait(&sigset, &signumber);
-			} // wait for alarm
+			// wait for alarm
 
-			kill(the_ids[process_to_start],SIGSTOP);
+			if (num_process_running > 1){
+				kill(the_ids[process_to_start],SIGSTOP);
+			}
+			process_status[process_to_start] = 0;
 			process_to_start = (process_to_start + 1) % number_of_programs; 
 
 			// check here to see what process to contiue
@@ -481,7 +486,6 @@ From Grayson Guan to Everyone: (01:53 PM)
 					}
 					else{
 						//kill(the_ids[process_to_start],SIGCONT);
-
 						// process_to_start established
 						process_status[process_to_start] = 1;
 						checking = 0;
@@ -546,14 +550,16 @@ From Grayson Guan to Everyone: (01:53 PM)
 	printf("//////////////////////////////////////////////////////////\n");
 	
 ////////////////////////////////////////////////////////////////////////////////////////////
-	sigprocmask(SIG_UNBLOCK, &sigset, NULL);
+	//sigprocmask(SIG_UNBLOCK, &sigset, NULL);
 
+	/*
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 		//sleep(1);
 		printf("Attempint to signal deap process\n");
 		kill(the_ids[fork_iterator],SIGUSR1);
 		//sleep(1);
 	}	
+	*/
 	
 	
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
@@ -563,11 +569,11 @@ From Grayson Guan to Everyone: (01:53 PM)
 		//sleep(1);
 	}	
 
-	printf("\n");
+	//printf("\n");
 
-	pid_t test_process_id = fork();
+	//pid_t test_process_id = fork();
 
-	kill(getpid(),SIGUSR1);
+	//kill(getpid(),SIGUSR1);
 
 
 	fclose (fp); 
