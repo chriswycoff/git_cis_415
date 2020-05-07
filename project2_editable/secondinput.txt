@@ -1,0 +1,8 @@
+ls -a -r -s
+sleep 1
+invalid name
+./iobound -minutes 1
+./cpubound -minutes 1
+./iobound -minutes 1
+./cpubound -minutes 1
+./iobound -minutes 1

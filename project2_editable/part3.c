@@ -391,7 +391,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 			}
 			*/
 
-
+			kill(getpid(),SIGSTOP);
 			if ( execvp(the_programs[fork_iterator], copy_of_args[fork_iterator]) < 0){
 				perror("execvp");
 				//exit(-1);
@@ -416,7 +416,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 			printf("waking up child back up %d\n", the_ids[fork_iterator]);
 			kill(the_ids[fork_iterator],SIGUSR1);
 			printf("stopping child %d\n", the_ids[fork_iterator]);
-			kill(the_ids[fork_iterator],SIGSTOP);
+			//kill(the_ids[fork_iterator],SIGSTOP);
 				//sleep(1);
 		}
 	
@@ -562,12 +562,14 @@ From Grayson Guan to Everyone: (01:53 PM)
 	*/
 	
 	
+	/* 
 	for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 		//sleep(1);
 		printf("%d ", the_ids[fork_iterator]);
 	
 		//sleep(1);
 	}	
+	*/
 
 	//printf("\n");
 
