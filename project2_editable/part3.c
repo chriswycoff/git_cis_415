@@ -391,6 +391,8 @@ From Grayson Guan to Everyone: (01:53 PM)
 			}
 			*/
 
+			// child gets stopped here !!!
+
 			kill(getpid(),SIGSTOP);
 			if ( execvp(the_programs[fork_iterator], copy_of_args[fork_iterator]) < 0){
 				perror("execvp");
@@ -415,7 +417,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 				//sleep(1);
 			printf("waking up child back up %d\n", the_ids[fork_iterator]);
 			kill(the_ids[fork_iterator],SIGUSR1);
-			printf("stopping child %d\n", the_ids[fork_iterator]);
+			//printf("stopping child %d\n", the_ids[fork_iterator]);
 			//kill(the_ids[fork_iterator],SIGSTOP);
 				//sleep(1);
 		}
@@ -470,6 +472,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 			// wait for alarm
 
 			if (num_process_running > 1){
+				printf("Halting child process: %d \n", the_ids[process_to_start]);
 				kill(the_ids[process_to_start],SIGSTOP);
 			}
 			process_status[process_to_start] = 0;
