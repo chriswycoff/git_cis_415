@@ -451,10 +451,11 @@ From Grayson Guan to Everyone: (01:53 PM)
 			kill(the_ids[process_to_start],SIGCONT);
 			if (num_process_running > 1){
 				printf("Resuming child process: %d \n", the_ids[process_to_start]);
-				printf("Name of process: %s", the_programs[process_to_start]);
+				printf("Name of process: %s\n", the_programs[process_to_start]);
 			}
 			else{
 				printf("Continuing to run child process: %d \n", the_ids[process_to_start]);
+				printf("Name of process: %s\n", the_programs[process_to_start]);
 			}
 
 
@@ -481,6 +482,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 			if (num_process_running > 1){
 				printf("Halting child process: %d \n", the_ids[process_to_start]);
+				printf("Name of process: %s\n", the_programs[process_to_start]);
 				kill(the_ids[process_to_start],SIGSTOP);
 			}
 			process_status[process_to_start] = 0;
