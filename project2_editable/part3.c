@@ -369,20 +369,20 @@ From Grayson Guan to Everyone: (01:53 PM)
 					
 						//sleep(1);
 					}
-			printf("just forked... current processs: %d \n", getpid());
+			//printf("just forked... current processs: %d \n", getpid());
 
-			printf("sigwaiting the child: %d \n", getpid());
+			//printf("sigwaiting the child: %d \n", getpid());
 			//if (the_ids[fork_iterator] == 0){
 			sigwait(&sigset, &signumber);
 
 			//}
 
 
-			printf("This is the child process, my pid is %d, my parent pid is %d\n", getpid(), getppid());
+			//printf("This is the child process, my pid is %d, my parent pid is %d\n", getpid(), getppid());
 			// printf("My status is  %d\n\n",the_ids[fork_iterator] );
-			printf("//////////////////////////////////////////////////////////\n");
+			//printf("//////////////////////////////////////////////////////////\n");
 
-			printf("Attempting to run: %s\n", the_programs[fork_iterator]);
+			//printf("Attempting to run: %s\n", the_programs[fork_iterator]);
 
 			/*
 			for (int i = 0; i <5; i++){
@@ -447,6 +447,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 			// start a process;
 			kill(the_ids[process_to_start],SIGCONT);
+			printf("Resuming child process: %d \n", the_ids[process_to_start]);
 			int original = process_to_start;
 
 			// check for terminated processes
