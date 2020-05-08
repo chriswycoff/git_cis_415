@@ -449,7 +449,15 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 			// start a process;
 			kill(the_ids[process_to_start],SIGCONT);
-			printf("Resuming child process: %d \n", the_ids[process_to_start]);
+			if (num_process_running > 1){
+				printf("Resuming child process: %d \n", the_ids[process_to_start]);
+				printf("Name of process: %s", the_programs[process_to_start]);
+			}
+			else{
+				printf("Continuing to run child process: %d \n", the_ids[process_to_start]);
+			}
+
+
 			int original = process_to_start;
 
 			// check for terminated processes
