@@ -110,6 +110,30 @@ void display_status(long tgid) {
     fclose(statusf);
 }
 
+void get_exec_time(long tgid) {
+    char path[40], line[100], *p;
+    FILE* statusf;
+
+    snprintf(path, 40, "/proc/%ld/sched", tgid);
+
+    statusf = fopen(path, "r");
+    if(!statusf)
+        return;
+
+    while(fgets(line, 100, statusf)) {
+        if(strncmp(line, "se.sum_exec_runtime                          :", 46) != 0)
+            continue;
+        // Ignore "State:" and whitespace
+        p = line + 46;
+        while(isspace(*p)) ++p;
+
+        printf("%6ld %s", tgid, p);
+        break;
+    }
+
+    fclose(statusf);
+}
+
 
 
 
@@ -463,6 +487,30 @@ From Grayson Guan to Everyone: (01:53 PM)
 	struct dirent* ent;
 	long tgid;
 
+//////////////////////////////////////Begin Proc Read//////////////////////////////////////////////
+			proc = opendir("/proc");
+			if(proc == NULL) {
+			    perror("opendir(/proc)");
+			    return 1;
+			}
+
+			while((ent = readdir(proc))) {
+			    if(!isdigit(*ent->d_name))
+			        continue;
+
+			    tgid = strtol(ent->d_name, NULL, 10);
+			    for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
+			    	    if (tgid == the_ids[fork_iterator]){
+			    	    	display_status(tgid);
+			    	    	printf("that was the status ^^\n");
+			    	    	get_exec_time(tgid);
+			    	    }
+			    }
+			    
+			}
+
+			closedir(proc);
+////////////////////////////////////////////////////////////////////////////////////
 
 
 	while(processes_running){
@@ -491,6 +539,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 			    	    if (tgid == the_ids[fork_iterator]){
 			    	    	display_status(tgid);
 			    	    	printf("that was the status ^^\n");
+			    	    	get_exec_time(tgid);
 			    	    }
 			    }
 			    
