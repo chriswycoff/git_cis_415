@@ -126,7 +126,7 @@ void get_exec_time(long tgid) {
         // Ignore "State:" and whitespace
         p = line + 46;
         while(isspace(*p)) ++p;
-
+        printf("Time executing on cpu (miliseconds): ");
         printf("%6ld %s", tgid, p);
         break;
     }
@@ -501,8 +501,8 @@ From Grayson Guan to Everyone: (01:53 PM)
 			    tgid = strtol(ent->d_name, NULL, 10);
 			    for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 			    	    if (tgid == the_ids[fork_iterator]){
+			    	    	printf("Program %s \n" , the_programs[fork_iterator]);
 			    	    	display_status(tgid);
-			    	    	printf("that was the status ^^\n");
 			    	    	get_exec_time(tgid);
 			    	    }
 			    }
