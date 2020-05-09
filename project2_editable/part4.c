@@ -19,6 +19,7 @@
 #include <sys/wait.h>
 #include <signal.h>
 #include <ctype.h>
+#include <dirent.h>
 
 
 int exit_function(int status, char * line_buffer, char ***the_args, char** the_programs, 
@@ -456,6 +457,14 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 	int first_time = 1;
 
+
+	DIR* proc; 
+
+	struct dirent* ent;
+	long tgid;
+
+
+
 	while(processes_running){
 
 			/*
@@ -466,7 +475,29 @@ From Grayson Guan to Everyone: (01:53 PM)
 				first_time = 0;
 			}
 			*/
+//////////////////////////////////////Begin Proc Read//////////////////////////////////////////////
+			proc = opendir("/proc");
+			if(proc == NULL) {
+			    perror("opendir(/proc)");
+			    return 1;
+			}
 
+			while((ent = readdir(proc))) {
+			    if(!isdigit(*ent->d_name))
+			        continue;
+
+			    tgid = strtol(ent->d_name, NULL, 10);
+			    for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
+			    	    if (tgid == the_ids[fork_iterator]){
+			    	    	display_status(tgid);
+			    	    	printf("that was the status ^^\n");
+			    	    }
+			    }
+			    
+			}
+
+			closedir(proc);
+////////////////////////////////////////////////////////////////////////////////////
 
 			printf("NUM PROCESS RUNNING : %d\n", num_process_running);
 			sleep(1);
