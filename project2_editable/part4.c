@@ -134,6 +134,30 @@ void get_exec_time(long tgid) {
     fclose(statusf);
 }
 
+void display_memory(long tgid) {
+    char path[40], line[100], *p;
+    FILE* statusf;
+
+    snprintf(path, 40, "/proc/%ld/status", tgid);
+
+    statusf = fopen(path, "r");
+    if(!statusf)
+        return;
+
+    while(fgets(line, 100, statusf)) {
+        if(strncmp(line, "VmSize:", 7) != 0)
+            continue;
+        // Ignore "State:" and whitespace
+        p = line + 8;
+        while(isspace(*p)) ++p;
+
+        printf("Memory used: %s", p);
+        break;
+    }
+
+    fclose(statusf);
+}
+
 
 
 
@@ -504,6 +528,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 			    	    	printf("Program %s \n" , the_programs[fork_iterator]);
 			    	    	display_status(tgid);
 			    	    	get_exec_time(tgid);
+			    	    	display_memory(tgid);
 			    	    }
 			    }
 			    
@@ -540,6 +565,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 			    	    	printf("Program %s \n" , the_programs[fork_iterator]);
 			    	    	display_status(tgid);
 			    	    	get_exec_time(tgid);
+			    	    	display_memory(tgid);
 			    	    }
 			    }
 			    
