@@ -127,7 +127,7 @@ void get_exec_time(long tgid) {
         p = line + 46;
         while(isspace(*p)) ++p;
         printf("Time executing on cpu (miliseconds): ");
-        printf("%6ld %s", tgid, p);
+        printf(" %s", p);
         break;
     }
 
