@@ -548,7 +548,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 			closedir(proc);
 ////////////////////////////////////////////////////////////////////////////////////
 
-			printf("NUM PROCESS RUNNING : %d\n", num_process_running);
+			//printf("NUM PROCESS RUNNING : %d\n", num_process_running);
 			//sleep(1);
 
 			// start a process;
