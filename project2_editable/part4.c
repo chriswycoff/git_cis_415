@@ -500,7 +500,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 ////////////////////////////////////////////////////////////////////////////////////
 
 			printf("NUM PROCESS RUNNING : %d\n", num_process_running);
-			sleep(1);
+			//sleep(1);
 
 			// start a process;
 			kill(the_ids[process_to_start],SIGCONT);
