@@ -214,6 +214,9 @@ void display_io_write(long tgid) {
 int main(int argc, char *argv[]) {
 
 	printf("RUNNING PART 1\n");
+	if (argc != 2){
+		printf("USAGE ./part4.out <input file>\n");
+	}
 	//dummy_fucntion();
 
 	//BEGIN parsing input file
@@ -520,7 +523,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 				perror("execvp");
 				//exit(-1);
 					fclose (fp); 
-					exit_function(-1, original_line, the_args, the_programs, arguments_per_program, number_of_programs,
+					exit_function(0, original_line, the_args, the_programs, arguments_per_program, number_of_programs,
 					copy_of_args);
 			}
 			
@@ -549,6 +552,8 @@ From Grayson Guan to Everyone: (01:53 PM)
 	int num_process_running = number_of_programs;
 
 	int wno_hang_number;
+
+	int status;
 
 	int process_to_start = 0;
 
@@ -649,11 +654,12 @@ From Grayson Guan to Everyone: (01:53 PM)
 			int original = process_to_start;
 
 			// check for terminated processes
+			
 			for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 		
-				wno_hang_number = waitpid(the_ids[fork_iterator], NULL, WNOHANG);
+				wno_hang_number = waitpid(the_ids[fork_iterator], &status, WNOHANG);
 
-				if((wno_hang_number != 0) && process_status[fork_iterator] != 2){
+				if((WIFEXITED(status)/*wno_hang_number != 0*/) && process_status[fork_iterator] != 2){
 					process_status[fork_iterator] = 2; // for terminated
 					num_process_running -= 1;
 
