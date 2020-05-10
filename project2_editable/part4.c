@@ -553,7 +553,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 	int wno_hang_number;
 
-	int status;
+	int status = 0;
 
 	int process_to_start = 0;
 
@@ -659,7 +659,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 		
 				wno_hang_number = waitpid(the_ids[fork_iterator], &status, WNOHANG);
 
-				if(wno_hang_number != 0 && process_status[fork_iterator] != 2){
+				if(status && process_status[fork_iterator] != 2){
 					process_status[fork_iterator] = 2; // for terminated
 					num_process_running -= 1;
 
