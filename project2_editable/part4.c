@@ -158,6 +158,55 @@ void display_memory(long tgid) {
     fclose(statusf);
 }
 
+void display_io_read(long tgid) {
+    char path[40], line[100], *p;
+    FILE* statusf;
+
+    snprintf(path, 40, "/proc/%ld/io", tgid);
+
+    statusf = fopen(path, "r");
+    if(!statusf)
+        return;
+
+    while(fgets(line, 100, statusf)) {
+        if(strncmp(line, "rchar:", 6) != 0)
+            continue;
+        // Ignore "State:" and whitespace
+        p = line + 7;
+        while(isspace(*p)) ++p;
+        printf("IO (read): ");
+        printf(" %s",p);
+        break;
+    }
+
+    fclose(statusf);
+}
+
+void display_io_write(long tgid) {
+    char path[40], line[100], *p;
+    FILE* statusf;
+
+    snprintf(path, 40, "/proc/%ld/io", tgid);
+
+    statusf = fopen(path, "r");
+    if(!statusf)
+        return;
+
+    while(fgets(line, 100, statusf)) {
+        if(strncmp(line, "wchar:", 6) != 0)
+            continue;
+        // Ignore "State:" and whitespace
+        p = line + 7;
+        while(isspace(*p)) ++p;
+        printf("IO (write): ");
+        printf(" %s",p);
+        break;
+    }
+
+    fclose(statusf);
+}
+
+
 
 
 
@@ -525,10 +574,14 @@ From Grayson Guan to Everyone: (01:53 PM)
 			    tgid = strtol(ent->d_name, NULL, 10);
 			    for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 			    	    if (tgid == the_ids[fork_iterator]){
+			    	    	printf("\n");
 			    	    	printf("Program %s \n" , the_programs[fork_iterator]);
 			    	    	display_status(tgid);
 			    	    	get_exec_time(tgid);
 			    	    	display_memory(tgid);
+			    	    	display_io_write(tgid);
+			    	    	display_io_read(tgid);
+			    	    	printf("\n");
 			    	    }
 			    }
 			    
@@ -562,10 +615,14 @@ From Grayson Guan to Everyone: (01:53 PM)
 			    tgid = strtol(ent->d_name, NULL, 10);
 			    for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
 			    	    if (tgid == the_ids[fork_iterator]){
+			    	    	printf("\n");
 			    	    	printf("Program %s \n" , the_programs[fork_iterator]);
 			    	    	display_status(tgid);
 			    	    	get_exec_time(tgid);
 			    	    	display_memory(tgid);
+			    	    	display_io_write(tgid);
+			    	    	display_io_read(tgid);
+			    	    	printf("\n");
 			    	    }
 			    }
 			    

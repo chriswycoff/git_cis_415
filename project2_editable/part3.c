@@ -1,8 +1,6 @@
 // Part 3  MCP v3.0
 // Christopher Wycoff
 
-// do we need -f flag? 
-// do we need output.txt???
 
 #include "header.h"
 

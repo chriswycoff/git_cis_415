@@ -1,6 +1,5 @@
 // Part 1  MCP v1.0
 // Christopher Wycoff
-
 #include "header.h"
 
 #define  _GNU_SOURCE
