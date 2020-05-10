@@ -1,0 +1,423 @@
+==3452== Memcheck, a memory error detector
+==3452== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==3452== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==3452== Command: ./part4.out input.txt
+==3452== 
+total 260
+ 4 signal_test.c
+12 signaltest
+ 4 secondinput.txt
+ 4 safetest.txt
+12 part5.out
+ 4 part5.c
+24 part4.out
+20 part4.c
+20 part3.out
+16 part3.c
+20 part2.out
+12 part2.c
+16 part1.out
+ 8 part1.c
+ 4 Makefile
+ 4 mac_test
+ 4 macinput.txt
+ 4 log_part4.txt
+ 4 iobound.c
+12 iobound
+ 4 input.txt
+ 4 header.h
+ 4 dummy_spin.c
+12 dummyspin
+ 4 dumb_input.txt
+ 4 cpubound.c
+12 cpubound
+ 4 ..
+ 4 .
+execvp: No such file or directory
+RUNNING PART 1
+
+
+
+
+
+**********************************************************************
+MAIN LOGIC starting, m pid is 3452
+
+**********************************************************************
+
+==3456== 
+==3456== HEAP SUMMARY:
+==3456==     in use at exit: 0 bytes in 0 blocks
+==3456==   total heap usage: 50 allocs, 50 frees, 22,592 bytes allocated
+==3456== 
+==3456== All heap blocks were freed -- no leaks are possible
+==3456== 
+==3456== For counts of detected and suppressed errors, rerun with: -v
+==3456== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+RUNNING PART 1
+
+
+
+
+
+**********************************************************************
+MAIN LOGIC starting, m pid is 3452
+
+**********************************************************************
+
+waking up child back up 3454
+waking up child back up 3455
+waking up child back up 3456
+waking up child back up 3457
+waking up child back up 3458
+
+Program ls 
+  3454 T (stopped)
+Time executing on cpu (miliseconds):  5.309320
+Memory used: 95328 kB
+IO (write):  3
+IO (read):  3
+
+
+Program sleep 
+  3455 T (stopped)
+Time executing on cpu (miliseconds):  4.942212
+Memory used: 95328 kB
+IO (write):  3
+IO (read):  3
+
+
+Program invalid 
+  3456 T (stopped)
+Time executing on cpu (miliseconds):  5.261930
+Memory used: 95328 kB
+IO (write):  3
+IO (read):  3
+
+
+Program ./iobound 
+  3457 T (stopped)
+Time executing on cpu (miliseconds):  4.986363
+Memory used: 95328 kB
+IO (write):  3
+IO (read):  3
+
+
+Program ./cpubound 
+  3458 T (stopped)
+Time executing on cpu (miliseconds):  4.928148
+Memory used: 95328 kB
+IO (write):  3
+IO (read):  3
+
+
+Program ls 
+  3454 T (stopped)
+Time executing on cpu (miliseconds):  5.309320
+Memory used: 95328 kB
+IO (write):  3
+IO (read):  3
+
+
+Program sleep 
+  3455 T (stopped)
+Time executing on cpu (miliseconds):  4.942212
+Memory used: 95328 kB
+IO (write):  3
+IO (read):  3
+
+
+Program invalid 
+  3456 T (stopped)
+Time executing on cpu (miliseconds):  5.261930
+Memory used: 95328 kB
+IO (write):  3
+IO (read):  3
+
+
+Program ./iobound 
+  3457 T (stopped)
+Time executing on cpu (miliseconds):  4.986363
+Memory used: 95328 kB
+IO (write):  3
+IO (read):  3
+
+
+Program ./cpubound 
+  3458 T (stopped)
+Time executing on cpu (miliseconds):  4.928148
+Memory used: 95328 kB
+IO (write):  3
+IO (read):  3
+
+Resuming child process: 3454 
+Name of process: ls
+Halting child process: 3454 
+Name of process: ls
+
+Program ls 
+  3454 Z (zombie)
+Time executing on cpu (miliseconds):  11.381256
+
+
+Program sleep 
+  3455 T (stopped)
+Time executing on cpu (miliseconds):  4.942212
+Memory used: 95328 kB
+IO (write):  3
+IO (read):  3
+
+
+Program invalid 
+  3456 T (stopped)
+Time executing on cpu (miliseconds):  5.261930
+Memory used: 95328 kB
+IO (write):  3
+IO (read):  3
+
+
+Program ./iobound 
+  3457 T (stopped)
+Time executing on cpu (miliseconds):  4.986363
+Memory used: 95328 kB
+IO (write):  3
+IO (read):  3
+
+
+Program ./cpubound 
+  3458 T (stopped)
+Time executing on cpu (miliseconds):  4.928148
+Memory used: 95328 kB
+IO (write):  3
+IO (read):  3
+
+Resuming child process: 3455 
+Name of process: sleep
+Halting child process: 3455 
+Name of process: sleep
+
+Program sleep 
+  3455 Z (zombie)
+Time executing on cpu (miliseconds):  11.141748
+
+
+Program invalid 
+  3456 T (stopped)
+Time executing on cpu (miliseconds):  5.261930
+Memory used: 95328 kB
+IO (write):  3
+IO (read):  3
+
+
+Program ./iobound 
+  3457 T (stopped)
+Time executing on cpu (miliseconds):  4.986363
+Memory used: 95328 kB
+IO (write):  3
+IO (read):  3
+
+
+Program ./cpubound 
+  3458 T (stopped)
+Time executing on cpu (miliseconds):  4.928148
+Memory used: 95328 kB
+IO (write):  3
+IO (read):  3
+
+Resuming child process: 3456 
+Name of process: invalid
+Halting child process: 3456 
+Name of process: invalid
+
+Program invalid 
+  3456 Z (zombie)
+Time executing on cpu (miliseconds):  70.333804
+
+
+Program ./iobound 
+  3457 T (stopped)
+Time executing on cpu (miliseconds):  4.986363
+Memory used: 95328 kB
+IO (write):  3
+IO (read):  3
+
+
+Program ./cpubound 
+  3458 T (stopped)
+Time executing on cpu (miliseconds):  4.928148
+Memory used: 95328 kB
+IO (write):  3
+IO (read):  3
+
+Resuming child process: 3457 
+Name of process: ./iobound
+Halting child process: 3457 
+Name of process: ./iobound
+
+Program ./iobound 
+  3457 R (running)
+Time executing on cpu (miliseconds):  4980.785567
+Memory used: 4372 kB
+IO (write):  4589141003
+IO (read):  6047
+
+
+Program ./cpubound 
+  3458 T (stopped)
+Time executing on cpu (miliseconds):  4.928148
+Memory used: 95328 kB
+IO (write):  3
+IO (read):  3
+
+Resuming child process: 3458 
+Name of process: ./cpubound
+Halting child process: 3458 
+Name of process: ./cpubound
+
+Program ./iobound 
+  3457 T (stopped)
+Time executing on cpu (miliseconds):  4980.923591
+Memory used: 4372 kB
+IO (write):  4589141003
+IO (read):  6047
+
+
+Program ./cpubound 
+  3458 T (stopped)
+Time executing on cpu (miliseconds):  4636.362577
+Memory used: 4372 kB
+IO (write):  3
+IO (read):  6047
+
+Resuming child process: 3457 
+Name of process: ./iobound
+Halting child process: 3457 
+Name of process: ./iobound
+
+Program ./iobound 
+  3457 R (running)
+Time executing on cpu (miliseconds):  9546.163526
+Memory used: 4372 kB
+IO (write):  8845934003
+IO (read):  6047
+
+
+Program ./cpubound 
+  3458 T (stopped)
+Time executing on cpu (miliseconds):  4636.362577
+Memory used: 4372 kB
+IO (write):  3
+IO (read):  6047
+
+Resuming child process: 3458 
+Name of process: ./cpubound
+Halting child process: 3458 
+Name of process: ./cpubound
+
+Program ./iobound 
+  3457 T (stopped)
+Time executing on cpu (miliseconds):  9546.173368
+Memory used: 4372 kB
+IO (write):  8845934003
+IO (read):  6047
+
+
+Program ./cpubound 
+  3458 Z (zombie)
+Time executing on cpu (miliseconds):  8577.552549
+
+Resuming child process: 3457 
+Name of process: ./iobound
+
+Program ./iobound 
+  3457 R (running)
+Time executing on cpu (miliseconds):  14441.719571
+Memory used: 4372 kB
+IO (write):  13517002003
+IO (read):  6047
+
+Continuing to run child process: 3457 
+Name of process: ./iobound
+
+Program ./iobound 
+  3457 R (running)
+Time executing on cpu (miliseconds):  19358.204893
+Memory used: 4372 kB
+IO (write):  18155779003
+IO (read):  6047
+
+Continuing to run child process: 3457 
+Name of process: ./iobound
+
+Program ./iobound 
+  3457 R (running)
+Time executing on cpu (miliseconds):  24228.551770
+Memory used: 4372 kB
+IO (write):  22758734003
+IO (read):  6047
+
+Continuing to run child process: 3457 
+Name of process: ./iobound
+
+Program ./iobound 
+  3457 R (running)
+Time executing on cpu (miliseconds):  29121.641579
+Memory used: 4372 kB
+IO (write):  27358418003
+IO (read):  6047
+
+Continuing to run child process: 3457 
+Name of process: ./iobound
+
+Program ./iobound 
+  3457 R (running)
+Time executing on cpu (miliseconds):  34003.861988
+Memory used: 4372 kB
+IO (write):  31874251003
+IO (read):  6047
+
+Continuing to run child process: 3457 
+Name of process: ./iobound
+
+Program ./iobound 
+  3457 R (running)
+Time executing on cpu (miliseconds):  38916.832137
+Memory used: 4372 kB
+IO (write):  36559149003
+IO (read):  6047
+
+Continuing to run child process: 3457 
+Name of process: ./iobound
+
+Program ./iobound 
+  3457 Z (zombie)
+Time executing on cpu (miliseconds):  42488.554467
+
+Continuing to run child process: 3457 
+Name of process: ./iobound
+Waiting for child... 
+Child finished, control back to parent: my pid is 3452 
+
+Waiting for child... 
+Child finished, control back to parent: my pid is 3452 
+
+Waiting for child... 
+Child finished, control back to parent: my pid is 3452 
+
+Waiting for child... 
+Child finished, control back to parent: my pid is 3452 
+
+Waiting for child... 
+Child finished, control back to parent: my pid is 3452 
+
+All Processing Finished: parent exiting: my pid is 3452 
+//////////////////////////////////////////////////////////
+==3452== 
+==3452== HEAP SUMMARY:
+==3452==     in use at exit: 0 bytes in 0 blocks
+==3452==   total heap usage: 426 allocs, 426 frees, 828,968 bytes allocated
+==3452== 
+==3452== All heap blocks were freed -- no leaks are possible
+==3452== 
+==3452== For counts of detected and suppressed errors, rerun with: -v
+==3452== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
