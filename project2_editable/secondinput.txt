@@ -3,3 +3,4 @@ sleep 1
 invalid name
 ./iobound -minutes 1
 ./iobound -minutes 2
+./cpubound -minutes 10
