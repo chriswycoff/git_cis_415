@@ -214,6 +214,9 @@ void display_io_write(long tgid) {
 int main(int argc, char *argv[]) {
 
 	printf("RUNNING PART 1\n");
+	if (argc != 2){
+		printf("USAGE ./part4.out <input file>\n");
+	}
 	//dummy_fucntion();
 
 	//BEGIN parsing input file
