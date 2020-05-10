@@ -667,7 +667,6 @@ From Grayson Guan to Everyone: (01:53 PM)
 			}
 
 			alarm(5);
-
 			
 				sigwait(&sigset, &signumber);
 			// wait for alarm
