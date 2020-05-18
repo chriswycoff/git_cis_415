@@ -51,7 +51,7 @@ struct threadargs subargs[NUMPROXIES];
 void *publisher(void *param);		// publisher routine
 void *subscriber(void *param);		// subscriber routine
 
-
+char time_print_buffer[30]; // time print buffer
 
 //////// END global variables ////////////////////////////////////////////////
 
@@ -91,9 +91,17 @@ void exit_function(){
 
 
 ////// BEGIN ENQUEUE /////////////////////////////////////////////////////
-int enqueue(){
-	//gettimeofday();
+int enqueue(struct topic_queue * a_topic_queue){
 	printf("Calling enqueue\n");
+
+	gettimeofday(&a_topic_queue->entries[1].timestamp, NULL);
+
+	time_t curtime = a_topic_queue->entries[1].timestamp.tv_sec;
+
+	strftime(time_print_buffer,30,"%m-%d-%Y  %T.",localtime(&curtime));
+
+	printf("%s%d\n",time_print_buffer,a_topic_queue->entries[1].timestamp.tv_usec);
+
 	return 1;
 
 }
@@ -111,7 +119,11 @@ int main(int argc, char *argv[]){
 	int first_arg = atoi(argv[1]);
 
 	printf("HELLO WORLD My int is %d\n" ,first_arg);
+
 	initialize();
+
+	enqueue(&topic_queues[1]);
+
 	exit_function();
 }
 ////// END MAIN /////////////////////////////////////////////////////
