@@ -1,13 +1,17 @@
 sources = $(wildcard *.c)
 objects = $(addsuffix .o, $(basename $(sources)))
-flags = -g -W -Wall -std=c11 -DDEBUG=0 -DTEST=0
+flags = -g -W -Wall -std=c11 
+LDFLAGS = -pthread
 target = server
 
+all:server
 
-$(target) : $(objects)
-	gcc -o $(target) $(objects)
+quacker.o : quacker.c
+	gcc $(flags) -c quacker.c
 
-%.o : %.c
-	gcc -c $(flags) $< -o $@
-clean :
-	rm $(target) $(objects)
+
+server: quacker.o
+	gcc $(LDFLAGS) quacker.o -o server
+
+clean:
+	rm -f *.o *~ server
