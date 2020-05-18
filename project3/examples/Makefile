@@ -6,9 +6,8 @@ target = example_server
 
 
 $(target) : $(objects)
-	gcc -o $(target) $(objects) $(LDFLAGS)
+	gcc -o $(LDFLAGS) $(target) $(objects) 
 
-%.o : %.c
-	gcc -c $(flags) $< -o $@
+
 clean :
 	rm $(target) $(objects)
