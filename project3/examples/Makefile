@@ -9,6 +9,6 @@ $(target) : $(objects)
 	gcc -o $(target) $(objects) $(LDFLAGS)
 
 %.o : %.c
-	gcc -c $(flags) $< -o $(LDFLAGS)
+	gcc -c $(flags) $< -o $@
 clean :
 	rm $(target) $(objects)
