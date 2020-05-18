@@ -4,6 +4,7 @@ flags = -g -W -Wall -std=c11  -DDEBUG=0 -DTEST=0
 LDFLAGS = -pthread
 target = example_server
 
+all: $(target)
 
 $(target) : $(objects)
 	gcc -o $(LDFLAGS) $(target) $(objects) 
