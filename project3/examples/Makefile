@@ -1,6 +1,6 @@
 sources = $(wildcard *.c)
 objects = $(addsuffix .o, $(basename $(sources)))
-flags = -g -W -Wall -std=c11 -DDEBUG=0 -DTEST=0
+flags = -g -W -Wall -std=c11 -pthread -DDEBUG=0 -DTEST=0
 target = example_server
 
 
