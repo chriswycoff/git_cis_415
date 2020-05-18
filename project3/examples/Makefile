@@ -1,14 +1,17 @@
 sources = $(wildcard *.c)
 objects = $(addsuffix .o, $(basename $(sources)))
-flags = -g -W -Wall -std=c11  -DDEBUG=0 -DTEST=0
+flags =  
 LDFLAGS = -pthread
 target = example_server
 
-all: $(target)
+all: example_server
 
-$(target) : $(objects)
-	gcc -o $(LDFLAGS) $(target) $(objects) 
+pub-sub-circular.o : pub-sub-circular.c
+	gcc $(flags) -c pub-sub-circular.c
 
 
-clean :
-	rm $(target) $(objects)
+example_server: pub-sub-circular.o
+	gcc $(LDFLAGS) pub-sub-circular.o -o example_server
+
+clean:
+	rm -f *.o *~ example_server
