@@ -87,6 +87,10 @@ int i; //, j, k;
 
 } // initialize()
 
+//////// END initialize  ////////////////////////////////////////////////
+
+////// BEGIN EXIT FUNCTION /////////////////////////////////////////////////////
+
 void exit_function(){
 	for (int i=0; i<MAXTOPICS; i++) {
 		free(topic_queues[i].entries);
@@ -94,9 +98,7 @@ void exit_function(){
 	exit(0);
 
 }
-
-//////// END initialize  ////////////////////////////////////////////////
-
+////// END EXIT FUNCTION /////////////////////////////////////////////////////
 
 
 ////// BEGIN ENQUEUE /////////////////////////////////////////////////////
@@ -105,7 +107,7 @@ int enqueue(struct topic_queue * a_topic_queue){
 	printf("Calling enqueue\n");
 
 	if (a_topic_queue->count >= MAXENTRIES){
-		printf("full queue \n");
+		printf("queue full cannot enqueue\n");
 		return -1;
 	}
 	// if this ^^^ does not happen there is room to enqueue
@@ -121,13 +123,39 @@ int enqueue(struct topic_queue * a_topic_queue){
 
 	a_topic_queue->head = (a_topic_queue->head + 1) % MAXENTRIES ;
 
-	sleep(1);
+	//sleep(1);
 
 	return 1;
 
 }
 
 ////// END ENQUEUE /////////////////////////////////////////////////////
+
+////// BEGIN ENQUEUE /////////////////////////////////////////////////////
+int dequeue(struct topic_queue * a_topic_queue){
+	printf("Calling dequeue\n");
+
+	if (a_topic_queue->count <= 0){
+		printf("queue empty cannot dequeue\n");
+		return -1;
+	}
+	// if this ^^^ does not happen there is something to deque
+
+	//decrement stuff
+
+	a_topic_queue->count--;
+
+	a_topic_queue->tail = (a_topic_queue->tail + 1) % MAXENTRIES ;
+
+	//sleep(1);
+
+	return 1;
+
+}
+
+
+////// END ENQUEUE /////////////////////////////////////////////////////
+
 
 
 ////// BEGIN MAIN /////////////////////////////////////////////////////
@@ -144,15 +172,20 @@ int main(int argc, char *argv[]){
 
 	printf("HELLO WORLD My int is %d\n" ,first_arg);
 
+	//initialize topic_queues and mutex locks
 	initialize();
 
-	for (int i= 0; i<MAXENTRIES; i++){
+	//// TESTING AREA /////
+
+	for (int i =0; i<4; i++){
+	//test enqueue
+	for (int i= 0; i<MAXENTRIES+3; i++){
 		for (int j =0; j< MAXTOPICS; j++){
 			enqueue(&topic_queues[j]);
 		}
 	}
 
-
+	//test reading data
 	for (int i = 0; i< MAXTOPICS; i++){
 		//printf("outer %d", i);
 		for (int j = 0; j< MAXENTRIES; j++){
@@ -164,6 +197,37 @@ int main(int argc, char *argv[]){
 			time_print_buffer, (long)topic_queues[i].entries[j].timestamp.tv_usec);
 		}
 	}
+
+	//test dequeue
+	for (int i= 0; i<MAXENTRIES+3; i++){
+		for (int j =0; j< MAXTOPICS; j++){
+			dequeue(&topic_queues[j]);
+		}
+	}
+
+	//enque some more entries
+	for (int i= 0; i<MAXENTRIES-1; i++){
+		for (int j =0; j< MAXTOPICS; j++){
+			enqueue(&topic_queues[j]);
+		}
+	}
+
+
+	//test reading data
+	for (int i = 0; i< MAXTOPICS; i++){
+		//printf("outer %d", i);
+		for (int j = 0; j< MAXENTRIES; j++){
+			curtime = topic_queues[i].entries[j].timestamp.tv_sec;
+
+			strftime(time_print_buffer,30,"%m-%d-%Y  %T.",localtime(&curtime));
+
+			printf("hi from entry %d %s%ld\n", topic_queues[i].entries[j].entryNum,
+			time_print_buffer, (long)topic_queues[i].entries[j].timestamp.tv_usec);
+		}
+	}
+	sleep(2);
+	}
+	//// END TESTING AREA /////
 
 
 	exit_function();
