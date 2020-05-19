@@ -7,6 +7,7 @@
 #include <semaphore.h>
 #include <sys/time.h>
 #include <unistd.h>
+#include <string.h>
 
 //////// START defines  ////////////////////////////////////////////////
 
@@ -56,14 +57,19 @@ void *subscriber(void *param);		// subscriber routine
 char time_print_buffer[30]; // time print buffer
 
 
+/// init the "get_entry" stuct ///////////////////////////////////////////////
+
+struct topicEntry vessel_for_get_entry;
+
+struct topicEntry vessel_for_enqueue;
 
 
 
-
+//////////////////////////////////////////////////////////////////////////////
 
 //////// END global variables ////////////////////////////////////////////////
 
-//////// Begin initialize ////////////////////////////////////////////////
+//////// Begin initialize ////////////////////////////////////////////////////
 void initialize() {
 int i; //, j, k;
 
@@ -102,7 +108,7 @@ void exit_function(){
 
 
 ////// BEGIN ENQUEUE /////////////////////////////////////////////////////
-int enqueue(struct topic_queue * a_topic_queue){
+int enqueue(struct topicEntry * a_topic_entry, struct topic_queue * a_topic_queue){
 
 	printf("Calling enqueue\n");
 
@@ -111,9 +117,16 @@ int enqueue(struct topic_queue * a_topic_queue){
 		return -1;
 	}
 	// if this ^^^ does not happen there is room to enqueue
+
+	// update entryNUM
 	a_topic_queue->entries[a_topic_queue->head].entryNum = a_topic_queue->entry_number;
 
 	gettimeofday(&a_topic_queue->entries[a_topic_queue->head].timestamp, NULL);
+
+	// update photoURL
+	strcpy(a_topic_queue->entries[a_topic_queue->head].photoURL, a_topic_entry->photoURL);
+
+	strcpy(a_topic_queue->entries[a_topic_queue->head].photoCaption, a_topic_entry->photoCaption);
 
 	//increment stuff
 
@@ -156,10 +169,24 @@ int dequeue(struct topic_queue * a_topic_queue){
 
 ////// END ENQUEUE /////////////////////////////////////////////////////
 
+////// BEGIN GETENTRY /////////////////////////////////////////////////////
+
+
+
+
+
+
+////// END GETENTRY /////////////////////////////////////////////////////
+
+
 
 
 ////// BEGIN MAIN /////////////////////////////////////////////////////
 int main(int argc, char *argv[]){
+
+	strcpy(vessel_for_enqueue.photoURL, "picture from the vessel");
+
+	strcpy(vessel_for_enqueue.photoCaption, "caption from the vessel");
 
 	time_t curtime; // for printing purposes
 
@@ -181,7 +208,7 @@ int main(int argc, char *argv[]){
 	//test enqueue
 	for (int i= 0; i<MAXENTRIES+3; i++){
 		for (int j =0; j< MAXTOPICS; j++){
-			enqueue(&topic_queues[j]);
+			enqueue(&vessel_for_enqueue, &topic_queues[j]);
 		}
 	}
 
@@ -208,7 +235,7 @@ int main(int argc, char *argv[]){
 	//enque some more entries
 	for (int i= 0; i<MAXENTRIES-1; i++){
 		for (int j =0; j< MAXTOPICS; j++){
-			enqueue(&topic_queues[j]);
+			enqueue(&vessel_for_enqueue, &topic_queues[j]);
 		}
 	}
 
@@ -223,6 +250,9 @@ int main(int argc, char *argv[]){
 
 			printf("hi from entry %d %s%ld\n", topic_queues[i].entries[j].entryNum,
 			time_print_buffer, (long)topic_queues[i].entries[j].timestamp.tv_usec);
+
+			printf("%s\n", topic_queues[i].entries[j].photoURL);
+			printf("%s\n", topic_queues[i].entries[j].photoCaption);
 		}
 	}
 	sleep(2);
