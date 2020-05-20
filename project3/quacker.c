@@ -520,7 +520,7 @@ int main(int argc, char *argv[]){
 		pub_sub_enqueue(&pub_queue, test_char_pp[i%3]);
 		pthread_cond_signal(&pub_queue_cond);
 		
-		pub_sub_enqueue(&sub_queue, test_char_pp[i%3]);
+		//pub_sub_enqueue(&sub_queue, test_char_pp[i%3]);
 		
 		//printf("%s\n",test_char_pp[i]);
 	}
