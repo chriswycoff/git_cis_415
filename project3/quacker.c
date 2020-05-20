@@ -23,7 +23,6 @@
 //////// START global variables ////////////////////////////////////////////////
 
 
-
 struct node{
 	struct node* next;
 	char command_file[100];
@@ -61,6 +60,9 @@ pthread_t subs[NUMPROXIES];		// thread ID for subscribers
 pthread_attr_t attr; 
 pthread_mutex_t mutex[MAXTOPICS];
 
+pthread_mutex_t sub_queue_mutex;
+pthread_mutex_t pub_queue_mutex;
+
 struct threadargs {
   int	id;
 };
@@ -94,7 +96,6 @@ int i; //, j, k;
 
 	//// initialize pub and sub command logic //////
 
-
 	////////////////////////////////////////////////
 
 
@@ -113,6 +114,8 @@ int i; //, j, k;
 	//    sem_init(&full[i], 0, 0);
 	//    sem_init(&empty[i], 0, BUFFERSIZE);
 	}
+	pthread_mutex_init(&pub_queue_mutex, NULL);
+	pthread_mutex_init(&sub_queue_mutex, NULL);
 
 	pthread_attr_init(&attr);
 
@@ -223,10 +226,78 @@ int dequeue(struct topic_queue * a_topic_queue){
 // does this not need to have an argument of the topic queue????
 
 int getEntry(int lastEntry, struct topicEntry *a_topic_entry, int topic_id){
-	//topic_queues[topic_id]
-	//for (int i = 0; i < num )
+	/*
+	FOR REFERENCE
+	struct topic_queue{
+		int entry_number;
+		int	count, head, tail;
+		struct topicEntry *entries;
+	};
+
+	struct topicEntry{
+		int entryNum;
+		struct timeval timestamp;
+		int pubId;
+		char photoURL[URLSIZE];
+		char photoCaption[CAPSIZE];
+	};
+
+	*/
+
+	struct topic_queue * specific_queue = &topic_queues[topic_id];
+
+	if (specific_queue->count < 0){
+		printf("ERROR \n");
+		return -1;
+	}
+
+	if (specific_queue->count == 0){
+		return 0;
+	}
+	/// topic_queue not empty so continue
+
+	int keep_going = 1;
+	int the_count = specific_queue->count;
+	int index = specific_queue->tail;
+
+	int counter = 0;
+
+	while(keep_going){
+		if (specific_queue->entries[index].entryNum == lastEntry+1){
+			/////copy the topic entry////
+			a_topic_entry->entryNum = specific_queue->entries[index].entryNum;
+			a_topic_entry->timestamp = specific_queue->entries[index].timestamp;
+			a_topic_entry->pubId = specific_queue->entries[index].pubId;
+			strcpy(specific_queue->entries[index].photoURL, a_topic_entry->photoURL);
+			strcpy(specific_queue->entries[index].photoCaption, a_topic_entry->photoCaption);
+			
+			return 1;
+		}
+
+		if (specific_queue->entries[index].entryNum > lastEntry+1){
+			/////copy the topic entry////
+			a_topic_entry->entryNum = specific_queue->entries[index].entryNum;
+			a_topic_entry->timestamp = specific_queue->entries[index].timestamp;
+			a_topic_entry->pubId = specific_queue->entries[index].pubId;
+			strcpy(specific_queue->entries[index].photoURL, a_topic_entry->photoURL);
+			strcpy(specific_queue->entries[index].photoCaption, a_topic_entry->photoCaption);
+			
+			return a_topic_entry->entryNum;
+		}
+
+
+		index = (index + 1 ) % MAXENTRIES;
+
+		// loop breaking logic
+		counter += 1;
+
+		if (counter > the_count){
+			keep_going = 0;
+		}
+
+	}
 	
-	return 1;
+	return 0;
 
 }
 
@@ -255,7 +326,7 @@ void exit_function(){
 
 			}
 		else{
-			//printf("dequing at exit: %s\n", check_if_empty);
+			printf("dequing pubs at exit \n");
 		}
 	}
 
@@ -272,7 +343,7 @@ void exit_function(){
 			}
 
 		else{
-			//printf("dequing at exit: %s\n", check_if_empty);
+			printf("dequing subs at exit \n");
 		}
 	}	
 
@@ -280,7 +351,27 @@ void exit_function(){
 	exit(0);
 
 }
-////// END EXIT FUNCTION /////////////////////////////////////////////////////
+
+////// END EXIT FUNCTION //////////////////////////////////////////////////////
+
+
+////// BEGIN PUBLISHER THREAD FUNCTION ////////////////////////////////////////
+void * publisher(void * params){
+
+}
+
+////// END PUBLISHER THREAD FUNCTION //////////////////////////////////////////
+
+////// BEGIN SUBSCRIBER THREAD FUNCTION ///////////////////////////////////////
+void * subscriber(void * params){
+	
+}
+
+////// END SUBSCRIBER THREAD FUNCTION /////////////////////////////////////////
+
+////// BEGIN ClEANUP THREAD FUNCTION ///////////////////////////////////////
+
+////// END SUBSCRIBER THREAD FUNCTION /////////////////////////////////////////
 
 
 ////// BEGIN MAIN /////////////////////////////////////////////////////
@@ -303,17 +394,37 @@ int main(int argc, char *argv[]){
 
 	printf("HELLO WORLD My int is %d\n" ,first_arg);
 
+
+	//// BEGIN TESTING AREA /////
+	int entries_to_get[]= {0, 2, 5, 16, 20};
+	int num_entries_to_get = 5;
+
+
+	/////////////////////////////
+
 	//initialize topic_queues and mutex locks
 	initialize();
 
-	//// TESTING AREA /////
 
-	for (int i =0; i<4; i++){
+	// OVERARCHING LOOP HERE /////
+	for (int i =0; i<1; i++){
+
 	//test enqueue
 	for (int i= 0; i<MAXENTRIES+3; i++){
 		for (int j =0; j< MAXTOPICS; j++){
 			enqueue(&vessel_for_enqueue, &topic_queues[j]);
 		}
+	}
+
+	// test getEntry ////
+	int get_entry_return = -4;
+	for (int i = 0; i< MAXTOPICS; i++){ 
+		for (int j =0; j< num_entries_to_get; j++){
+			get_entry_return = getEntry(entries_to_get[j], &vessel_for_get_entry, i);
+			printf("looking for entry: %d \n", entries_to_get[j] + 1);
+			printf("the result of get entry was: %d \n", get_entry_return);
+		}
+		
 	}
 
 	//test reading data
@@ -367,11 +478,13 @@ int main(int argc, char *argv[]){
 
 	for(int i = 0; i<3; i++){
 		pub_sub_enqueue(&pub_queue, test_char_pp[i]);
+		
 		pub_sub_enqueue(&sub_queue, test_char_pp[i]);
-		printf("%s\n",test_char_pp[i]);
+		
+		//printf("%s\n",test_char_pp[i]);
 	}
 
-	//// END TESTING AREA /////
+	//// END TESTING AREA ////
 
 
 	exit_function();
