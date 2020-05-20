@@ -255,12 +255,12 @@ void exit_function(){
 
 			}
 		else{
-			printf("dequing at exit: %s\n", check_if_empty);
+			//printf("dequing at exit: %s\n", check_if_empty);
 		}
 	}
 
 	keep_going = 1;
-	
+
 	while(keep_going){
 
 		char * check_if_empty = pub_sub_dequeue(&sub_queue);
@@ -272,7 +272,7 @@ void exit_function(){
 			}
 
 		else{
-			printf("dequing at exit: %s\n", check_if_empty);
+			//printf("dequing at exit: %s\n", check_if_empty);
 		}
 	}	
 
