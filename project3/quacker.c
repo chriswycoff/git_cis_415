@@ -527,7 +527,7 @@ int main(int argc, char *argv[]){
 
 	//// END TESTING AREA ////
 
-	sleep(5);
+	sleep(7);
 	exit_function();
 }
 ////// END MAIN /////////////////////////////////////////////////////
