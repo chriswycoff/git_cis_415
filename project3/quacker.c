@@ -528,6 +528,7 @@ int main(int argc, char *argv[]){
 	//// END TESTING AREA ////
 
 	sleep(7);
+	pthread_cond_signal(&pub_queue_cond);
 	exit_function();
 }
 ////// END MAIN /////////////////////////////////////////////////////
