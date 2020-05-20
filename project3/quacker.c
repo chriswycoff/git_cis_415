@@ -124,6 +124,7 @@ int i; //, j, k;
 	pthread_mutex_init(&sub_queue_mutex, NULL);
 
 	pthread_attr_init(&attr);
+	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 
 } // initialize()
 
@@ -380,6 +381,7 @@ void * publisher(void * params){
 		pthread_mutex_unlock(&pub_queue_mutex);
 		
 	}
+	return NULL;
 
 }
 
@@ -400,6 +402,8 @@ void * subscriber(void * params){
 	while(keep_going){
 
 	}
+	return NULL;
+
 	
 }
 
@@ -514,21 +518,20 @@ int main(int argc, char *argv[]){
 	pthread_create(&pubs[0], &attr, publisher, (void *) &pubargs[0]);
 
 
-	for(int i = 0; i<10; i++){
+	for(int i = 0; i<3; i++){
 		printf("Main SERVER SLEEPING\n");
-		//sleep(2);
-		//pub_sub_enqueue(&pub_queue, test_char_pp[i%3]);
-		//pthread_cond_signal(&pub_queue_cond);
+		sleep(2);
+		pub_sub_enqueue(&pub_queue, test_char_pp[i%3]);
+		pthread_cond_signal(&pub_queue_cond);
 		
-		//pub_sub_enqueue(&sub_queue, test_char_pp[i%3]);
+		pub_sub_enqueue(&sub_queue, test_char_pp[i%3]);
 		
-		//printf("%s\n",test_char_pp[i]);
+		printf("%s\n",test_char_pp[i]);
 	}
 
 	//// END TESTING AREA ////
 
 	sleep(7);
-	//pthread_cond_signal(&pub_queue_cond);
 	exit_function();
 }
 ////// END MAIN /////////////////////////////////////////////////////
