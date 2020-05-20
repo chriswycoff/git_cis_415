@@ -515,7 +515,7 @@ int main(int argc, char *argv[]){
 	char* test_char_pp[] = {"hello Wolrd", "I am a c g", "this.txt"};
 
 	pubargs[0].id = 1;
-	//pthread_create(&pubs[0], &attr, publisher, (void *) &pubargs[0]);
+	pthread_create(&pubs[0], &attr, publisher, (void *) &pubargs[0]);
 
 
 	for(int i = 0; i<3; i++){
@@ -531,7 +531,9 @@ int main(int argc, char *argv[]){
 
 	//// END TESTING AREA ////
 
-	sleep(7);
+	sleep(3);
+	pthread_cancel(pubs[0]);
+	pthread_join(pubs[0],NULL);
 	exit_function();
 }
 ////// END MAIN /////////////////////////////////////////////////////
