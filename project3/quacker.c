@@ -124,7 +124,7 @@ int i; //, j, k;
 	pthread_mutex_init(&sub_queue_mutex, NULL);
 
 	pthread_attr_init(&attr);
-	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+	//pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 
 } // initialize()
 
@@ -515,7 +515,7 @@ int main(int argc, char *argv[]){
 	char* test_char_pp[] = {"hello Wolrd", "I am a c g", "this.txt"};
 
 	pubargs[0].id = 1;
-	pthread_create(&pubs[0], &attr, publisher, (void *) &pubargs[0]);
+	//pthread_create(&pubs[0], &attr, publisher, (void *) &pubargs[0]);
 
 
 	for(int i = 0; i<3; i++){
