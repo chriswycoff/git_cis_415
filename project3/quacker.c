@@ -63,6 +63,12 @@ pthread_mutex_t mutex[MAXTOPICS];
 pthread_mutex_t sub_queue_mutex;
 pthread_mutex_t pub_queue_mutex;
 
+//// pthread condition variables ///////
+pthread_cond_t sub_queue_cond = PTHREAD_COND_INITIALIZER;
+pthread_cond_t pub_queue_cond = PTHREAD_COND_INITIALIZER;
+
+////////////////////////////////////////
+
 struct threadargs {
   int	id;
 };
@@ -354,16 +360,46 @@ void exit_function(){
 
 ////// END EXIT FUNCTION //////////////////////////////////////////////////////
 
+////// BEGIN PUBLISHER Handler FUNCTION ////////////////////////////////////////
+
+void handle_publisher(){
+
+}
+////// END PUBLISHER Handler FUNCTION ////////////////////////////////////////
+
 
 ////// BEGIN PUBLISHER THREAD FUNCTION ////////////////////////////////////////
 void * publisher(void * params){
+	int keep_going = 1;
+	
+	while(keep_going){
+		pthread_mutex_lock(&pub_queue_mutex);
+		pthread_cond_wait(&pub_queue_cond,&pub_queue_mutex);
+		printf("UNLOCKING and grabbing\n");
+		char * check_if_empty = pub_sub_dequeue(&pub_queue);
+		pthread_mutex_unlock(&pub_queue_mutex);
+		
+	}
 
 }
 
 ////// END PUBLISHER THREAD FUNCTION //////////////////////////////////////////
 
+
+////// BEGIN SUBSCRIBER Handler FUNCTION ////////////////////////////////////////
+
+void handle_subscriber(){
+
+}
+////// END SUBSCRIBER Handler FUNCTION ////////////////////////////////////////
+
 ////// BEGIN SUBSCRIBER THREAD FUNCTION ///////////////////////////////////////
 void * subscriber(void * params){
+	int keep_going = 1;
+
+	while(keep_going){
+
+	}
 	
 }
 
@@ -376,7 +412,6 @@ void * subscriber(void * params){
 
 ////// BEGIN MAIN /////////////////////////////////////////////////////
 int main(int argc, char *argv[]){
-
 
 
 	strcpy(vessel_for_enqueue.photoURL, "picture from the vessel");
@@ -475,18 +510,24 @@ int main(int argc, char *argv[]){
 
 	char* test_char_pp[] = {"hello Wolrd", "I am a c g", "this.txt"};
 
+	pubargs[0].id = 1;
+	pthread_create(&pubs[0], &attr, publisher, (void *) &pubargs[0]);
 
-	for(int i = 0; i<3; i++){
-		pub_sub_enqueue(&pub_queue, test_char_pp[i]);
+
+	for(int i = 0; i<10; i++){
+		printf("Main SERVER SLEEPING\n");
+		sleep(2);
+		pub_sub_enqueue(&pub_queue, test_char_pp[i%3]);
+		pthread_cond_signal(&pub_queue_cond);
 		
-		pub_sub_enqueue(&sub_queue, test_char_pp[i]);
+		pub_sub_enqueue(&sub_queue, test_char_pp[i%3]);
 		
 		//printf("%s\n",test_char_pp[i]);
 	}
 
 	//// END TESTING AREA ////
 
-
+	sleep(5);
 	exit_function();
 }
 ////// END MAIN /////////////////////////////////////////////////////
