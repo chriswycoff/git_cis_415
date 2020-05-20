@@ -23,6 +23,21 @@
 //////// START global variables ////////////////////////////////////////////////
 
 
+
+struct node{
+	struct node* next;
+	char command_file[100];
+};
+
+
+struct pub_sub_queue{
+	struct node* head;
+	struct node* tail;
+	int count;
+};
+
+
+
 struct topicEntry{
   int entryNum;
   struct timeval timestamp;
@@ -37,7 +52,9 @@ struct topic_queue{
 	struct topicEntry *entries;
 };
 
+//// biggest context data structure ////////////////////////////////////////////////
 struct topic_queue topic_queues[MAXTOPICS]; // data structure holding the topic queues
+//////////////////////////////////////////////////////////////////////////////////////
 
 pthread_t pubs[NUMPROXIES];		// thread ID for publishers
 pthread_t subs[NUMPROXIES];		// thread ID for subscribers
@@ -63,7 +80,9 @@ struct topicEntry vessel_for_get_entry;
 
 struct topicEntry vessel_for_enqueue;
 
+struct pub_sub_queue sub_queue;
 
+struct pub_sub_queue pub_queue;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -73,39 +92,69 @@ struct topicEntry vessel_for_enqueue;
 void initialize() {
 int i; //, j, k;
 
-  // create the buffers
-  for (i=0; i<MAXTOPICS; i++) {
-  	topic_queues[i].entry_number = 1; // monotomically increasing number per topic
-    topic_queues[i].count = 0;	// # entries in buffer now
-    topic_queues[i].head = 0;	// head index
-    topic_queues[i].tail = 0;	// tail index
-    topic_queues[i].entries = (struct topicEntry *) malloc(sizeof(struct topicEntry) * MAXENTRIES);
-  }
+	//// initialize pub and sub command logic //////
 
-  // create the buffer semaphores
-  for (i=0; i<MAXTOPICS; i++) {
-    pthread_mutex_init(&(mutex[i]), NULL);
-    //    sem_init(&full[i], 0, 0);
-    //    sem_init(&empty[i], 0, BUFFERSIZE);
-  }
 
-  pthread_attr_init(&attr);
+	////////////////////////////////////////////////
+
+
+	// create the buffers
+	for (i=0; i<MAXTOPICS; i++) {
+		topic_queues[i].entry_number = 1; // monotomically increasing number per topic
+		topic_queues[i].count = 0;	// # entries in buffer now
+		topic_queues[i].head = 0;	// head index
+		topic_queues[i].tail = 0;	// tail index
+		topic_queues[i].entries = (struct topicEntry *) malloc(sizeof(struct topicEntry) * MAXENTRIES);
+	}
+
+	// create the buffer semaphores
+	for (i=0; i<MAXTOPICS; i++) {
+		pthread_mutex_init(&(mutex[i]), NULL);
+	//    sem_init(&full[i], 0, 0);
+	//    sem_init(&empty[i], 0, BUFFERSIZE);
+	}
+
+	pthread_attr_init(&attr);
 
 } // initialize()
 
 //////// END initialize  ////////////////////////////////////////////////
 
-////// BEGIN EXIT FUNCTION /////////////////////////////////////////////////////
 
-void exit_function(){
-	for (int i=0; i<MAXTOPICS; i++) {
-		free(topic_queues[i].entries);
+/////////// START PUB/SUB COMMAND ENQUEUE and DEQUEUE ////////////////////////////////
+
+void pub_sub_enqueue(struct pub_sub_queue* a_pub_sub_queue, char* command_string){
+	struct node *new_node = malloc(sizeof(struct node));
+	strcpy(new_node->command_file, command_string);
+	new_node->next = NULL;
+	if(a_pub_sub_queue->tail == NULL){
+		a_pub_sub_queue->head = new_node;
 	}
-	exit(0);
+	else{
+		a_pub_sub_queue->tail->next = new_node;
+	}
+	a_pub_sub_queue->tail = new_node;
 
 }
-////// END EXIT FUNCTION /////////////////////////////////////////////////////
 
+
+char* pub_sub_dequeue(struct pub_sub_queue* a_pub_sub_queue){
+	if (a_pub_sub_queue->head == NULL){
+		return NULL;
+	}
+	else{
+		char* result = a_pub_sub_queue->head->command_file;
+		struct node* temp = a_pub_sub_queue->head;
+		a_pub_sub_queue->head = a_pub_sub_queue->head->next;
+		if (a_pub_sub_queue->head == NULL){
+			a_pub_sub_queue->tail = NULL;
+		}
+		free(temp);
+		return result;
+	}
+}
+
+/////////// END PUB/SUB COMMAND ENQUEUE and DEQUEUE ////////////////////////////////
 
 ////// BEGIN ENQUEUE /////////////////////////////////////////////////////
 int enqueue(struct topicEntry * a_topic_entry, struct topic_queue * a_topic_queue){
@@ -171,18 +220,73 @@ int dequeue(struct topic_queue * a_topic_queue){
 
 ////// BEGIN GETENTRY /////////////////////////////////////////////////////
 
+// does this not need to have an argument of the topic queue????
 
+int getEntry(int lastEntry, struct topicEntry *a_topic_entry, int topic_id){
+	//topic_queues[topic_id]
+	//for (int i = 0; i < num )
+	
+	return 1;
 
+}
 
 
 
 ////// END GETENTRY /////////////////////////////////////////////////////
 
+////// BEGIN EXIT FUNCTION /////////////////////////////////////////////////////
 
+void exit_function(){
+	for (int i=0; i<MAXTOPICS; i++) {
+
+		free(topic_queues[i].entries);
+
+	}
+
+	int keep_going = 1;
+
+	while(keep_going){
+
+		char * check_if_empty = pub_sub_dequeue(&pub_queue);
+
+		if (check_if_empty == NULL){
+
+				keep_going = 0;
+
+			}
+		else{
+			printf("dequing at exit: %s\n", check_if_empty);
+		}
+	}
+
+	keep_going = 1;
+	
+	while(keep_going){
+
+		char * check_if_empty = pub_sub_dequeue(&sub_queue);
+
+		if (check_if_empty == NULL){
+
+				keep_going = 0;
+
+			}
+
+		else{
+			printf("dequing at exit: %s\n", check_if_empty);
+		}
+	}	
+
+
+	exit(0);
+
+}
+////// END EXIT FUNCTION /////////////////////////////////////////////////////
 
 
 ////// BEGIN MAIN /////////////////////////////////////////////////////
 int main(int argc, char *argv[]){
+
+
 
 	strcpy(vessel_for_enqueue.photoURL, "picture from the vessel");
 
@@ -255,8 +359,18 @@ int main(int argc, char *argv[]){
 			printf("%s\n", topic_queues[i].entries[j].photoCaption);
 		}
 	}
-	sleep(2);
+	///sleep(2);
 	}
+
+	char* test_char_pp[] = {"hello Wolrd", "I am a c g", "this.txt"};
+
+
+	for(int i = 0; i<3; i++){
+		pub_sub_enqueue(&pub_queue, test_char_pp[i]);
+		pub_sub_enqueue(&sub_queue, test_char_pp[i]);
+		printf("%s\n",test_char_pp[i]);
+	}
+
 	//// END TESTING AREA /////
 
 
