@@ -516,9 +516,9 @@ int main(int argc, char *argv[]){
 
 	for(int i = 0; i<10; i++){
 		printf("Main SERVER SLEEPING\n");
-		sleep(2);
-		pub_sub_enqueue(&pub_queue, test_char_pp[i%3]);
-		pthread_cond_signal(&pub_queue_cond);
+		//sleep(2);
+		//pub_sub_enqueue(&pub_queue, test_char_pp[i%3]);
+		//pthread_cond_signal(&pub_queue_cond);
 		
 		//pub_sub_enqueue(&sub_queue, test_char_pp[i%3]);
 		
@@ -528,7 +528,7 @@ int main(int argc, char *argv[]){
 	//// END TESTING AREA ////
 
 	sleep(7);
-	pthread_cond_signal(&pub_queue_cond);
+	//pthread_cond_signal(&pub_queue_cond);
 	exit_function();
 }
 ////// END MAIN /////////////////////////////////////////////////////
