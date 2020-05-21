@@ -431,8 +431,8 @@ void * publisher(void * params){
 
 ////// BEGIN SUBSCRIBER Handler FUNCTION ////////////////////////////////////////
 
-void handle_subscriber(){
-
+void handle_subscriber(char* command_file){
+	printf("Hander being called %s\n", command_file);
 }
 ////// END SUBSCRIBER Handler FUNCTION ////////////////////////////////////////
 
@@ -455,9 +455,12 @@ struct threadargs* my_arguments = (struct threadargs *)params;
 		char * check_if_empty = pub_sub_dequeue(&sub_queue, command_slot);
 		if (check_if_empty != NULL){
 			printf("Grabbed sub command: %s\n", command_slot);
+			// call handler //
+			handle_subscriber(command_slot);
 		}
 		pthread_mutex_unlock(&sub_queue_mutex);
 
+		// after hander check if done
 		pthread_mutex_lock(&done_mutex);
 		if (DONE == 1){
 			printf("Thread: %d GOT HERE\n",my_arguments->id);
@@ -471,7 +474,6 @@ struct threadargs* my_arguments = (struct threadargs *)params;
 	pthread_mutex_unlock(&sub_left_mutex);
 
 	return NULL;
-
 	
 }
 
@@ -479,7 +481,8 @@ struct threadargs* my_arguments = (struct threadargs *)params;
 
 ////// BEGIN ClEANUP THREAD FUNCTION ///////////////////////////////////////
 
-////// END SUBSCRIBER THREAD FUNCTION /////////////////////////////////////////
+////// END CLEANUP THREAD FUNCTION /////////////////////////////////////////
+
 
 
 ////// BEGIN MAIN /////////////////////////////////////////////////////
@@ -514,73 +517,73 @@ int main(int argc, char *argv[]){
 
 
 	// OVERARCHING LOOP HERE /////
-	for (int i =0; i<1; i++){
+	for (int i =0; i<3; i++){
 
-	//test enqueue
-	for (int i= 0; i<MAXENTRIES+3; i++){
-		for (int j =0; j< MAXTOPICS; j++){
-			enqueue(&vessel_for_enqueue, &topic_queues[j]);
+		//test enqueue
+		for (int i= 0; i<MAXENTRIES+3; i++){
+			for (int j =0; j< MAXTOPICS; j++){
+				enqueue(&vessel_for_enqueue, &topic_queues[j]);
+			}
 		}
-	}
 
-	// test getEntry ////
-	int get_entry_return = -4;
-	for (int i = 0; i< MAXTOPICS; i++){ 
-		for (int j =0; j< num_entries_to_get; j++){
-			get_entry_return = getEntry(entries_to_get[j], &vessel_for_get_entry, i);
-			printf("looking for entry: %d \n", entries_to_get[j] + 1);
-			printf("the result of get entry was: %d \n", get_entry_return);
+		// test getEntry ////
+		int get_entry_return = -4;
+		for (int i = 0; i< MAXTOPICS; i++){ 
+			for (int j =0; j< num_entries_to_get; j++){
+				get_entry_return = getEntry(entries_to_get[j], &vessel_for_get_entry, i);
+				printf("looking for entry: %d \n", entries_to_get[j] + 1);
+				printf("the result of get entry was: %d \n", get_entry_return);
+			}
+			
 		}
-		
-	}
 
-	//test reading data
-	for (int i = 0; i< MAXTOPICS; i++){
-		//printf("outer %d", i);
-		for (int j = 0; j< MAXENTRIES; j++){
-			curtime = topic_queues[i].entries[j].timestamp.tv_sec;
+		//test reading data
+		for (int i = 0; i< MAXTOPICS; i++){
+			//printf("outer %d", i);
+			for (int j = 0; j< MAXENTRIES; j++){
+				curtime = topic_queues[i].entries[j].timestamp.tv_sec;
 
-			strftime(time_print_buffer,30,"%m-%d-%Y  %T.",localtime(&curtime));
+				strftime(time_print_buffer,30,"%m-%d-%Y  %T.",localtime(&curtime));
 
-			printf("hi from entry %d %s%ld\n", topic_queues[i].entries[j].entryNum,
-			time_print_buffer, (long)topic_queues[i].entries[j].timestamp.tv_usec);
+				printf("hi from entry %d %s%ld\n", topic_queues[i].entries[j].entryNum,
+				time_print_buffer, (long)topic_queues[i].entries[j].timestamp.tv_usec);
+			}
 		}
-	}
 
-	//test dequeue
-	for (int i= 0; i<MAXENTRIES+3; i++){
-		for (int j =0; j< MAXTOPICS; j++){
-			dequeue(&topic_queues[j]);
+		//test dequeue
+		for (int i= 0; i<MAXENTRIES+3; i++){
+			for (int j =0; j< MAXTOPICS; j++){
+				dequeue(&topic_queues[j]);
+			}
 		}
-	}
 
-	//enque some more entries
-	for (int i= 0; i<MAXENTRIES-1; i++){
-		for (int j =0; j< MAXTOPICS; j++){
-			enqueue(&vessel_for_enqueue, &topic_queues[j]);
+		//enque some more entries
+		for (int i= 0; i<MAXENTRIES-1; i++){
+			for (int j =0; j< MAXTOPICS; j++){
+				enqueue(&vessel_for_enqueue, &topic_queues[j]);
+			}
 		}
-	}
 
 
-	//test reading data
-	for (int i = 0; i< MAXTOPICS; i++){
-		//printf("outer %d", i);
-		for (int j = 0; j< MAXENTRIES; j++){
-			curtime = topic_queues[i].entries[j].timestamp.tv_sec;
+		//test reading data
+		for (int i = 0; i< MAXTOPICS; i++){
+			//printf("outer %d", i);
+			for (int j = 0; j< MAXENTRIES; j++){
+				curtime = topic_queues[i].entries[j].timestamp.tv_sec;
 
-			strftime(time_print_buffer,30,"%m-%d-%Y  %T.",localtime(&curtime));
+				strftime(time_print_buffer,30,"%m-%d-%Y  %T.",localtime(&curtime));
 
-			printf("hi from entry %d %s%ld\n", topic_queues[i].entries[j].entryNum,
-			time_print_buffer, (long)topic_queues[i].entries[j].timestamp.tv_usec);
+				printf("hi from entry %d %s%ld\n", topic_queues[i].entries[j].entryNum,
+				time_print_buffer, (long)topic_queues[i].entries[j].timestamp.tv_usec);
 
-			printf("%s\n", topic_queues[i].entries[j].photoURL);
-			printf("%s\n", topic_queues[i].entries[j].photoCaption);
+				printf("%s\n", topic_queues[i].entries[j].photoURL);
+				printf("%s\n", topic_queues[i].entries[j].photoCaption);
+			}
 		}
-	}
-	///sleep(2);
+		///sleep(2);
 	}
 
-	char* test_char_pp[] = {"hello Wolrd", "I am a c g", "this.txt"};
+	char* test_char_pp[] = {"command_file1.txt", "command_file2.txt", "command_file1.txt"};
 
 	for (int i=0; i < NUMPROXIES; i++){
 		pubargs[i].id = i;
@@ -593,20 +596,21 @@ int main(int argc, char *argv[]){
 	sleep(1);
 
 
-	for(int i = 0; i<20; i++){
+	for(int i = 0; i<3; i++){
 		printf("Main SERVER Unlocking\n");
 		pthread_mutex_lock(&pub_queue_mutex);
 		pub_sub_enqueue(&pub_queue, test_char_pp[i%3]);
 		pthread_mutex_unlock(&pub_queue_mutex);
+
+		pthread_mutex_lock(&sub_queue_mutex);
+		pub_sub_enqueue(&sub_queue, test_char_pp[i%3]);
+		pthread_mutex_unlock(&sub_queue_mutex);
 
 		pthread_mutex_lock(&pub_queue_mutex);
 		pthread_cond_signal(&pub_queue_cond);
 		pthread_mutex_unlock(&pub_queue_mutex);
 
 		// sleep(1);
-		pthread_mutex_lock(&sub_queue_mutex);
-		pub_sub_enqueue(&sub_queue, test_char_pp[i%3]);
-		pthread_mutex_unlock(&sub_queue_mutex);
 
 		//sleep(1);
 		pthread_mutex_lock(&sub_queue_mutex);
@@ -661,7 +665,6 @@ int main(int argc, char *argv[]){
 	////////////// END PUB THREAD CLEANUP /////////////////
 
 	////////////// START SUB THREAD CLEANUP /////////////////
-
 	
 	sleep(1);
 	while(sub_threads_left > 0){
