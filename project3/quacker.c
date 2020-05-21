@@ -15,7 +15,7 @@
 #define CAPSIZE 100
 #define MAXENTRIES 4
 #define MAXTOPICS 2
-#define NUMPROXIES 10
+#define NUMPROXIES 1
 
 //////// END defines  ////////////////////////////////////////////////
 
@@ -93,6 +93,10 @@ struct pub_sub_queue sub_queue;
 struct pub_sub_queue pub_queue;
 
 //////////////////////////////////////////////////////////////////////////////
+
+int test_int = 0;
+
+pthread_mutex_t int_test_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 //////// END global variables ////////////////////////////////////////////////
 
@@ -375,9 +379,13 @@ void * publisher(void * params){
 	
 	while(keep_going){
 		pthread_mutex_lock(&pub_queue_mutex);
-		pthread_cond_wait(&pub_queue_cond,&pub_queue_mutex);
+
+		pthread_cond_wait(&pub_queue_cond, &pub_queue_mutex);
 		printf("UNLOCKING and grabbing\n");
 		char * check_if_empty = pub_sub_dequeue(&pub_queue);
+		if (check_if_empty != NULL){
+			printf("Grabbed command: %s\n",check_if_empty);
+		}
 		pthread_mutex_unlock(&pub_queue_mutex);
 		
 	}
@@ -514,26 +522,43 @@ int main(int argc, char *argv[]){
 
 	char* test_char_pp[] = {"hello Wolrd", "I am a c g", "this.txt"};
 
-	pubargs[0].id = 1;
-	pthread_create(&pubs[0], &attr, publisher, (void *) &pubargs[0]);
+	for (int i=0; i < NUMPROXIES; i++){
+		pubargs[i].id = 1;
+		pthread_create(&pubs[i], &attr, publisher, (void *) &pubargs[i]);
+	}
+	sleep(1);
 
 
-	for(int i = 0; i<3; i++){
-		printf("Main SERVER SLEEPING\n");
-		sleep(2);
+	for(int i = 0; i<15; i++){
+		printf("Main SERVER Unlocking\n");
+		pthread_mutex_lock(&pub_queue_mutex);
+
 		pub_sub_enqueue(&pub_queue, test_char_pp[i%3]);
+
+		pthread_mutex_unlock(&pub_queue_mutex);
+
 		pthread_cond_signal(&pub_queue_cond);
+		sleep(1);
 		
 		pub_sub_enqueue(&sub_queue, test_char_pp[i%3]);
 		
-		printf("%s\n",test_char_pp[i]);
+		//printf("%s\n",test_char_pp[i]);
 	}
 
 	//// END TESTING AREA ////
+	int pubs_left = sub_queue.count;
 
-	sleep(3);
-	pthread_cancel(pubs[0]);
-	pthread_join(pubs[0],NULL);
+	while(pubs_left){
+		pthread_cond_signal(&pub_queue_cond);
+		pubs_left = sub_queue.count;
+		sleep(1);
+	}
+
+	sleep(1);
+	for (int i=0; i < NUMPROXIES; i++){
+		pthread_cancel(pubs[i]);
+		pthread_join(pubs[i],NULL);
+	}
 	exit_function();
 }
 ////// END MAIN /////////////////////////////////////////////////////
