@@ -13,9 +13,14 @@
 
 #define URLSIZE 100
 #define CAPSIZE 100
-#define MAXENTRIES 4
-#define MAXTOPICS 2
-#define NUMPROXIES 1
+#define MAXENTRIES 5
+#define MAXTOPICS 3
+#define NUMPROXIES 10
+
+volatile int DONE = 0;
+volatile int pub_threads_left = NUMPROXIES;
+volatile int sub_threads_left = NUMPROXIES;
+
 
 //////// END defines  ////////////////////////////////////////////////
 
@@ -34,8 +39,6 @@ struct pub_sub_queue{
 	struct node* tail;
 	int count;
 };
-
-
 
 struct topicEntry{
   int entryNum;
@@ -97,6 +100,12 @@ struct pub_sub_queue pub_queue;
 int test_int = 0;
 
 pthread_mutex_t int_test_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+pthread_mutex_t done_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+pthread_mutex_t pub_left_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+pthread_mutex_t sub_left_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 //////// END global variables ////////////////////////////////////////////////
 
@@ -380,12 +389,19 @@ void handle_publisher(){
 
 ////// BEGIN PUBLISHER THREAD FUNCTION ////////////////////////////////////////
 void * publisher(void * params){
+
+	struct threadargs* my_arguments = (struct threadargs *)params;
+
+
 	int keep_going = 1;
 	char command_slot[100];
 	
 	while(keep_going){
+		if (my_arguments->id % 3 == 0){
+			sleep(2); // to simulate some threads sleeping
+		}
+		printf("HELLO FROM THREAD %d \n",my_arguments->id);
 		pthread_mutex_lock(&pub_queue_mutex);
-
 		pthread_cond_wait(&pub_queue_cond, &pub_queue_mutex);
 		printf("UNLOCKING and grabbing\n");
 		char * check_if_empty = pub_sub_dequeue(&pub_queue, command_slot);
@@ -393,8 +409,18 @@ void * publisher(void * params){
 			printf("Grabbed pub command: %s\n", command_slot);
 		}
 		pthread_mutex_unlock(&pub_queue_mutex);
-		
+
+		pthread_mutex_lock(&done_mutex);
+		if (DONE == 1){
+			printf("Thread: %d GOT HERE\n",my_arguments->id);
+			keep_going = 0;
+		}
+		pthread_mutex_unlock(&done_mutex);
 	}
+
+	pthread_mutex_lock(&pub_left_mutex);
+	pub_threads_left -= 1;
+	pthread_mutex_unlock(&pub_left_mutex);
 	return NULL;
 
 }
@@ -529,13 +555,13 @@ int main(int argc, char *argv[]){
 	char* test_char_pp[] = {"hello Wolrd", "I am a c g", "this.txt"};
 
 	for (int i=0; i < NUMPROXIES; i++){
-		pubargs[i].id = 1;
+		pubargs[i].id = i;
 		pthread_create(&pubs[i], &attr, publisher, (void *) &pubargs[i]);
 	}
 	sleep(1);
 
 
-	for(int i = 0; i<8; i++){
+	for(int i = 0; i<20; i++){
 		printf("Main SERVER Unlocking\n");
 		pthread_mutex_lock(&pub_queue_mutex);
 
@@ -543,7 +569,10 @@ int main(int argc, char *argv[]){
 
 		pthread_mutex_unlock(&pub_queue_mutex);
 
+		pthread_mutex_lock(&pub_queue_mutex);
 		pthread_cond_signal(&pub_queue_cond);
+		pthread_mutex_unlock(&pub_queue_mutex);
+
 		sleep(1);
 		
 		pub_sub_enqueue(&sub_queue, test_char_pp[i%3]);
@@ -552,19 +581,38 @@ int main(int argc, char *argv[]){
 	}
 
 	//// END TESTING AREA ////
+	
+	//printf("here\n");
+	pthread_mutex_lock(&done_mutex);
+	DONE = 1;
+	pthread_mutex_unlock(&done_mutex);
+	
+
 	int pubs_left = sub_queue.count;
 
-	while(pubs_left){
+	for(int i = 0; i<NUMPROXIES; i++){
+		pthread_mutex_lock(&pub_queue_mutex);
 		pthread_cond_signal(&pub_queue_cond);
+		pthread_mutex_unlock(&pub_queue_mutex);
+	}
+	while(pubs_left){
 		pubs_left = sub_queue.count;
 		sleep(1);
 	}
-
-	sleep(1);
-	for (int i=0; i < NUMPROXIES; i++){
-		pthread_cancel(pubs[i]);
-		pthread_join(pubs[i],NULL);
+	while(pub_threads_left > 0){
+		pthread_mutex_lock(&pub_queue_mutex);
+		pthread_cond_signal(&pub_queue_cond);
+		pthread_mutex_unlock(&pub_queue_mutex);
 	}
+
+
+
+	for (int i=0; i < NUMPROXIES; i++){
+		//pthread_cancel(pubs[i]);
+		printf("here : %d\n", i);
+		pthread_join(pubs[i], NULL);
+	}
+
 	exit_function();
 }
 ////// END MAIN /////////////////////////////////////////////////////
