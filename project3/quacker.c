@@ -152,7 +152,8 @@ void pub_sub_enqueue(struct pub_sub_queue* a_pub_sub_queue, char* command_string
 }
 
 
-char* pub_sub_dequeue(struct pub_sub_queue* a_pub_sub_queue){
+char* pub_sub_dequeue(struct pub_sub_queue* a_pub_sub_queue, char* command_slot){
+	
 	if (a_pub_sub_queue->head == NULL){
 		return NULL;
 	}
@@ -162,6 +163,9 @@ char* pub_sub_dequeue(struct pub_sub_queue* a_pub_sub_queue){
 		a_pub_sub_queue->head = a_pub_sub_queue->head->next;
 		if (a_pub_sub_queue->head == NULL){
 			a_pub_sub_queue->tail = NULL;
+		}
+		if (result != NULL ){
+			strcpy(command_slot, result);
 		}
 		free(temp);
 		return result;
@@ -319,6 +323,7 @@ int getEntry(int lastEntry, struct topicEntry *a_topic_entry, int topic_id){
 ////// BEGIN EXIT FUNCTION /////////////////////////////////////////////////////
 
 void exit_function(){
+	char command_slot[100];
 	for (int i=0; i<MAXTOPICS; i++) {
 
 		free(topic_queues[i].entries);
@@ -329,7 +334,7 @@ void exit_function(){
 
 	while(keep_going){
 
-		char * check_if_empty = pub_sub_dequeue(&pub_queue);
+		char * check_if_empty = pub_sub_dequeue(&pub_queue,command_slot);
 
 		if (check_if_empty == NULL){
 
@@ -345,7 +350,7 @@ void exit_function(){
 
 	while(keep_going){
 
-		char * check_if_empty = pub_sub_dequeue(&sub_queue);
+		char * check_if_empty = pub_sub_dequeue(&sub_queue,command_slot);
 
 		if (check_if_empty == NULL){
 
@@ -376,15 +381,16 @@ void handle_publisher(){
 ////// BEGIN PUBLISHER THREAD FUNCTION ////////////////////////////////////////
 void * publisher(void * params){
 	int keep_going = 1;
+	char command_slot[100];
 	
 	while(keep_going){
 		pthread_mutex_lock(&pub_queue_mutex);
 
 		pthread_cond_wait(&pub_queue_cond, &pub_queue_mutex);
 		printf("UNLOCKING and grabbing\n");
-		char * check_if_empty = pub_sub_dequeue(&pub_queue);
+		char * check_if_empty = pub_sub_dequeue(&pub_queue, command_slot);
 		if (check_if_empty != NULL){
-			printf("Grabbed command: %s\n",check_if_empty);
+			printf("Grabbed pub command: %s\n", command_slot);
 		}
 		pthread_mutex_unlock(&pub_queue_mutex);
 		
@@ -529,7 +535,7 @@ int main(int argc, char *argv[]){
 	sleep(1);
 
 
-	for(int i = 0; i<15; i++){
+	for(int i = 0; i<8; i++){
 		printf("Main SERVER Unlocking\n");
 		pthread_mutex_lock(&pub_queue_mutex);
 
