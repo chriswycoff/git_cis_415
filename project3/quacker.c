@@ -590,19 +590,26 @@ int main(int argc, char *argv[]){
 
 	int pubs_left = sub_queue.count;
 
+	/*
 	for(int i = 0; i<NUMPROXIES; i++){
 		pthread_mutex_lock(&pub_queue_mutex);
 		pthread_cond_signal(&pub_queue_cond);
 		pthread_mutex_unlock(&pub_queue_mutex);
 	}
+	*/
+	/*
 	while(pubs_left){
 		pubs_left = sub_queue.count;
 		sleep(1);
 	}
+	*/
+	int times_executed = 0;
 	while(pub_threads_left > 0){
+		times_executed+=1;
 		pthread_mutex_lock(&pub_queue_mutex);
 		pthread_cond_signal(&pub_queue_cond);
 		pthread_mutex_unlock(&pub_queue_mutex);
+		//sleep(1);
 	}
 
 
@@ -613,6 +620,7 @@ int main(int argc, char *argv[]){
 		pthread_join(pubs[i], NULL);
 	}
 
+	//printf("times_executed: %d\n", times_executed); wow that is a lot
 	exit_function();
 }
 ////// END MAIN /////////////////////////////////////////////////////
