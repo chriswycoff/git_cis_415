@@ -57,12 +57,20 @@ struct topic_queue{
 
 //// biggest context data structure ////////////////////////////////////////////////
 struct topic_queue topic_queues[MAXTOPICS]; // data structure holding the topic queues
+pthread_mutex_t topic_queue_mutexes[MAXTOPICS]; // mutexes for the topic store
 //////////////////////////////////////////////////////////////////////////////////////
 
 pthread_t pubs[NUMPROXIES];		// thread ID for publishers
 pthread_t subs[NUMPROXIES];		// thread ID for subscribers
 pthread_attr_t attr; 
-pthread_mutex_t mutex[MAXTOPICS];
+
+/// cleanup pthread ///
+pthread_t cleanup_thread;
+pthread_attr_t clean_attr; 
+
+
+
+// thread pool mutexs
 
 pthread_mutex_t sub_queue_mutex;
 pthread_mutex_t pub_queue_mutex;
@@ -108,6 +116,7 @@ pthread_mutex_t pub_left_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 pthread_mutex_t sub_left_mutex = PTHREAD_MUTEX_INITIALIZER;
 
+
 //////// END global variables ////////////////////////////////////////////////
 
 //////// Begin initialize ////////////////////////////////////////////////////
@@ -130,14 +139,16 @@ int i; //, j, k;
 
 	// create the buffer semaphores
 	for (i=0; i<MAXTOPICS; i++) {
-		pthread_mutex_init(&(mutex[i]), NULL);
+		pthread_mutex_init(&(topic_queue_mutexes[i]), NULL);
 	//    sem_init(&full[i], 0, 0);
 	//    sem_init(&empty[i], 0, BUFFERSIZE);
 	}
 	pthread_mutex_init(&pub_queue_mutex, NULL);
 	pthread_mutex_init(&sub_queue_mutex, NULL);
 
+
 	pthread_attr_init(&attr);
+	pthread_attr_init(&clean_attr);
 	//pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 
 } // initialize()
@@ -380,10 +391,17 @@ void exit_function(){
 
 ////// END EXIT FUNCTION //////////////////////////////////////////////////////
 
+
+///// TESTING ROUTINES /////////////////////////////////////////////////////////
+
+
+
+/////////////END TESTING ROUTINES///////////////////////////////////////////////
+
 ////// BEGIN PUBLISHER Handler FUNCTION ////////////////////////////////////////
 
-void handle_publisher(){
-
+void handle_publisher(char *command_file){
+	printf("Handler being called %s\n", command_file);
 }
 ////// END PUBLISHER Handler FUNCTION ////////////////////////////////////////
 
@@ -408,6 +426,9 @@ void * publisher(void * params){
 		char * check_if_empty = pub_sub_dequeue(&pub_queue, command_slot);
 		if (check_if_empty != NULL){
 			printf("Grabbed pub command: %s\n", command_slot);
+			// call handler //
+			handle_publisher(command_slot);
+			// end call handler
 		}
 		pthread_mutex_unlock(&pub_queue_mutex);
 
@@ -432,7 +453,7 @@ void * publisher(void * params){
 ////// BEGIN SUBSCRIBER Handler FUNCTION ////////////////////////////////////////
 
 void handle_subscriber(char* command_file){
-	printf("Hander being called %s\n", command_file);
+	printf("Handler being called %s\n", command_file);
 }
 ////// END SUBSCRIBER Handler FUNCTION ////////////////////////////////////////
 
@@ -457,10 +478,11 @@ struct threadargs* my_arguments = (struct threadargs *)params;
 			printf("Grabbed sub command: %s\n", command_slot);
 			// call handler //
 			handle_subscriber(command_slot);
+			// end call handler
 		}
 		pthread_mutex_unlock(&sub_queue_mutex);
 
-		// after hander check if done
+		// after handler check if done
 		pthread_mutex_lock(&done_mutex);
 		if (DONE == 1){
 			printf("Thread: %d GOT HERE\n",my_arguments->id);
@@ -480,6 +502,101 @@ struct threadargs* my_arguments = (struct threadargs *)params;
 ////// END SUBSCRIBER THREAD FUNCTION /////////////////////////////////////////
 
 ////// BEGIN ClEANUP THREAD FUNCTION ///////////////////////////////////////
+
+void * cleanup_thread_function(void * params){
+	int number_entried_dequeue;
+
+	while(!DONE){ 
+		for (int i=0; i<MAXTOPICS; i++) {
+			number_entried_dequeue = 0;
+			pthread_mutex_lock(&topic_queue_mutexes[i]);
+			/// determine how many to dequeue ///
+			/*
+			FOR REFERENCE
+			struct topic_queue{
+				int entry_number;
+				int	count, head, tail;
+				struct topicEntry *entries;
+			};
+
+			struct topicEntry{
+				int entryNum;
+				struct timeval timestamp;
+				int pubId;
+				char photoURL[URLSIZE];
+				char photoCaption[CAPSIZE];
+			};
+
+			*/
+			struct timeval cleanup_time_stamp;
+
+			struct topic_queue * specific_queue = &topic_queues[i];
+
+			if (specific_queue->count < 0){
+				printf("ERROR \n");
+				return NULL;
+			}
+
+				if (specific_queue->count != 0){
+					// tho
+				
+					/// topic_queue not empty so continue
+
+					int keep_going = 1;
+					int the_count = specific_queue->count;
+					int index = specific_queue->tail;
+					int counter = 0;
+
+					while(keep_going){
+						gettimeofday(&cleanup_time_stamp, NULL); 
+						printf("time here %d \n",cleanup_time_stamp.tv_sec);
+						int how_old_in_seconds = cleanup_time_stamp.tv_sec - specific_queue->entries[index].timestamp.tv_sec;
+						printf("this entry is %d seconds old\n", how_old_in_seconds);
+						/*
+						if (specific_queue->entries[index].entryNum == lastEntry+1){
+							/////copy the topic entry////
+							a_topic_entry->entryNum = specific_queue->entries[index].entryNum;
+							a_topic_entry->timestamp = specific_queue->entries[index].timestamp;
+							a_topic_entry->pubId = specific_queue->entries[index].pubId;
+							strcpy(specific_queue->entries[index].photoURL, a_topic_entry->photoURL);
+							strcpy(specific_queue->entries[index].photoCaption, a_topic_entry->photoCaption);
+							
+							return 1;
+						}
+
+						if (specific_queue->entries[index].entryNum > lastEntry+1){
+							/////copy the topic entry////
+							a_topic_entry->entryNum = specific_queue->entries[index].entryNum;
+							a_topic_entry->timestamp = specific_queue->entries[index].timestamp;
+							a_topic_entry->pubId = specific_queue->entries[index].pubId;
+							strcpy(specific_queue->entries[index].photoURL, a_topic_entry->photoURL);
+							strcpy(specific_queue->entries[index].photoCaption, a_topic_entry->photoCaption);
+							
+							return a_topic_entry->entryNum;
+						}
+						*/
+
+
+						index = (index + 1 ) % MAXENTRIES;
+
+						// loop breaking logic
+						counter += 1;
+
+					if (counter > the_count){
+						keep_going = 0;
+					}
+
+				}
+			}
+
+			pthread_mutex_unlock(&topic_queue_mutexes[i]);
+			sched_yield();
+		}
+	}
+
+
+	return NULL;
+}
 
 ////// END CLEANUP THREAD FUNCTION /////////////////////////////////////////
 
@@ -563,6 +680,8 @@ int main(int argc, char *argv[]){
 				enqueue(&vessel_for_enqueue, &topic_queues[j]);
 			}
 		}
+		sleep(3);
+		pthread_create(&cleanup_thread, &clean_attr, cleanup_thread_function, NULL);
 
 
 		//test reading data
@@ -592,12 +711,14 @@ int main(int argc, char *argv[]){
 		pthread_create(&subs[i], &attr, subscriber, (void *) &subargs[i]);
 
 	}
+	pthread_create(&cleanup_thread, &clean_attr, cleanup_thread_function, NULL);
 	
 	sleep(1);
 
 
 	for(int i = 0; i<3; i++){
-		printf("Main SERVER Unlocking\n");
+		//printf("Main SERVER Unlocking\n");
+		// ADD COMMANDS TO QUEUE
 		pthread_mutex_lock(&pub_queue_mutex);
 		pub_sub_enqueue(&pub_queue, test_char_pp[i%3]);
 		pthread_mutex_unlock(&pub_queue_mutex);
@@ -606,13 +727,12 @@ int main(int argc, char *argv[]){
 		pub_sub_enqueue(&sub_queue, test_char_pp[i%3]);
 		pthread_mutex_unlock(&sub_queue_mutex);
 
+		///////////// SIGNAL TREADS ////////////
+
 		pthread_mutex_lock(&pub_queue_mutex);
 		pthread_cond_signal(&pub_queue_cond);
 		pthread_mutex_unlock(&pub_queue_mutex);
 
-		// sleep(1);
-
-		//sleep(1);
 		pthread_mutex_lock(&sub_queue_mutex);
 		pthread_cond_signal(&sub_queue_cond);
 		pthread_mutex_unlock(&sub_queue_mutex);
@@ -658,7 +778,7 @@ int main(int argc, char *argv[]){
 
 	for (int i=0; i < NUMPROXIES; i++){
 		//pthread_cancel(pubs[i]);
-		printf("here : %d\n", i);
+		//printf("here : %d\n", i);
 		pthread_join(pubs[i], NULL);
 	}
 
@@ -677,7 +797,7 @@ int main(int argc, char *argv[]){
 
 	for (int i=0; i < NUMPROXIES; i++){
 		//pthread_cancel(pubs[i]);
-		printf("here : %d\n", i);
+		//printf("here : %d\n", i);
 		pthread_join(subs[i], NULL);
 	}
 	////////////// END SUB THREAD CLEANUP /////////////////
