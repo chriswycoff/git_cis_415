@@ -14,7 +14,7 @@
 #define URLSIZE 100
 #define CAPSIZE 100
 #define MAXENTRIES 5
-#define MAXTOPICS 3
+#define MAXTOPICS 2
 #define NUMPROXIES 10
 
 volatile int DONE = 0;
@@ -507,6 +507,8 @@ void * cleanup_thread_function(void * params){
 	int number_entried_dequeue;
 
 	while(!DONE){ 
+		//sleep(2);
+		sleep(1);
 		for (int i=0; i<MAXTOPICS; i++) {
 			number_entried_dequeue = 0;
 			pthread_mutex_lock(&topic_queue_mutexes[i]);
@@ -590,7 +592,7 @@ void * cleanup_thread_function(void * params){
 			}
 
 			pthread_mutex_unlock(&topic_queue_mutexes[i]);
-			sched_yield();
+			//sched_yield();
 		}
 	}
 
@@ -629,8 +631,48 @@ int main(int argc, char *argv[]){
 
 	/////////////////////////////
 
+
 	//initialize topic_queues and mutex locks
 	initialize();
+
+	//// SPIN UP THREADS ////
+
+	char* test_char_pp[] = {"command_file1.txt", "command_file2.txt", "command_file1.txt"};
+
+	for (int i=0; i < NUMPROXIES; i++){
+		pubargs[i].id = i;
+		subargs[i].id = i;
+		pthread_create(&pubs[i], &attr, publisher, (void *) &pubargs[i]);
+		pthread_create(&subs[i], &attr, subscriber, (void *) &subargs[i]);
+
+	}
+	pthread_create(&cleanup_thread, &clean_attr, cleanup_thread_function, NULL);
+	
+	sleep(1);
+
+	for(int i = 0; i<3; i++){
+		//printf("Main SERVER Unlocking\n");
+		// ADD COMMANDS TO QUEUE
+		pthread_mutex_lock(&pub_queue_mutex);
+		pub_sub_enqueue(&pub_queue, test_char_pp[i%3]);
+		pthread_mutex_unlock(&pub_queue_mutex);
+
+		pthread_mutex_lock(&sub_queue_mutex);
+		pub_sub_enqueue(&sub_queue, test_char_pp[i%3]);
+		pthread_mutex_unlock(&sub_queue_mutex);
+
+		///////////// SIGNAL TREADS ////////////
+
+		pthread_mutex_lock(&pub_queue_mutex);
+		pthread_cond_signal(&pub_queue_cond);
+		pthread_mutex_unlock(&pub_queue_mutex);
+
+		pthread_mutex_lock(&sub_queue_mutex);
+		pthread_cond_signal(&sub_queue_cond);
+		pthread_mutex_unlock(&sub_queue_mutex);
+		
+		//printf("%s\n",test_char_pp[i]);
+	}
 
 
 	// OVERARCHING LOOP HERE /////
@@ -681,7 +723,7 @@ int main(int argc, char *argv[]){
 			}
 		}
 		sleep(3);
-		pthread_create(&cleanup_thread, &clean_attr, cleanup_thread_function, NULL);
+		//pthread_create(&cleanup_thread, &clean_attr, cleanup_thread_function, NULL);
 
 
 		//test reading data
@@ -695,15 +737,15 @@ int main(int argc, char *argv[]){
 				printf("hi from entry %d %s%ld\n", topic_queues[i].entries[j].entryNum,
 				time_print_buffer, (long)topic_queues[i].entries[j].timestamp.tv_usec);
 
-				printf("%s\n", topic_queues[i].entries[j].photoURL);
-				printf("%s\n", topic_queues[i].entries[j].photoCaption);
+				//printf("%s\n", topic_queues[i].entries[j].photoURL);
+				//printf("%s\n", topic_queues[i].entries[j].photoCaption);
 			}
 		}
 		///sleep(2);
 	}
 
-	char* test_char_pp[] = {"command_file1.txt", "command_file2.txt", "command_file1.txt"};
 
+	/*
 	for (int i=0; i < NUMPROXIES; i++){
 		pubargs[i].id = i;
 		subargs[i].id = i;
@@ -715,6 +757,7 @@ int main(int argc, char *argv[]){
 	
 	sleep(1);
 
+	
 
 	for(int i = 0; i<3; i++){
 		//printf("Main SERVER Unlocking\n");
@@ -739,10 +782,12 @@ int main(int argc, char *argv[]){
 		
 		//printf("%s\n",test_char_pp[i]);
 	}
+	*/
 
 	//// END TESTING AREA ////
 	
 	//printf("here\n");
+	sleep(5);
 	pthread_mutex_lock(&done_mutex);
 	DONE = 1;
 	pthread_mutex_unlock(&done_mutex);
@@ -763,7 +808,6 @@ int main(int argc, char *argv[]){
 		sleep(1);
 	}
 	*/
-
 
 	////////////// START PUB THREAD CLEANUP /////////////////
 	sleep(1);
@@ -800,6 +844,9 @@ int main(int argc, char *argv[]){
 		//printf("here : %d\n", i);
 		pthread_join(subs[i], NULL);
 	}
+	
+	pthread_join(cleanup_thread, NULL);
+
 	////////////// END SUB THREAD CLEANUP /////////////////
 
 	printf("times_executed: %d\n", times_executed); //wow that is a lot
