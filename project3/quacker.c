@@ -956,11 +956,11 @@ void * signaling_thread_function(void * params){
 	UNUSED(params); 
 	while(!DONE){ 
 		for (int i = 0; i<100; i++){
-			usleep(20);
+			//usleep(20);
 			pthread_mutex_lock(&pub_queue_mutex);
 			pthread_cond_signal(&pub_queue_cond);
 			pthread_mutex_unlock(&pub_queue_mutex);
-			usleep(20);
+			//usleep(20);
 			pthread_mutex_lock(&sub_queue_mutex);
 			pthread_cond_signal(&sub_queue_cond);
 			pthread_mutex_unlock(&sub_queue_mutex);
@@ -1183,22 +1183,22 @@ int main(int argc, char *argv[]){
 	//// END TESTING AREA ////
 	printf("Main SERVER Unlocking\n");
 	for (int i = 0; i<100; i++){
-		usleep(20);
+		//usleep(20);
 		pthread_mutex_lock(&pub_queue_mutex);
 		pthread_cond_signal(&pub_queue_cond);
 		pthread_mutex_unlock(&pub_queue_mutex);
-		usleep(20);
+		/usleep(20);
 		pthread_mutex_lock(&sub_queue_mutex);
 		pthread_cond_signal(&sub_queue_cond);
 		pthread_mutex_unlock(&sub_queue_mutex);
 	}
 	sleep(1);
 	for (int i = 0; i<100; i++){
-		usleep(20);
+		//usleep(20);
 		pthread_mutex_lock(&pub_queue_mutex);
 		pthread_cond_signal(&pub_queue_cond);
 		pthread_mutex_unlock(&pub_queue_mutex);
-		usleep(20);
+		//usleep(20);
 		pthread_mutex_lock(&sub_queue_mutex);
 		pthread_cond_signal(&sub_queue_cond);
 		pthread_mutex_unlock(&sub_queue_mutex);
