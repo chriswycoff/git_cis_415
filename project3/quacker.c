@@ -727,7 +727,7 @@ void handle_subscriber_test_3(char *command_file, struct threadargs* my_argument
 	int success = 0;
 	while(!success){
 		//printf("HITTING HERE3\n");
-		success = getEntry(12, &vessel_for_enqueue_3, 2);
+		success = getEntry(8, &vessel_for_enqueue_3, 2);
 		if (success == 0){
 			sched_yield();
 			sleep(1);
@@ -740,7 +740,7 @@ void handle_subscriber_test_3(char *command_file, struct threadargs* my_argument
 	success = 0;
 	while(!success){
 		//printf("HITTING HERE4\n");
-		success = getEntry(9, &vessel_for_enqueue_3, 2);
+		success = getEntry(6, &vessel_for_enqueue_3, 2);
 		if (success == 0){
 			sched_yield();
 			sleep(1);
