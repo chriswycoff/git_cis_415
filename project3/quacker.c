@@ -16,6 +16,7 @@
 #define MAXENTRIES 5
 #define MAXTOPICS 2
 #define NUMPROXIES 10
+#define TEST_DELTA 2
 
 volatile int DONE = 0;
 volatile int pub_threads_left = NUMPROXIES;
@@ -554,6 +555,11 @@ void * cleanup_thread_function(void * params){
 						printf("time here %d \n",cleanup_time_stamp.tv_sec);
 						int how_old_in_seconds = cleanup_time_stamp.tv_sec - specific_queue->entries[index].timestamp.tv_sec;
 						printf("this entry is %d seconds old\n", how_old_in_seconds);
+						// for reference int dequeue(struct topic_queue * a_topic_queue)
+						if (how_old_in_seconds > TEST_DELTA){
+							dequeue(specific_queue);
+						}
+
 						/*
 						if (specific_queue->entries[index].entryNum == lastEntry+1){
 							/////copy the topic entry////
@@ -674,7 +680,7 @@ int main(int argc, char *argv[]){
 		//printf("%s\n",test_char_pp[i]);
 	}
 
-
+	/*
 	// OVERARCHING LOOP HERE /////
 	for (int i =0; i<3; i++){
 
@@ -743,6 +749,7 @@ int main(int argc, char *argv[]){
 		}
 		///sleep(2);
 	}
+	*/
 
 
 	/*
