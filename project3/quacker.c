@@ -14,9 +14,9 @@
 #define URLSIZE 100
 #define CAPSIZE 100
 #define MAXENTRIES 3
-#define MAXTOPICS 3
+#define MAXTOPICS 4
 #define NUMPROXIES 10
-#define TEST_DELTA 2
+#define TEST_DELTA 4
 #define UNUSED(x) (void)(x)
 
 volatile int DONE = 0;
@@ -70,6 +70,10 @@ pthread_attr_t attr;
 /// cleanup pthread ///
 pthread_t cleanup_thread;
 pthread_attr_t clean_attr; 
+
+/// signal pthread ///
+pthread_t signal_thread;
+pthread_attr_t signal_attr; 
 
 
 
@@ -205,12 +209,12 @@ int enqueue(struct topicEntry * a_topic_entry, struct topic_queue * a_topic_queu
 	int the_current_id = a_topic_queue->topic_id;
 	pthread_mutex_lock(&topic_queue_mutexes[the_current_id]);
 
-	printf("Calling enqueue\n");
+	//printf("Calling enqueue\n");
 
 	if (a_topic_queue->count >= MAXENTRIES){
 		printf("queue full cannot enqueue\n");
 		pthread_mutex_unlock(&topic_queue_mutexes[the_current_id]);
-		return -1;
+		return 0;
 
 	}
 	// if this ^^^ does not happen there is room to enqueue
@@ -287,10 +291,11 @@ int getEntry(int lastEntry, struct topicEntry *a_topic_entry, int topic_id){
 		char photoCaption[CAPSIZE];
 	};
 
-	*/
 
-	struct topic_queue * specific_queue = &topic_queues[topic_id];
+	*/
+	//printf("CALLING getEntry\n");
 	pthread_mutex_lock(&topic_queue_mutexes[topic_id]);
+	struct topic_queue * specific_queue = &topic_queues[topic_id];
 
 	if (specific_queue->count < 0){
 		printf("ERROR \n");
@@ -298,6 +303,7 @@ int getEntry(int lastEntry, struct topicEntry *a_topic_entry, int topic_id){
 	}
 
 	if (specific_queue->count == 0){
+		pthread_mutex_unlock(&topic_queue_mutexes[topic_id]);
 		return 0;
 	}
 	/// topic_queue not empty so continue
@@ -314,9 +320,10 @@ int getEntry(int lastEntry, struct topicEntry *a_topic_entry, int topic_id){
 			a_topic_entry->entryNum = specific_queue->entries[index].entryNum;
 			a_topic_entry->timestamp = specific_queue->entries[index].timestamp;
 			a_topic_entry->pubId = specific_queue->entries[index].pubId;
-			strcpy(specific_queue->entries[index].photoURL, a_topic_entry->photoURL);
-			strcpy(specific_queue->entries[index].photoCaption, a_topic_entry->photoCaption);
-			
+			strcpy(a_topic_entry->photoURL, specific_queue->entries[index].photoURL);
+			strcpy(a_topic_entry->photoCaption, specific_queue->entries[index].photoCaption);
+
+			pthread_mutex_unlock(&topic_queue_mutexes[topic_id]);
 			return 1;
 		}
 
@@ -325,9 +332,11 @@ int getEntry(int lastEntry, struct topicEntry *a_topic_entry, int topic_id){
 			a_topic_entry->entryNum = specific_queue->entries[index].entryNum;
 			a_topic_entry->timestamp = specific_queue->entries[index].timestamp;
 			a_topic_entry->pubId = specific_queue->entries[index].pubId;
-			strcpy(specific_queue->entries[index].photoURL, a_topic_entry->photoURL);
-			strcpy(specific_queue->entries[index].photoCaption, a_topic_entry->photoCaption);
-			
+			strcpy(a_topic_entry->photoURL, specific_queue->entries[index].photoURL);
+			strcpy(a_topic_entry->photoCaption, specific_queue->entries[index].photoCaption);
+			// maybe wrong ^^
+
+			pthread_mutex_unlock(&topic_queue_mutexes[topic_id]);
 			return a_topic_entry->entryNum;
 		}
 
@@ -426,13 +435,23 @@ void handle_publisher_test_1(char *command_file, struct threadargs* my_arguments
 
 	struct topicEntry vessel_for_enqueue_1;
 
-	strcpy(vessel_for_enqueue_1.photoURL, "picture from the vessel");
+	strcpy(vessel_for_enqueue_1.photoURL, "picture from the vessel 1");
 
-	strcpy(vessel_for_enqueue_1.photoCaption, "caption from the vessel");
+	strcpy(vessel_for_enqueue_1.photoCaption, "caption from the vessel 2");
 
 	/// lets give this to queue at index 1
 
-	enqueue(&vessel_for_enqueue_1, &topic_queues[1]);
+	int success = 0;
+	while(!success){
+		success = enqueue(&vessel_for_enqueue_1, &topic_queues[1]);
+		if (success == 0){
+			sched_yield();
+			sleep(1);
+		}
+		if(DONE){
+			break;
+		}
+	}
 	//enqueue(&vessel_for_enqueue_1, &topic_queues[1]);
 
 }
@@ -453,13 +472,22 @@ void handle_publisher_test_2(char *command_file, struct threadargs* my_arguments
 
 	struct topicEntry vessel_for_enqueue_2;
 
-	strcpy(vessel_for_enqueue_2.photoURL, "picture from the vessel");
+	strcpy(vessel_for_enqueue_2.photoURL, "picture from the vessel 2");
 
-	strcpy(vessel_for_enqueue_2.photoCaption, "caption from the vessel");
+	strcpy(vessel_for_enqueue_2.photoCaption, "caption from the vessel 2");
 
 	/// lets give this to queue at index 1
-
-	enqueue(&vessel_for_enqueue_2, &topic_queues[1]);
+	int success = 0;
+	while(!success){
+		success = enqueue(&vessel_for_enqueue_2, &topic_queues[2]);
+		if (success == 0){
+			sched_yield();
+			sleep(1);
+		}
+		if(DONE){
+			break;
+		}
+	}
 	//enqueue(&vessel_for_enqueue_1, &topic_queues[1]);
 
 }
@@ -480,32 +508,66 @@ void handle_publisher_test_3(char *command_file, struct threadargs* my_arguments
 
 	struct topicEntry vessel_for_enqueue_3;
 
-	strcpy(vessel_for_enqueue_3.photoURL, "picture from the vessel");
+	strcpy(vessel_for_enqueue_3.photoURL, "picture from the vessel 3");
 
-	strcpy(vessel_for_enqueue_3.photoCaption, "caption from the vessel");
+	strcpy(vessel_for_enqueue_3.photoCaption, "caption from the vessel 3");
 
 	/// lets give this to queue at index 1
+	int success = 0;
+	while(!success){
+		success = enqueue(&vessel_for_enqueue_3, &topic_queues[2]);
+		if (success == 0){
+			sched_yield();
+			sleep(1);
+		}
+		if(DONE){
+			break;
+		}
+	}
+	success = 0;
+	while(!success){
+		success = enqueue(&vessel_for_enqueue_3, &topic_queues[2]);
+		if (success == 0){
+			sched_yield();
+			sleep(1);
+		}
+		if(DONE){
+			break;
+		}
 
-	enqueue(&vessel_for_enqueue_3, &topic_queues[2]);
-	enqueue(&vessel_for_enqueue_3, &topic_queues[2]);
-	enqueue(&vessel_for_enqueue_3, &topic_queues[2]);
-	enqueue(&vessel_for_enqueue_3, &topic_queues[2]);
+	}
+	printf("FINALLY ABLE TO ENQUEUE THIIS HERE\n");
+	success = 0;
+	while(!success){
+		success = enqueue(&vessel_for_enqueue_3, &topic_queues[2]);
+		success = enqueue(&vessel_for_enqueue_3, &topic_queues[2]);
+		success = enqueue(&vessel_for_enqueue_3, &topic_queues[2]);
+		if (success == 0){
+			sched_yield();
+			sleep(1);
+		}
+		if(DONE){
+			break;
+		}
+
+	}
+
 	//enqueue(&vessel_for_enqueue_1, &topic_queues[1]);
 
 }
 
+///// END PUBLISHER TESTS ////////////////////////////////////////////////
+
 void handle_publisher(char *command_file, struct threadargs* my_arguments){
 	printf("PUB Handler being called %s\n", command_file);
-	if ((my_arguments->id % 4 == 0)){
+	if (((my_arguments->id % 4) == 0)){
 		handle_publisher_test_1(command_file,my_arguments);
 	}
 
-	if ((my_arguments->id % 5 == 0)){
-		printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! \n");
+	if (((my_arguments->id % 5) == 0)){
 		handle_publisher_test_2(command_file,my_arguments);
 	}
-	if ((my_arguments->id % 6 == 0)){
-		printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! \n");
+	if (((my_arguments->id % 6) == 0)){
 		handle_publisher_test_3(command_file,my_arguments);
 	}
 }
@@ -532,13 +594,13 @@ void * publisher(void * params){
 		pthread_cond_wait(&pub_queue_cond, &pub_queue_mutex);
 		//printf("UNLOCKING and grabbing\n");
 		char * check_if_empty = pub_sub_dequeue(&pub_queue, command_slot);
+		pthread_mutex_unlock(&pub_queue_mutex);
 		if (check_if_empty != NULL){
 			//printf("Grabbed pub command: %s\n", command_slot);
 			// call handler //
 			handle_publisher(command_slot,my_arguments);
 			// end call handler
 		}
-		pthread_mutex_unlock(&pub_queue_mutex);
 
 		pthread_mutex_lock(&done_mutex);
 		if (DONE == 1){
@@ -557,11 +619,177 @@ void * publisher(void * params){
 
 ////// END PUBLISHER THREAD FUNCTION //////////////////////////////////////////
 
+void handle_subscriber_test_1(char *command_file, struct threadargs* my_arguments){
+	/* // for reference
+	struct topicEntry{
+	  int entryNum;
+	  struct timeval timestamp;
+	  int pubId;
+	  char photoURL[URLSIZE];
+	  char photoCaption[CAPSIZE];
+	};
+
+	int getEntry(int lastEntry, struct topicEntry *a_topic_entry, int topic_id)
+	*/ 
+
+	printf("SUB Handler TEST 1 called!!!!! from thread: %d\n", my_arguments->id );
+	printf("using : %s\n", command_file);
+
+	struct topicEntry vessel_for_enqueue_1;
+
+	strcpy(vessel_for_enqueue_1.photoURL,  "BEFORE");
+
+	strcpy(vessel_for_enqueue_1.photoCaption,  "BEFORE");
+
+	/// lets give this to queue at index 1
+
+	int success = 0;
+	
+	while(!success){
+		//printf("HITTING HERE1\n");
+		success = getEntry(13, &vessel_for_enqueue_1, 2);
+		if (success == 0){
+			sched_yield();
+			sleep(1);
+		}
+		if(DONE){
+			break;
+		}
+	}
+
+	printf("GOT THIS:%s FROM ENTRY: %d \n", vessel_for_enqueue_1.photoURL,vessel_for_enqueue_1.entryNum);
+	
+
+}
+
+void handle_subscriber_test_2(char *command_file, struct threadargs* my_arguments){
+	/* // for reference
+	struct topicEntry{
+	  int entryNum;
+	  struct timeval timestamp;
+	  int pubId;
+	  char photoURL[URLSIZE];
+	  char photoCaption[CAPSIZE];
+	};
+	*/ 
+
+	printf("SUB Handler TEST 2 called!!!!! from thread: %d\n", my_arguments->id );
+	printf("using : %s\n", command_file);
+
+	struct topicEntry vessel_for_enqueue_2;
+
+	strcpy(vessel_for_enqueue_2.photoURL,  "BEFORE");
+
+	strcpy(vessel_for_enqueue_2.photoCaption,  "BEFORE");
+
+	/// lets give this to queue at index 1
+	
+	int success = 0;
+	while(!success){
+		//printf("HITTING HERE2\n");
+		success = getEntry(1, &vessel_for_enqueue_2, 2);
+		if (success == 0){
+			sched_yield();
+			sleep(1);
+		}
+		if(DONE){
+			break;
+		}
+	}
+	
+
+	printf("GOT THIS:%s FROM ENTRY: %d \n", vessel_for_enqueue_2.photoURL,vessel_for_enqueue_2.entryNum);
+
+}
+
+void handle_subscriber_test_3(char *command_file, struct threadargs* my_arguments){
+	/* // for reference
+	struct topicEntry{
+	  int entryNum;
+	  struct timeval timestamp;
+	  int pubId;
+	  char photoURL[URLSIZE];
+	  char photoCaption[CAPSIZE];
+	};
+	*/ 
+
+	printf("SUB Handler TEST 3 called!!!!! from thread: %d\n", my_arguments->id );
+	printf("using : %s\n", command_file);
+
+	struct topicEntry vessel_for_enqueue_3;
+
+	strcpy(vessel_for_enqueue_3.photoURL, "BEFORE");
+
+	strcpy(vessel_for_enqueue_3.photoCaption, "BEFORE");
+
+	/// lets give this to queue at index 1
+	int success = 0;
+	while(!success){
+		//printf("HITTING HERE3\n");
+		success = getEntry(12, &vessel_for_enqueue_3, 2);
+		if (success == 0){
+			sched_yield();
+			sleep(1);
+		}
+		if(DONE){
+			break;
+		}
+	}
+	printf("GOT THIS:%s FROM ENTRY: %d \n", vessel_for_enqueue_3.photoURL,vessel_for_enqueue_3.entryNum);
+	success = 0;
+	while(!success){
+		//printf("HITTING HERE4\n");
+		success = getEntry(9, &vessel_for_enqueue_3, 2);
+		if (success == 0){
+			sched_yield();
+			sleep(1);
+		}
+		if(DONE){
+			break;
+		}
+
+	}
+	printf("GOT THIS:%s FROM ENTRY: %d \n", vessel_for_enqueue_3.photoURL,vessel_for_enqueue_3.entryNum);
+	printf("GOT TO FINAL GET ENTRY3\n");
+	success = 0;
+	while(!success){
+		//printf("HITTING HERE5\n");
+		success = getEntry(7, &vessel_for_enqueue_3, 2);
+		if (success == 0){
+			sched_yield();
+			sleep(1);
+		}
+		if(DONE){
+			break;
+		}
+
+
+	}
+	printf("GOT THIS:%s FROM ENTRY: %d \n", vessel_for_enqueue_3.photoURL,vessel_for_enqueue_3.entryNum);
+
+	
+
+}
+
 
 ////// BEGIN SUBSCRIBER Handler FUNCTION ////////////////////////////////////////
 
-void handle_subscriber(char* command_file){
-	//printf("Handler being called %s\n", command_file);
+void handle_subscriber(char* command_file, struct threadargs* my_arguments){
+	printf("Handler being called %s\n", command_file);
+	printf("SUB Handler being called %s\n", command_file);
+	
+	if (((my_arguments->id % 4) == 0)){
+		handle_subscriber_test_1(command_file,my_arguments);
+	}
+
+	if (((my_arguments->id % 5) == 0)){
+		handle_subscriber_test_2(command_file,my_arguments);
+	}
+	if (((my_arguments->id % 6) == 0)){
+		handle_subscriber_test_3(command_file,my_arguments);
+	}
+	
+	
 }
 ////// END SUBSCRIBER Handler FUNCTION ////////////////////////////////////////
 
@@ -582,13 +810,13 @@ struct threadargs* my_arguments = (struct threadargs *)params;
 		pthread_cond_wait(&sub_queue_cond, &sub_queue_mutex);
 		//printf("UNLOCKING and grabbing\n");
 		char * check_if_empty = pub_sub_dequeue(&sub_queue, command_slot);
+		pthread_mutex_unlock(&sub_queue_mutex);
 		if (check_if_empty != NULL){
 			printf("Grabbed sub command: %s\n", command_slot);
 			// call handler //
-			handle_subscriber(command_slot);
+			handle_subscriber(command_slot, my_arguments);
 			// end call handler
 		}
-		pthread_mutex_unlock(&sub_queue_mutex);
 
 		// after handler check if done
 		pthread_mutex_lock(&done_mutex);
@@ -615,6 +843,7 @@ void * cleanup_thread_function(void * params){
 	int number_entried_dequeue;
 	UNUSED(params);
 	while(!DONE){ 
+		printf("Calling Cleanup\n");
 		//sleep(2);
 		sleep(1);
 		for (int i=0; i<MAXTOPICS; i++) {
@@ -663,7 +892,7 @@ void * cleanup_thread_function(void * params){
 						int how_old_in_seconds = cleanup_time_stamp.tv_sec - specific_queue->entries[index].timestamp.tv_sec;
 						printf("Entry: %d is %d seconds old\n", specific_queue->entries[index].entryNum, how_old_in_seconds);
 						// for reference int dequeue(struct topic_queue * a_topic_queue)
-						if (how_old_in_seconds > TEST_DELTA){
+						if (how_old_in_seconds >= TEST_DELTA){
 							printf("Cleanup dequing\n");
 							dequeue(specific_queue);
 
@@ -707,6 +936,8 @@ void * cleanup_thread_function(void * params){
 			}
 
 			pthread_mutex_unlock(&topic_queue_mutexes[i]);
+
+
 			sched_yield();
 		}
 	}
@@ -716,6 +947,30 @@ void * cleanup_thread_function(void * params){
 }
 
 ////// END CLEANUP THREAD FUNCTION /////////////////////////////////////////
+
+
+///////////
+
+void * signaling_thread_function(void * params){
+	UNUSED(params); 
+	while(!DONE){ 
+		for (int i = 0; i<100; i++){
+			usleep(20);
+			pthread_mutex_lock(&pub_queue_mutex);
+			pthread_cond_signal(&pub_queue_cond);
+			pthread_mutex_unlock(&pub_queue_mutex);
+			usleep(20);
+			pthread_mutex_lock(&sub_queue_mutex);
+			pthread_cond_signal(&sub_queue_cond);
+			pthread_mutex_unlock(&sub_queue_mutex);
+		}
+		sched_yield();
+		sleep(1);
+	}
+	return NULL;
+
+}
+///////////
 
 
 
@@ -757,11 +1012,10 @@ int main(int argc, char *argv[]){
 
 	}
 	pthread_create(&cleanup_thread, &clean_attr, cleanup_thread_function, NULL);
-	
+	pthread_create(&signal_thread, &signal_attr, signaling_thread_function, NULL);
 	sleep(1);
-
+	printf("Main SERVER Unlocking\n");
 	for(int i = 0; i<10; i++){
-		//printf("Main SERVER Unlocking\n");
 		// ADD COMMANDS TO QUEUE
 		pthread_mutex_lock(&pub_queue_mutex);
 		pub_sub_enqueue(&pub_queue, test_char_pp[i%3]);
@@ -784,8 +1038,8 @@ int main(int argc, char *argv[]){
 		//printf("%s\n",test_char_pp[i]);
 	}
 	sleep(5);
+	printf("Main SERVER Unlocking\n");
 		for(int i = 0; i<10; i++){
-		//printf("Main SERVER Unlocking\n");
 		// ADD COMMANDS TO QUEUE
 		pthread_mutex_lock(&pub_queue_mutex);
 		pub_sub_enqueue(&pub_queue, test_char_pp[i%3]);
@@ -926,16 +1180,32 @@ int main(int argc, char *argv[]){
 	*/
 
 	//// END TESTING AREA ////
+	printf("Main SERVER Unlocking\n");
 	for (int i = 0; i<100; i++){
+		usleep(20);
 		pthread_mutex_lock(&pub_queue_mutex);
 		pthread_cond_signal(&pub_queue_cond);
 		pthread_mutex_unlock(&pub_queue_mutex);
+		usleep(20);
+		pthread_mutex_lock(&sub_queue_mutex);
+		pthread_cond_signal(&sub_queue_cond);
+		pthread_mutex_unlock(&sub_queue_mutex);
 	}
-
+	sleep(1);
+	for (int i = 0; i<100; i++){
+		usleep(20);
+		pthread_mutex_lock(&pub_queue_mutex);
+		pthread_cond_signal(&pub_queue_cond);
+		pthread_mutex_unlock(&pub_queue_mutex);
+		usleep(20);
+		pthread_mutex_lock(&sub_queue_mutex);
+		pthread_cond_signal(&sub_queue_cond);
+		pthread_mutex_unlock(&sub_queue_mutex);
+	}
 
 	
 	//printf("here\n");
-	sleep(6);
+	sleep(20);
 	pthread_mutex_lock(&done_mutex);
 	DONE = 1;
 	pthread_mutex_unlock(&done_mutex);
