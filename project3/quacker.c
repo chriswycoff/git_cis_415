@@ -25,6 +25,10 @@ volatile int DONE = 0;
 volatile int pub_threads_left = NUMPROXIES;
 volatile int sub_threads_left = NUMPROXIES;
 
+volatile int num_of_commands = 16;
+
+volatile int num_of_commands_counter = num_of_commands;
+
 
 //////// END defines  ////////////////////////////////////////////////
 
@@ -1006,13 +1010,18 @@ int main(int argc, char *argv[]){
 
 	char* test_char_pp[] = {"command_file1.txt", "command_file2.txt", "command_file3.txt"};
 
-	for (int i=0; i < NUMPROXIES; i++){
+	for (int i=0; i < 15; i++){
 		pubargs[i].id = i;
 		subargs[i].id = i;
+
+	}
+	sleep(1);
+	for (int i=0; i < NUMPROXIES; i++){
 		pthread_create(&pubs[i], &attr, publisher, (void *) &pubargs[i]);
 		pthread_create(&subs[i], &attr, subscriber, (void *) &subargs[i]);
 
 	}
+	
 	pthread_create(&cleanup_thread, &clean_attr, cleanup_thread_function, NULL);
 	pthread_create(&signal_thread, &signal_attr, signaling_thread_function, NULL);
 	sleep(1);
@@ -1225,7 +1234,7 @@ int main(int argc, char *argv[]){
 	pthread_mutex_lock(&sub_queue_mutex);
 	pthread_cond_signal(&sub_queue_cond);
 	pthread_mutex_unlock(&sub_queue_mutex);
-	sleep(15);
+	sleep(30);
 	DONE = 1;
 	pthread_mutex_unlock(&done_mutex);
 	
