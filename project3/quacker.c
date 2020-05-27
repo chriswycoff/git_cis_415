@@ -1028,15 +1028,15 @@ int main(int argc, char *argv[]){
 	pthread_create(&signal_thread, &signal_attr, signaling_thread_function, NULL);
 	sleep(1);
 	printf("Main SERVER Unlocking\n");
-	for(int i = 0; i<10; i++){
+	for(int i = 0; i<20; i++){
 		// ADD COMMANDS TO QUEUE
 		pthread_mutex_lock(&pub_queue_mutex);
 		pub_sub_enqueue(&pub_queue, test_char_pp[i%3]);
 		pthread_mutex_unlock(&pub_queue_mutex);
 
-		pthread_mutex_lock(&sub_queue_mutex);
-		pub_sub_enqueue(&sub_queue, test_char_pp[i%3]);
-		pthread_mutex_unlock(&sub_queue_mutex);
+		//pthread_mutex_lock(&sub_queue_mutex);
+		//pub_sub_enqueue(&sub_queue, test_char_pp[i%3]);
+		//pthread_mutex_unlock(&sub_queue_mutex);
 
 		///////////// SIGNAL TREADS ////////////
 
@@ -1044,19 +1044,21 @@ int main(int argc, char *argv[]){
 		pthread_cond_signal(&pub_queue_cond);
 		pthread_mutex_unlock(&pub_queue_mutex);
 
-		pthread_mutex_lock(&sub_queue_mutex);
-		pthread_cond_signal(&sub_queue_cond);
-		pthread_mutex_unlock(&sub_queue_mutex);
+		//pthread_mutex_lock(&sub_queue_mutex);
+		//pthread_cond_signal(&sub_queue_cond);
+		//pthread_mutex_unlock(&sub_queue_mutex);
 		
 		//printf("%s\n",test_char_pp[i]);
 	}
-	sleep(5);
+	sleep(1);
+
+	/// sub commands
 	printf("Main SERVER Unlocking\n");
 		for(int i = 0; i<10; i++){
 		// ADD COMMANDS TO QUEUE
-		pthread_mutex_lock(&pub_queue_mutex);
-		pub_sub_enqueue(&pub_queue, test_char_pp[i%3]);
-		pthread_mutex_unlock(&pub_queue_mutex);
+		//pthread_mutex_lock(&pub_queue_mutex);
+		//pub_sub_enqueue(&pub_queue, test_char_pp[i%3]);
+		//pthread_mutex_unlock(&pub_queue_mutex);
 
 		pthread_mutex_lock(&sub_queue_mutex);
 		pub_sub_enqueue(&sub_queue, test_char_pp[i%3]);
@@ -1064,9 +1066,9 @@ int main(int argc, char *argv[]){
 
 		///////////// SIGNAL TREADS ////////////
 
-		pthread_mutex_lock(&pub_queue_mutex);
-		pthread_cond_signal(&pub_queue_cond);
-		pthread_mutex_unlock(&pub_queue_mutex);
+		//pthread_mutex_lock(&pub_queue_mutex);
+		//pthread_cond_signal(&pub_queue_cond);
+		//pthread_mutex_unlock(&pub_queue_mutex);
 
 		pthread_mutex_lock(&sub_queue_mutex);
 		pthread_cond_signal(&sub_queue_cond);
