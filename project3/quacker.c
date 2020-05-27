@@ -21,13 +21,15 @@
 #define TEST_DELTA 4
 #define UNUSED(x) (void)(x)
 
+#define NUMCOMMANDS 16
+
 volatile int DONE = 0;
 volatile int pub_threads_left = NUMPROXIES;
 volatile int sub_threads_left = NUMPROXIES;
 
-volatile int num_of_commands = 16;
+volatile int num_of_commands = NUMCOMMANDS;
 
-volatile int num_of_commands_counter = num_of_commands;
+volatile int num_of_commands_counter = NUMCOMMANDS;
 
 
 //////// END defines  ////////////////////////////////////////////////
