@@ -1012,7 +1012,7 @@ int main(int argc, char *argv[]){
 
 	char* test_char_pp[] = {"command_file1.txt", "command_file2.txt", "command_file3.txt"};
 
-	for (int i=0; i < 15; i++){
+	for (int i=0; i < NUMPROXIES; i++){
 		pubargs[i].id = i;
 		subargs[i].id = i;
 
