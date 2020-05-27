@@ -15,7 +15,7 @@
 
 #define URLSIZE 100
 #define CAPSIZE 100
-#define MAXENTRIES 10
+#define MAXENTRIES 20
 #define MAXTOPICS 4
 #define NUMPROXIES 10
 #define TEST_DELTA 4
