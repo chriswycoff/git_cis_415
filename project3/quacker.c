@@ -15,7 +15,7 @@
 
 #define URLSIZE 100
 #define CAPSIZE 100
-#define MAXENTRIES 20
+#define MAXENTRIES 4
 #define MAXTOPICS 4
 #define NUMPROXIES 10
 #define TEST_DELTA 4
@@ -343,9 +343,9 @@ int getEntry(int lastEntry, struct topicEntry *a_topic_entry, int topic_id){
 			strcpy(a_topic_entry->photoURL, specific_queue->entries[index].photoURL);
 			strcpy(a_topic_entry->photoCaption, specific_queue->entries[index].photoCaption);
 			// maybe wrong ^^
-
+			int return_val = a_topic_entry->entryNum;
 			pthread_mutex_unlock(&topic_queue_mutexes[topic_id]);
-			return a_topic_entry->entryNum;
+			return return_val;
 		}
 
 
@@ -419,11 +419,18 @@ void exit_function(){
 ////// END EXIT FUNCTION //////////////////////////////////////////////////////
 
 
-///// TESTING ROUTINES /////////////////////////////////////////////////////////
+///// FILE HANDLING /////////////////////////////////////////////////////////
+
+int take_in_main_command_file(char * command_array[]){
 
 
 
-/////////////END TESTING ROUTINES///////////////////////////////////////////////
+
+	return 1; 
+}
+
+
+/////////////END  FILE HANDLING //////////////////////////////////////////////
 
 ////// BEGIN PUBLISHER Handler FUNCTIONS ////////////////////////////////////////
 
@@ -665,7 +672,7 @@ void handle_subscriber_test_1(char *command_file, struct threadargs* my_argument
 		}
 	}
 
-	printf("GOT THIS:%s FROM ENTRY: %d \n", vessel_for_enqueue_1.photoURL,vessel_for_enqueue_1.entryNum);
+	printf("GOT THIS test1 :%s FROM ENTRY: %d \n", vessel_for_enqueue_1.photoURL,vessel_for_enqueue_1.entryNum);
 	
 
 }
@@ -706,7 +713,7 @@ void handle_subscriber_test_2(char *command_file, struct threadargs* my_argument
 	}
 	
 
-	printf("GOT THIS:%s FROM ENTRY: %d \n", vessel_for_enqueue_2.photoURL,vessel_for_enqueue_2.entryNum);
+	printf("GOT THIS in TEST 2:%s FROM ENTRY: %d \n", vessel_for_enqueue_2.photoURL,vessel_for_enqueue_2.entryNum);
 
 }
 
@@ -736,20 +743,20 @@ void handle_subscriber_test_3(char *command_file, struct threadargs* my_argument
 		//printf("HITTING HERE3\n");
 		success = getEntry(8, &vessel_for_enqueue_3, 2);
 		if (success == 0){
-			sched_yield();
+			//sched_yield();
 			sleep(1);
 		}
 		if(DONE){
 			break;
 		}
 	}
-	printf("GOT THIS:%s FROM ENTRY: %d \n", vessel_for_enqueue_3.photoURL,vessel_for_enqueue_3.entryNum);
+	printf("GOT THIS in test 3:%s FROM ENTRY: %d \n", vessel_for_enqueue_3.photoURL,vessel_for_enqueue_3.entryNum);
 	success = 0;
 	while(!success){
 		//printf("HITTING HERE4\n");
 		success = getEntry(6, &vessel_for_enqueue_3, 2);
 		if (success == 0){
-			sched_yield();
+			//sched_yield();
 			sleep(1);
 		}
 		if(DONE){
@@ -757,14 +764,14 @@ void handle_subscriber_test_3(char *command_file, struct threadargs* my_argument
 		}
 
 	}
-	printf("GOT THIS:%s FROM ENTRY: %d \n", vessel_for_enqueue_3.photoURL,vessel_for_enqueue_3.entryNum);
+	printf("GOT THIS in test 3.2:%s FROM ENTRY: %d \n", vessel_for_enqueue_3.photoURL,vessel_for_enqueue_3.entryNum);
 	printf("GOT TO FINAL GET ENTRY3\n");
 	success = 0;
 	while(!success){
 		//printf("HITTING HERE5\n");
 		success = getEntry(7, &vessel_for_enqueue_3, 2);
 		if (success == 0){
-			sched_yield();
+			//sched_yield();
 			sleep(1);
 		}
 		if(DONE){
@@ -773,7 +780,7 @@ void handle_subscriber_test_3(char *command_file, struct threadargs* my_argument
 
 
 	}
-	printf("GOT THIS:%s FROM ENTRY: %d \n", vessel_for_enqueue_3.photoURL,vessel_for_enqueue_3.entryNum);
+	printf("GOT THIS in test 3.2:%s FROM ENTRY: %d \n", vessel_for_enqueue_3.photoURL,vessel_for_enqueue_3.entryNum);
 
 	
 
@@ -811,7 +818,7 @@ struct threadargs* my_arguments = (struct threadargs *)params;
 	
 	while(keep_going){
 		if (my_arguments->id % 3 == 0){
-			sleep(1); // to simulate some threads sleeping
+			//sleep(1); // to simulate some threads sleeping
 		}
 		//printf("HELLO FROM SUB THREAD %d \n",my_arguments->id);
 		pthread_mutex_lock(&sub_queue_mutex);
@@ -1028,6 +1035,7 @@ int main(int argc, char *argv[]){
 	pthread_create(&signal_thread, &signal_attr, signaling_thread_function, NULL);
 	sleep(1);
 	printf("Main SERVER Unlocking\n");
+	// pub commands
 	for(int i = 0; i<20; i++){
 		// ADD COMMANDS TO QUEUE
 		pthread_mutex_lock(&pub_queue_mutex);
@@ -1050,7 +1058,6 @@ int main(int argc, char *argv[]){
 		
 		//printf("%s\n",test_char_pp[i]);
 	}
-	sleep(1);
 
 	/// sub commands
 	printf("Main SERVER Unlocking\n");
