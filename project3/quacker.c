@@ -15,7 +15,7 @@
 
 #define URLSIZE 100
 #define CAPSIZE 100
-#define MAXENTRIES 4
+#define MAXENTRIES 10
 #define MAXTOPICS 4
 #define NUMPROXIES 10
 #define TEST_DELTA 4
@@ -1036,7 +1036,7 @@ int main(int argc, char *argv[]){
 	sleep(1);
 	printf("Main SERVER Unlocking\n");
 	// pub commands
-	for(int i = 0; i<20; i++){
+	for(int i = 0; i<30; i++){
 		// ADD COMMANDS TO QUEUE
 		pthread_mutex_lock(&pub_queue_mutex);
 		pub_sub_enqueue(&pub_queue, test_char_pp[i%3]);
