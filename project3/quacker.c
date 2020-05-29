@@ -1116,7 +1116,7 @@ int num_characters;
 
 /// start parsing//
 
-/*
+
 while(continue_parsing){
 	num_characters = getline(&line_buffer, &bufsize, stdin);
 
@@ -1133,10 +1133,6 @@ while(continue_parsing){
 	//printf("%s\n", line_buffer);
 
 	char* tokens[2048];
-
-	for(int i = 0; i<2048; i++){
-			tokens[i] = "invalid";
-		}
 
 		char *token = strtok_r(line_buffer, " ", &line_buffer);
 
@@ -1213,7 +1209,7 @@ while(continue_parsing){
 
 free(line_buffer);
 //exit(0);
-*/
+
 ////////////////////// End File Parsing for main command file ///////////////////////
 
 
