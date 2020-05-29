@@ -1122,7 +1122,7 @@ int num_characters;
 
 
 /// start parsing//
-
+/*
 
 while(continue_parsing){
 	num_characters = getline(&line_buffer, &bufsize, stdin);
@@ -1177,7 +1177,9 @@ while(continue_parsing){
 	int len_num;
 
 	char token_vessel[200];
-	char sub_string[] = "topics";
+	char topics_string[] = "topics\0";
+	char subscribers_string[] = "subscribers\0";
+	char publishers_string[] = "publishers\0";
 	int copy_count = 0;
 
 
@@ -1193,40 +1195,20 @@ while(continue_parsing){
 					break; ///////////////////////////////////////////////////
 
 				case QUERY:
-					printf("before %d \n", strlen(tokens[1]));
-					tokens[1][strlen(tokens[1])-2] = '\0';
-					printf("after %d \n", strlen(tokens[1]));
-
-					while(tokens[1][copy_count] != '\0'){
-						token_vessel[copy_count] = tokens[1][copy_count];
-						copy_count+=1;
-					}
-					token_vessel[copy_count] = '\0';
-
-
-
-					printf("result: %d ", strcmp(token_vessel, sub_string));
-					printf("****\n");
-					for (int i = 0; i < strlen(tokens[1]); i++){
-						printf("%c\n",tokens[1][i]);
-						if (tokens[1][i] == sub_string[i]){
-							printf("same char %d\n", i);
-						}
-					}
-					printf("****\n");
-
-					if (get_value_from_string_key(tokens[1]) == SUBSCRIBERS){
+					printf("%s\n", tokens[1]);
+					if (strncmp(tokens[1], subscribers_string, 4) == 0){
 						printf("QUERY SUBS\n");
-						/*
-						for (int i = 0; i< MAXTOPICS; i++){
-							if (topic_queues[num].exists == 1){
-							printf("Topic Found: %s\n",topic_queues[num].name_of_topic);
-							printf("Topic Lenght: %d\n",topic_queues[num].max);
-							}
-						}
-						*/
 
 					}
+					if (strncmp(tokens[1], topics_string, 4) == 0)
+					{
+						printf("QUERY TOPICS\n");
+					}
+					if (strncmp(tokens[1], publishers_string, 4) == 0)
+					{
+						printf("QUERY PUBS\n");
+					}
+
 
 					break; ///////////////////////////////////////////////////
 
@@ -1267,7 +1249,7 @@ free(original_line);
 exit(0);
 
 sleep(1);
-
+*/
 ////////////////////// End File Parsing for main command file ///////////////////////
 
 
