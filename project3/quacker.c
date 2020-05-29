@@ -1243,13 +1243,13 @@ while(continue_parsing){
 
 // end parsing
 
-
+*/
 free(original_line);
 
-exit(0);
+//exit(0);
 
-sleep(1);
-*/
+//sleep(1);
+
 ////////////////////// End File Parsing for main command file ///////////////////////
 
 
