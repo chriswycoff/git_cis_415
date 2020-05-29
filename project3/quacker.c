@@ -75,12 +75,13 @@ int get_value_from_string_key(char *a_key)
     for (int i=0; i < number_of_keys; i++) {
     	printf("here 5\n");
         legal_commands *sym = &command_lookup[i];
+        printf("here 6\n");
         if (strcmp(sym->key, a_key) == 0){
             return sym->value;
         }
     }
     // if gets to here there was no return thus return -1
-   	printf("here 6\n");
+   	printf("here 7\n");
     return INVALID;
 }
 
