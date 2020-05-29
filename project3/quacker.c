@@ -68,6 +68,7 @@ int number_of_keys = 10;
 
 int get_value_from_string_key(char *a_key)
 {
+	printf("here 5\n");
 	if (a_key == NULL){
 		return A_NULL;
 	}
