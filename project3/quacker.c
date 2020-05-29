@@ -76,12 +76,12 @@ int get_value_from_string_key(char *a_key)
     	printf("here 5\n");
         legal_commands *sym = &command_lookup[i];
         printf("here 6\n");
+        printf("this %s\n", a_key);
         if (strcmp(sym->key, a_key) == 0){
             return sym->value;
         }
     }
     // if gets to here there was no return thus return -1
-   	printf("here 7\n");
     return INVALID;
 }
 
@@ -1135,32 +1135,31 @@ while(continue_parsing){
 	//printf("the line: ", line_buffer, num_characters);
 	//printf("%s\n", line_buffer);
 
-	char tokens[100][100];
+	char* tokens[2048];
 
 		char *token = strtok_r(line_buffer, " ", &line_buffer);
 
 		int token_counter = 0;
 		printf("here2\n");
-		strcpy(tokens[token_counter], token);
+		tokens[token_counter]= token;
 
 		if (token != NULL){
 			printf("\n");
 		}
-				printf("here2.2\n");
 
 		//gather tokens below
 		while(token != NULL){
 			//printf("T%d: %s\n", token_counter, token);
 			token = strtok_r(NULL, " ",&line_buffer);
 			token_counter += 1; 
-			if (token != NULL){
-				strcpy(tokens[token_counter], token);
-			}
+			tokens[token_counter]= token;
 		}
 		
 		printf("here3\n");
 		//printf("%s\n",tokens[0]);
 		
+
+
 
 	incase_counter+=1;
 
