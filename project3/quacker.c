@@ -60,7 +60,7 @@ typedef struct{
 
 legal_commands command_lookup[] = {
 	{"create", CREATE}, { "query", QUERY }, { "add", ADD }, { "delta", DELTA },
-	{ "start", START }, { "subscriber", SUBSCRIBER }, { "subscribers", SUBSCRIBERS }, 
+	{ "start", START }, { "subscriber", SUBSCRIBER }, { "subscribers ", SUBSCRIBERS }, 
 	{ "publisher", PUBLISHER }, { "publishers", PUBLISHERS }, { "topics", TOPICS }
 };
 
@@ -210,6 +210,7 @@ int i; //, j, k;
 
 	// create the buffers
 	for (i=0; i<MAXTOPICS; i++) {
+		topic_queues[i].exists = 0;
 		topic_queues[i].topic_id = i;
 		topic_queues[i].entry_number = 1; // monotomically increasing number per topic
 		topic_queues[i].count = 0;	// # entries in buffer now
@@ -1172,18 +1173,60 @@ while(continue_parsing){
 		break;
 	}
 
-	int num;
+	int num = 0;
+	int len_num;
+
+	char token_vessel[200];
+	char sub_string[] = "topics";
+	int copy_count = 0;
+
 
 	switch(get_value_from_string_key(tokens[0])) {
 				case CREATE:
 					//printf("Create topic: %s len: %s num: %s\n", tokens[3], tokens[4], tokens[2]);
 					num = atoi(tokens[2]);
+					len_num = atoi(tokens[4]);
 					strcpy(topic_queues[num].name_of_topic, tokens[3]);
 					topic_queues[num].exists = 1; 
+					topic_queues[num].max = len_num;
 					printf("hi %s\n",topic_queues[num].name_of_topic);
 					break; ///////////////////////////////////////////////////
 
 				case QUERY:
+					printf("before %d \n", strlen(tokens[1]));
+					tokens[1][strlen(tokens[1])-2] = '\0';
+					printf("after %d \n", strlen(tokens[1]));
+
+					while(tokens[1][copy_count] != '\0'){
+						token_vessel[copy_count] = tokens[1][copy_count];
+						copy_count+=1;
+					}
+					token_vessel[copy_count] = '\0';
+
+
+
+					printf("result: %d ", strcmp(token_vessel, sub_string));
+					printf("****\n");
+					for (int i = 0; i < strlen(tokens[1]); i++){
+						printf("%c\n",tokens[1][i]);
+						if (tokens[1][i] == sub_string[i]){
+							printf("same char %d\n", i);
+						}
+					}
+					printf("****\n");
+
+					if (get_value_from_string_key(tokens[1]) == SUBSCRIBERS){
+						printf("QUERY SUBS\n");
+						/*
+						for (int i = 0; i< MAXTOPICS; i++){
+							if (topic_queues[num].exists == 1){
+							printf("Topic Found: %s\n",topic_queues[num].name_of_topic);
+							printf("Topic Lenght: %d\n",topic_queues[num].max);
+							}
+						}
+						*/
+
+					}
 
 					break; ///////////////////////////////////////////////////
 
