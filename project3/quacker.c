@@ -1,6 +1,6 @@
 // Project 3 "quacker"
 // Christopher Wycoff
-
+#define  _GNU_SOURCE
 #include <stdlib.h>
 #include <stdio.h>
 #include <pthread.h>
@@ -9,7 +9,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <string.h>
-#define  _GNU_SOURCE
+
 
 //////// START defines  ////////////////////////////////////////////////
 
