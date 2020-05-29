@@ -1095,7 +1095,7 @@ int topic_index = 0;
 
 
 size_t bufsize = 1000; 
-/*
+
 line_buffer = (char *)malloc(bufsize * sizeof(char));
 
 char * original_line = line_buffer;
@@ -1222,7 +1222,6 @@ while(continue_parsing){
 free(original_line);
 sleep(1);
 //exit(0);
-*/
 
 ////////////////////// End File Parsing for main command file ///////////////////////
 
@@ -1523,6 +1522,7 @@ sleep(1);
 	}
 	
 	pthread_join(cleanup_thread, NULL);
+	pthread_join(signal_thread, NULL);
 
 	////////////// END SUB THREAD CLEANUP /////////////////
 
