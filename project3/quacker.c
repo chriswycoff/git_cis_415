@@ -31,6 +31,57 @@ volatile int num_of_commands = NUMCOMMANDS;
 
 volatile int num_of_commands_counter = NUMCOMMANDS;
 
+/*-----------------define command keys----------------------------------------------------*/
+
+#define A_NULL 0
+#define CREATE 1
+#define QUERY 2
+#define ADD 3
+#define DELTA 4
+#define START 5
+#define SUBSCRIBER 6
+#define SUBSCRIBERS 7
+#define PUBLISHER 8
+#define PUBLISHERS 9
+#define TOPICS 10
+
+#define INVALID -1
+
+
+
+
+/*---------------------------------------------------------------------------*/
+
+typedef struct{
+	char *key;
+	int value;
+}legal_commands;
+
+
+legal_commands command_lookup[] = {
+	{"create", CREATE}, { "query", QUERY }, { "add", ADD }, { "delta", DELTA },
+	{ "start", START }, { "subscriber", SUBSCRIBER }, { "subscribers", SUBSCRIBERS }, 
+	{ "publisher", PUBLISHER }, { "publishers", PUBLISHERS }, { "topics", TOPICS }
+};
+
+int number_of_keys = 10;
+
+int get_value_from_string_key(char *a_key)
+{
+	if (a_key == NULL){
+		return A_NULL;
+	}
+    for (int i=0; i < number_of_keys; i++) {
+        legal_commands *sym = &command_lookup[i];
+        if (strcmp(sym->key, a_key) == 0){
+            return sym->value;
+        }
+    }
+    // if gets to here there was no return thus return -1
+   
+    return INVALID;
+}
+
 
 //////// END defines  ////////////////////////////////////////////////
 
@@ -862,7 +913,7 @@ struct threadargs* my_arguments = (struct threadargs *)params;
 
 ////// END SUBSCRIBER THREAD FUNCTION /////////////////////////////////////////
 
-////// BEGIN ClEANUP THREAD FUNCTION ///////////////////////////////////////
+////// BEGIN ClEANUP THREAD FUNCTION //////////////////////////////////////////
 
 void * cleanup_thread_function(void * params){
 	int number_entried_dequeue;
@@ -1007,29 +1058,30 @@ int main(int argc, char *argv[]){
 
 	strcpy(vessel_for_enqueue.photoCaption, "caption from the vessel");
 
-	if (argc < 2){
-		printf("USAGE ./server <int>\n");
+	if (argc != 1){
+		printf("USAGE ./server\n");
 		exit(-1);
 	}
 
-	int first_arg = atoi(argv[1]);
+	//int first_arg = atoi(argv[1]);
 
-	printf("HELLO WORLD My int is %d\n" ,first_arg);
+	//printf("HELLO WORLD My int is %d\n" ,first_arg);
 
-////////////////////// Start File Parsing for main command file /////////////////////
 
 char* test_char_pp[] = {"command_file1.txt", "command_file2.txt", "command_file3.txt"};
 
+
+////////////////////// Start File Parsing for main command file /////////////////////
 
 int pub_command_count = 0;
 
 int sub_command_count = 0;
 
-char* pub_command_array[100];
+char* pub_command_array[200];
 
-char topic_ids[100][100];
+char topic_ids[200][200];
 
-int topic_lens[100];
+int topic_lens[200];
 
 /// indexing counters ////
 
@@ -1038,7 +1090,8 @@ int topic_index = 0;
 //////////////////////////////
 
 
-size_t bufsize = 200; 
+size_t bufsize = 1000; 
+
 line_buffer = (char *)malloc(bufsize * sizeof(char));
 
 srand(time(0));
@@ -1046,13 +1099,12 @@ srand(time(0));
 for(int i = 0; i<10; i++){
 	strcpy(topic_ids[i], test_char_pp[i%3]);
 	topic_lens[i] = rand()%10;
-
 	
 	}
 
 for(int i = 0; i<10; i++){
 
-	printf("topic ID:%s len of topic: %d \n", topic_ids[i], topic_lens[i] );
+	printf("topic ID:%s len of topic: %d\n", topic_ids[i], topic_lens[i] );
 	}
 
 int continue_parsing = 1; 
@@ -1061,20 +1113,106 @@ int incase_counter = 0;
 
 int num_characters;
 
+
+/// start parsing//
+
+
 while(continue_parsing){
 	num_characters = getline(&line_buffer, &bufsize, stdin);
 
-	printf("the line : %s \n", line_buffer);
-
-	incase_counter+=1; 
-
-	if (incase_counter > 10000){
+	if (num_characters == -1){
 		break;
 	}
 
+	if (line_buffer[num_characters-1] == '\n'){
+			line_buffer[num_characters-1] = '\0';
+			num_characters -= 1;
+	}
+
+	//printf("the line: ", line_buffer, num_characters);
+	//printf("%s\n", line_buffer);
+
+	char* tokens[2048];
+
+	for(int i = 0; i<2048; i++){
+			tokens[i] = "invalid";
+		}
+
+		char *token = strtok_r(line_buffer, " ", &line_buffer);
+
+		int token_counter = 0;
+
+		tokens[token_counter]= token;
+
+		if (token != NULL){
+			printf("\n");
+		}
+
+		//gather tokens below
+		while(token != NULL){
+			//printf("T%d: %s\n", token_counter, token);
+			token = strtok_r(NULL, " ",&line_buffer);
+			token_counter += 1; 
+			tokens[token_counter]= token;
+		}
+		
+
+		printf("%s\n",tokens[0]);
+		
+
+
+
+	incase_counter+=1;
+
+	if (incase_counter > 30){
+		break;
+	}
+
+
+	switch(get_value_from_string_key(tokens[0])) {
+				case CREATE:
+					printf("Create topic: %s len: %s num: %s\n", tokens[3], tokens[4], tokens[2]); 
+
+					break; ///////////////////////////////////////////////////
+
+				case QUERY:
+
+					break; ///////////////////////////////////////////////////
+
+				case ADD:
+					if (get_value_from_string_key(tokens[1]) == SUBSCRIBER){
+						printf("Create subscriber!\n");
+
+					}
+					if (get_value_from_string_key(tokens[1]) == PUBLISHER){
+						printf("Create publisher!\n");
+
+					}
+					break; ///////////////////////////////////////////////////
+
+				case DELTA:
+					
+					break; ///////////////////////////////////////////////////
+
+				case A_NULL:
+					break; ///////////////////////////////////////////////////
+
+				case START:
+					break; ///////////////////////////////////////////////////
+
+				default:
+					printf("Error unrecognized command!!!!!!!\n");
+
+			}
+			
+
 }
 
-exit(0);
+// end parsing
+
+
+free(line_buffer);
+//exit(0);
 
 ////////////////////// End File Parsing for main command file ///////////////////////
 
