@@ -1212,7 +1212,7 @@ while(continue_parsing){
 // end parsing
 
 
-free(line_buffer);
+//free(line_buffer);
 sleep(1);
 //exit(0);
 
