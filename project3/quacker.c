@@ -1139,7 +1139,7 @@ while(continue_parsing){
 
 	char *token;
 
-		 token = strtok_r(line_buffer, " ", &line_buffer);
+		 token = (char *) strtok_r(line_buffer, " ", &line_buffer);
 
 		int token_counter = 0;
 		printf("here2\n");
@@ -1152,7 +1152,7 @@ while(continue_parsing){
 		//gather tokens below
 		while(token != NULL){
 			//printf("T%d: %s\n", token_counter, token);
-			token = strtok_r(NULL, " ",&line_buffer);
+			token = (char *) strtok_r(NULL, " ",&line_buffer);
 			token_counter += 1; 
 			tokens[token_counter]= token;
 		}
