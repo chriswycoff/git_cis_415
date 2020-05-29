@@ -76,7 +76,7 @@ int get_value_from_string_key(char *a_key)
     	printf("here 5\n");
         legal_commands *sym = &command_lookup[i];
         printf("here 6\n");
-        printf("this %s\n", a_key);
+        printf("this%s\n", a_key);
         if (strcmp(sym->key, a_key) == 0){
             return sym->value;
         }
@@ -1137,7 +1137,9 @@ while(continue_parsing){
 
 	char* tokens[2048];
 
-		char *token = strtok_r(line_buffer, " ", &line_buffer);
+	char *token;
+
+		 token = strtok_r(line_buffer, " ", &line_buffer);
 
 		int token_counter = 0;
 		printf("here2\n");
@@ -1156,7 +1158,7 @@ while(continue_parsing){
 		}
 		
 		printf("here3\n");
-		printf("%s\n",tokens[0]);
+		//printf("%s\n",tokens[0]);
 		
 
 
