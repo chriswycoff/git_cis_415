@@ -1128,7 +1128,7 @@ while(continue_parsing){
 			line_buffer[num_characters-1] = '\0';
 			num_characters -= 1;
 	}
-
+	printf("here1\n");
 	//printf("the line: ", line_buffer, num_characters);
 	//printf("%s\n", line_buffer);
 
@@ -1137,7 +1137,7 @@ while(continue_parsing){
 		char *token = strtok_r(line_buffer, " ", &line_buffer);
 
 		int token_counter = 0;
-
+		printf("here2\n");
 		tokens[token_counter]= token;
 
 		if (token != NULL){
@@ -1152,7 +1152,7 @@ while(continue_parsing){
 			tokens[token_counter]= token;
 		}
 		
-
+		printf("here3\n");
 		//printf("%s\n",tokens[0]);
 		
 
@@ -1163,7 +1163,7 @@ while(continue_parsing){
 	if (incase_counter > 30){
 		break;
 	}
-
+	printf("here4\n");
 
 	switch(get_value_from_string_key(tokens[0])) {
 				case CREATE:
