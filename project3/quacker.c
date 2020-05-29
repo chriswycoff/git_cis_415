@@ -1213,6 +1213,7 @@ while(continue_parsing){
 
 
 free(line_buffer);
+sleep(1);
 //exit(0);
 
 ////////////////////// End File Parsing for main command file ///////////////////////
