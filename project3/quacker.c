@@ -1116,7 +1116,7 @@ int num_characters;
 
 /// start parsing//
 
-
+/*
 while(continue_parsing){
 	num_characters = getline(&line_buffer, &bufsize, stdin);
 
@@ -1157,7 +1157,7 @@ while(continue_parsing){
 		}
 		
 
-		printf("%s\n",tokens[0]);
+		//printf("%s\n",tokens[0]);
 		
 
 
@@ -1213,7 +1213,7 @@ while(continue_parsing){
 
 free(line_buffer);
 //exit(0);
-
+*/
 ////////////////////// End File Parsing for main command file ///////////////////////
 
 
