@@ -113,6 +113,8 @@ struct topicEntry{
 
 struct topic_queue{
 	int topic_id;
+	char name_of_topic[100];
+	int exists;
 	int entry_number;
 	int max;
 	int	count, head, tail;
@@ -1170,11 +1172,15 @@ while(continue_parsing){
 		break;
 	}
 
+	int num;
 
 	switch(get_value_from_string_key(tokens[0])) {
 				case CREATE:
-					printf("Create topic: %s len: %s num: %s\n", tokens[3], tokens[4], tokens[2]); 
-
+					//printf("Create topic: %s len: %s num: %s\n", tokens[3], tokens[4], tokens[2]);
+					num = atoi(tokens[2]);
+					strcpy(topic_queues[num].name_of_topic, tokens[3]);
+					topic_queues[num].exists = 1; 
+					printf("hi %s\n",topic_queues[num].name_of_topic);
 					break; ///////////////////////////////////////////////////
 
 				case QUERY:
