@@ -1029,7 +1029,7 @@ char* pub_command_array[100];
 
 char topic_ids[100][100];
 
-int * topic_lens[100];
+int topic_lens[100];
 
 /// indexing counters ////
 
@@ -1038,7 +1038,8 @@ int topic_index = 0;
 //////////////////////////////
 
 
-//line_buffer = (char *)malloc(200 * sizeof(char));
+size_t bufsize = 200; 
+line_buffer = (char *)malloc(bufsize * sizeof(char));
 
 srand(time(0));
 
@@ -1053,6 +1054,25 @@ for(int i = 0; i<10; i++){
 
 	printf("topic ID:%s len of topic: %d \n", topic_ids[i], topic_lens[i] );
 	}
+
+int continue_parsing = 1; 
+
+int incase_counter = 0; 
+
+int num_characters;
+
+while(continue_parsing){
+	num_characters = getline(&line_buffer, &bufsize, stdin);
+
+	printf("the line : %s \n", line_buffer);
+
+	incase_counter+=1; 
+
+	if (incase_counter > 10000){
+		break;
+	}
+
+}
 
 exit(0);
 
