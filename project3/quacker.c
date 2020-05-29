@@ -1156,7 +1156,7 @@ while(continue_parsing){
 		}
 		
 		printf("here3\n");
-		//printf("%s\n",tokens[0]);
+		printf("%s\n",tokens[0]);
 		
 
 
