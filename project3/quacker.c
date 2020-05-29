@@ -1220,8 +1220,10 @@ while(continue_parsing){
 
 
 free(original_line);
+
+exit(0);
+
 sleep(1);
-//exit(0);
 
 ////////////////////// End File Parsing for main command file ///////////////////////
 
