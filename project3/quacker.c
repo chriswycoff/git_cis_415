@@ -1135,31 +1135,32 @@ while(continue_parsing){
 	//printf("the line: ", line_buffer, num_characters);
 	//printf("%s\n", line_buffer);
 
-	char* tokens[2048];
+	char tokens[100][100];
 
 		char *token = strtok_r(line_buffer, " ", &line_buffer);
 
 		int token_counter = 0;
 		printf("here2\n");
-		tokens[token_counter]= token;
+		strcpy(tokens[token_counter], token);
 
 		if (token != NULL){
 			printf("\n");
 		}
+				printf("here2.2\n");
 
 		//gather tokens below
 		while(token != NULL){
 			//printf("T%d: %s\n", token_counter, token);
 			token = strtok_r(NULL, " ",&line_buffer);
 			token_counter += 1; 
-			tokens[token_counter]= token;
+			if (token != NULL){
+				strcpy(tokens[token_counter], token);
+			}
 		}
 		
 		printf("here3\n");
 		//printf("%s\n",tokens[0]);
 		
-
-
 
 	incase_counter+=1;
 
