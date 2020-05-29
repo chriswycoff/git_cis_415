@@ -1097,6 +1097,8 @@ size_t bufsize = 1000;
 
 line_buffer = (char *)malloc(bufsize * sizeof(char));
 
+char * original_line = line_buffer;
+
 srand(time(0));
 
 for(int i = 0; i<10; i++){
@@ -1212,7 +1214,7 @@ while(continue_parsing){
 // end parsing
 
 
-//free(line_buffer);
+free(original_line);
 sleep(1);
 //exit(0);
 
