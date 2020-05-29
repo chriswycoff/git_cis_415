@@ -132,6 +132,16 @@ pthread_mutex_t pub_left_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t sub_left_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 
+
+////// START Variables for file IO /////////////////////////////////////////////////
+
+
+char* line_buffer;
+
+
+////////// END Variables for file IO ///////////////////////////////////////////////
+
+
 //////// END global variables ////////////////////////////////////////////////
 
 //////// Begin initialize ////////////////////////////////////////////////////
@@ -1006,6 +1016,50 @@ int main(int argc, char *argv[]){
 
 	printf("HELLO WORLD My int is %d\n" ,first_arg);
 
+////////////////////// Start File Parsing for main command file /////////////////////
+
+char* test_char_pp[] = {"command_file1.txt", "command_file2.txt", "command_file3.txt"};
+
+
+int pub_command_count = 0;
+
+int sub_command_count = 0;
+
+char* pub_command_array[100];
+
+char topic_ids[100][100];
+
+int * topic_lens[100];
+
+/// indexing counters ////
+
+int topic_index = 0;
+
+//////////////////////////////
+
+
+//line_buffer = (char *)malloc(200 * sizeof(char));
+
+srand(time(0));
+
+for(int i = 0; i<10; i++){
+	strcpy(topic_ids[i], test_char_pp[i%3]);
+	topic_lens[i] = rand()%10;
+
+	
+	}
+
+for(int i = 0; i<10; i++){
+
+	printf("topic ID:%s len of topic: %d \n", topic_ids[i], topic_lens[i] );
+	}
+
+exit(0);
+
+////////////////////// End File Parsing for main command file ///////////////////////
+
+
+
 
 	//// BEGIN TESTING AREA /////
 
@@ -1016,8 +1070,6 @@ int main(int argc, char *argv[]){
 	initialize();
 
 	//// SPIN UP THREADS ////
-
-	char* test_char_pp[] = {"command_file1.txt", "command_file2.txt", "command_file3.txt"};
 
 	for (int i=0; i < NUMPROXIES; i++){
 		pubargs[i].id = i;
