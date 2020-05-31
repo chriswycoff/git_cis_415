@@ -1122,7 +1122,7 @@ int num_characters;
 
 
 /// start parsing//
-/*
+
 
 while(continue_parsing){
 	num_characters = getline(&line_buffer, &bufsize, stdin);
@@ -1163,7 +1163,6 @@ while(continue_parsing){
 		
 
 		//printf("%s\n",tokens[0]);
-		
 
 
 
@@ -1209,21 +1208,26 @@ while(continue_parsing){
 						printf("QUERY PUBS\n");
 					}
 
-
 					break; ///////////////////////////////////////////////////
 
 				case ADD:
-					if (get_value_from_string_key(tokens[1]) == SUBSCRIBER){
-						printf("Create subscriber!\n");
+					if (strncmp(tokens[1], subscribers_string, 4) == 0){
+						printf("Add Pubisher\n");
+						printf("file called: %s\n", tokens[2]);
 
 					}
-					if (get_value_from_string_key(tokens[1]) == PUBLISHER){
-						printf("Create publisher!\n");
+					if (strncmp(tokens[1], publishers_string, 4) == 0){
+						printf("Add Pubisher\n");
+						
+						char publisher_command_file[200];
+						strcpy(publisher_command_file, tokens[2]);
+						printf("the file called: %s\n", publisher_command_file);
 
 					}
 					break; ///////////////////////////////////////////////////
 
 				case DELTA:
+
 					
 					break; ///////////////////////////////////////////////////
 
@@ -1243,10 +1247,10 @@ while(continue_parsing){
 
 // end parsing
 
-*/
+
 free(original_line);
 
-//exit(0);
+exit(0);
 
 //sleep(1);
 
