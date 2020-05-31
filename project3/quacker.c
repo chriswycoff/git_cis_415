@@ -252,6 +252,7 @@ void pub_sub_enqueue(struct pub_sub_queue* a_pub_sub_queue, char* command_string
 	}
 	a_pub_sub_queue->tail = new_node;
 
+	a_pub_sub_queue->count += 1;
 }
 
 
@@ -1053,6 +1054,15 @@ void * signaling_thread_function(void * params){
 }
 ///////////
 
+void query_stuff(struct pub_sub_queue* q_to_query){
+	struct node* current_node= q_to_query->head;
+	printf("HI %d\n", q_to_query->count);
+	for (int i =0; i < q_to_query->count; i++){
+		printf("%d : current_node: %s \n",i, current_node->command_file);
+		current_node = current_node->next;
+	}
+
+}
 
 
 ////// BEGIN MAIN /////////////////////////////////////////////////////
@@ -1120,9 +1130,7 @@ int incase_counter = 0;
 
 int num_characters;
 
-
 /// start parsing//
-
 
 while(continue_parsing){
 	num_characters = getline(&line_buffer, &bufsize, stdin);
@@ -1132,6 +1140,7 @@ while(continue_parsing){
 	}
 
 	if (line_buffer[num_characters-1] == '\n'){
+			printf("HERE1\n");
 			line_buffer[num_characters-1] = '\0';
 			num_characters -= 1;
 	}
@@ -1180,6 +1189,9 @@ while(continue_parsing){
 	char subscribers_string[] = "subscribers\0";
 	char publishers_string[] = "publishers\0";
 	int copy_count = 0;
+	char sub_compare_string[] = "\"subscriber.txt\"\0";
+	char pub_compare_string[] = "\"publisher.txt\"\0";
+	char test_line[300];
 
 
 	switch(get_value_from_string_key(tokens[0])) {
@@ -1197,31 +1209,113 @@ while(continue_parsing){
 					printf("%s\n", tokens[1]);
 					if (strncmp(tokens[1], subscribers_string, 4) == 0){
 						printf("QUERY SUBS\n");
-
+						query_stuff(&sub_queue);
 					}
 					if (strncmp(tokens[1], topics_string, 4) == 0)
 					{
 						printf("QUERY TOPICS\n");
+
 					}
 					if (strncmp(tokens[1], publishers_string, 4) == 0)
 					{
 						printf("QUERY PUBS\n");
+						query_stuff(&pub_queue);
 					}
 
 					break; ///////////////////////////////////////////////////
 
 				case ADD:
 					if (strncmp(tokens[1], subscribers_string, 4) == 0){
-						printf("Add Pubisher\n");
-						printf("file called: %s\n", tokens[2]);
+						printf("Add subscriber\n");
+						char subscriber_command_file[200];
+						strcpy(subscriber_command_file, tokens[2]);
+						subscriber_command_file[strlen(subscriber_command_file)-1] = '\0';
+						printf("the file called: %s\n", subscriber_command_file);
+						printf("strlen: %d \n", (int)strlen(subscriber_command_file));
+						//printf("same?: %d\n",strcmp(sub_compare_string,subscriber_command_file) );
+
+						// logic to remove the quotes
+						char final_subscriber_command_file[200];
+						for (int i = 0; i < (int)strlen(subscriber_command_file); i++ ){
+							if (i != 0){
+								final_subscriber_command_file[i-1] = subscriber_command_file[i];
+							}
+							if (i == (int)strlen(subscriber_command_file)-1){
+								final_subscriber_command_file[i-1] = '\0';
+							}
+						}
+						//
+						/// this will go into thread function
+						FILE *fp ;
+
+						fp = fopen(final_subscriber_command_file, "r");
+
+						if (fp == NULL){
+							printf("dint work\n");
+						}
+						num_characters = getline(&line_buffer, &bufsize, fp);
+
+						printf("the line :%s\n", line_buffer);
+						for (int i = 0; i < 2; i++){
+						pub_sub_enqueue(&sub_queue, final_subscriber_command_file);
+						pub_sub_enqueue(&sub_queue, final_subscriber_command_file);
+						char tester_string1[] = "AAATESTER1_tester.txt";
+						pub_sub_enqueue(&sub_queue, tester_string1);
+						pub_sub_enqueue(&sub_queue, final_subscriber_command_file);
+						pub_sub_enqueue(&sub_queue, final_subscriber_command_file);
+						pub_sub_enqueue(&sub_queue, final_subscriber_command_file);
+						char tester_string2[] = "some_tester.txt";
+						pub_sub_enqueue(&sub_queue, tester_string2);
+						}
+
+
 
 					}
 					if (strncmp(tokens[1], publishers_string, 4) == 0){
-						printf("Add Pubisher\n");
 						
+						printf("Add Publisher\n");
 						char publisher_command_file[200];
 						strcpy(publisher_command_file, tokens[2]);
+						publisher_command_file[strlen(publisher_command_file)-1] = '\0';
 						printf("the file called: %s\n", publisher_command_file);
+						printf("strlen: %d \n", (int)strlen(publisher_command_file));
+						//printf("same?: %d\n",strcmp(sub_compare_string,publisher_command_file));
+
+						// logic to remove the quotes
+						char final_publisher_command_file[200];
+						for (int i = 0; i < (int)strlen(publisher_command_file); i++ ){
+							if (i != 0){
+								final_publisher_command_file[i-1] = publisher_command_file[i];
+							}
+							if (i == (int)strlen(publisher_command_file)-1){
+								final_publisher_command_file[i-1] = '\0';
+							}
+						}
+						//
+						
+						/// this will go into thread function
+						FILE *fp ;
+
+						fp = fopen(final_publisher_command_file, "r");
+
+						if (fp == NULL){
+							printf("dint work\n");
+						}
+						
+						num_characters = getline(&line_buffer, &bufsize, fp);
+
+						printf("the line :%s\n", line_buffer);
+						for (int i = 0; i < 4; i++){
+						pub_sub_enqueue(&pub_queue, final_publisher_command_file);
+						pub_sub_enqueue(&pub_queue, final_publisher_command_file);
+						pub_sub_enqueue(&pub_queue, final_publisher_command_file);
+						char tester_string2[] = "some_tester.txt";
+						pub_sub_enqueue(&pub_queue, tester_string2);
+						pub_sub_enqueue(&pub_queue, final_publisher_command_file);
+						pub_sub_enqueue(&pub_queue, final_publisher_command_file);
+					}
+
+
 
 					}
 					break; ///////////////////////////////////////////////////
@@ -1250,7 +1344,7 @@ while(continue_parsing){
 
 free(original_line);
 
-exit(0);
+//exit(0);
 
 //sleep(1);
 
@@ -1286,10 +1380,11 @@ exit(0);
 	sleep(1);
 	printf("Main SERVER Unlocking\n");
 	// pub commands
+
 	for(int i = 0; i<30; i++){
 		// ADD COMMANDS TO QUEUE
 		pthread_mutex_lock(&pub_queue_mutex);
-		pub_sub_enqueue(&pub_queue, test_char_pp[i%3]);
+		//pub_sub_enqueue(&pub_queue, test_char_pp[i%3]);
 		pthread_mutex_unlock(&pub_queue_mutex);
 
 		//pthread_mutex_lock(&sub_queue_mutex);
@@ -1318,7 +1413,7 @@ exit(0);
 		//pthread_mutex_unlock(&pub_queue_mutex);
 
 		pthread_mutex_lock(&sub_queue_mutex);
-		pub_sub_enqueue(&sub_queue, test_char_pp[i%3]);
+		//pub_sub_enqueue(&sub_queue, test_char_pp[i%3]);
 		pthread_mutex_unlock(&sub_queue_mutex);
 
 		///////////// SIGNAL TREADS ////////////
@@ -1333,7 +1428,6 @@ exit(0);
 		
 		//printf("%s\n",test_char_pp[i]);
 	}
-
 
 	/*
 	time_t curtime; // for printing purposes
