@@ -163,7 +163,6 @@ void *subscriber(void *param);		// subscriber routine
 
 char time_print_buffer[30]; // time print buffer
 
-
 /// init the "get_entry" stuct ///////////////////////////////////////////////
 
 struct topicEntry vessel_for_get_entry;
@@ -1054,11 +1053,23 @@ void * signaling_thread_function(void * params){
 }
 ///////////
 
-void query_stuff(struct pub_sub_queue* q_to_query){
+void query_stuff(struct pub_sub_queue* q_to_query, int pub_or_sub){
+	// 1 for pub 0 for sub /// 
+	if (pub_or_sub){
+		printf("QUERYING publishers");
+		}
+	else{
+		printf("QUERYING Subscribers");
+	}
 	struct node* current_node= q_to_query->head;
 	printf("HI %d\n", q_to_query->count);
 	for (int i =0; i < q_to_query->count; i++){
-		printf("%d : current_node: %s \n",i, current_node->command_file);
+		if (pub_or_sub){
+			printf("%d : publisher: %s \n",i, current_node->command_file);
+		}
+		else{
+			printf("%d : subscriber: %s \n",i, current_node->command_file);
+		}
 		current_node = current_node->next;
 	}
 
@@ -1209,7 +1220,7 @@ while(continue_parsing){
 					printf("%s\n", tokens[1]);
 					if (strncmp(tokens[1], subscribers_string, 4) == 0){
 						printf("QUERY SUBS\n");
-						query_stuff(&sub_queue);
+						query_stuff(&sub_queue,0);
 					}
 					if (strncmp(tokens[1], topics_string, 4) == 0)
 					{
@@ -1219,7 +1230,7 @@ while(continue_parsing){
 					if (strncmp(tokens[1], publishers_string, 4) == 0)
 					{
 						printf("QUERY PUBS\n");
-						query_stuff(&pub_queue);
+						query_stuff(&pub_queue,1);
 					}
 
 					break; ///////////////////////////////////////////////////
@@ -1305,7 +1316,7 @@ while(continue_parsing){
 						num_characters = getline(&line_buffer, &bufsize, fp);
 
 						printf("the line :%s\n", line_buffer);
-						for (int i = 0; i < 4; i++){
+					for (int i = 0; i < 4; i++){
 						pub_sub_enqueue(&pub_queue, final_publisher_command_file);
 						pub_sub_enqueue(&pub_queue, final_publisher_command_file);
 						pub_sub_enqueue(&pub_queue, final_publisher_command_file);
