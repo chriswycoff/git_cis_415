@@ -414,7 +414,6 @@ int getEntry(int lastEntry, struct topicEntry *a_topic_entry, int topic_id){
 			return return_val;
 		}
 
-
 		index = (index + 1 ) % MAXENTRIES;
 
 		// loop breaking logic
@@ -726,20 +725,22 @@ void handle_subscriber_test_1(char *command_file, struct threadargs* my_argument
 
 	int success = 0;
 	
-	while(!success){
+	//while(!success){
 		//printf("HITTING HERE1\n");
-		success = getEntry(13, &vessel_for_enqueue_1, 2);
-		if (success == 0){
-			sched_yield();
-			sleep(1);
-		}
+		success = getEntry(3, &vessel_for_enqueue_1, 2);
+		//if (success == 0){
+			//sched_yield();
+			//sleep(1);
+		//}
+		/*
 		if(DONE){
 			break;
 		}
-	}
-
+		*/
+	//}
+	if (success){
 	printf("GOT THIS test1 :%s FROM ENTRY: %d \n", vessel_for_enqueue_1.photoURL,vessel_for_enqueue_1.entryNum);
-	
+	}
 
 }
 
@@ -766,21 +767,24 @@ void handle_subscriber_test_2(char *command_file, struct threadargs* my_argument
 	/// lets give this to queue at index 1
 	
 	int success = 0;
-	while(!success){
-		//printf("HITTING HERE2\n");
-		success = getEntry(1, &vessel_for_enqueue_2, 2);
-		if (success == 0){
-			sched_yield();
-			sleep(1);
-		}
+	
+	//while(!success){
+		//printf("HITTING HERE1\n");
+		success = getEntry(2, &vessel_for_enqueue_2, 2);
+		//if (success == 0){
+			//sched_yield();
+			//sleep(1);
+		//}
+		/*
 		if(DONE){
 			break;
 		}
-	}
+		*/
+	//}
 	
-
+	if (success){
 	printf("GOT THIS in TEST 2:%s FROM ENTRY: %d \n", vessel_for_enqueue_2.photoURL,vessel_for_enqueue_2.entryNum);
-
+	}
 }
 
 void handle_subscriber_test_3(char *command_file, struct threadargs* my_arguments){
@@ -805,49 +809,62 @@ void handle_subscriber_test_3(char *command_file, struct threadargs* my_argument
 
 	/// lets give this to queue at index 1
 	int success = 0;
-	while(!success){
-		//printf("HITTING HERE3\n");
-		success = getEntry(8, &vessel_for_enqueue_3, 2);
-		if (success == 0){
+	
+	//while(!success){
+		//printf("HITTING HERE1\n");
+		success = getEntry(1, &vessel_for_enqueue_3, 2);
+		//if (success == 0){
 			//sched_yield();
-			sleep(1);
-		}
+			//sleep(1);
+		//}
+		/*
 		if(DONE){
 			break;
 		}
-	}
-	printf("GOT THIS in test 3:%s FROM ENTRY: %d \n", vessel_for_enqueue_3.photoURL,vessel_for_enqueue_3.entryNum);
+		*/
+	//}
+	if (success){
+		printf("GOT THIS in test 3:%s FROM ENTRY: %d \n", vessel_for_enqueue_3.photoURL,vessel_for_enqueue_3.entryNum);
+	}	
 	success = 0;
-	while(!success){
-		//printf("HITTING HERE4\n");
-		success = getEntry(6, &vessel_for_enqueue_3, 2);
-		if (success == 0){
+
+
+	
+	//while(!success){
+		//printf("HITTING HERE1\n");
+		success = getEntry(2, &vessel_for_enqueue_3, 2);
+		//if (success == 0){
 			//sched_yield();
-			sleep(1);
-		}
+			//sleep(1);
+		//}
+		/*
 		if(DONE){
 			break;
 		}
-
+		*/
+	//}
+	if (success){
+		printf("GOT THIS in test 3.2:%s FROM ENTRY: %d \n", vessel_for_enqueue_3.photoURL,vessel_for_enqueue_3.entryNum);
 	}
-	printf("GOT THIS in test 3.2:%s FROM ENTRY: %d \n", vessel_for_enqueue_3.photoURL,vessel_for_enqueue_3.entryNum);
 	printf("GOT TO FINAL GET ENTRY3\n");
 	success = 0;
-	while(!success){
-		//printf("HITTING HERE5\n");
-		success = getEntry(7, &vessel_for_enqueue_3, 2);
-		if (success == 0){
+	
+	//while(!success){
+		//printf("HITTING HERE1\n");
+		success = getEntry(1, &vessel_for_enqueue_3, 2);
+		//if (success == 0){
 			//sched_yield();
-			sleep(1);
-		}
+			//sleep(1);
+		//}
+		/*
 		if(DONE){
 			break;
 		}
-
-
+		*/
+	//}
+	if (success){
+		printf("GOT THIS in test 3.2:%s FROM ENTRY: %d \n", vessel_for_enqueue_3.photoURL,vessel_for_enqueue_3.entryNum);
 	}
-	printf("GOT THIS in test 3.2:%s FROM ENTRY: %d \n", vessel_for_enqueue_3.photoURL,vessel_for_enqueue_3.entryNum);
-
 	
 
 }
@@ -876,6 +893,7 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 
 ////// BEGIN SUBSCRIBER THREAD FUNCTION ///////////////////////////////////////
 void * subscriber(void * params){
+	sleep(1);
 
 struct threadargs* my_arguments = (struct threadargs *)params;
 
@@ -1056,13 +1074,13 @@ void * signaling_thread_function(void * params){
 void query_stuff(struct pub_sub_queue* q_to_query, int pub_or_sub){
 	// 1 for pub 0 for sub /// 
 	if (pub_or_sub){
-		printf("QUERYING publishers");
+		printf("QUERYING publishers\n");
 		}
 	else{
-		printf("QUERYING Subscribers");
+		printf("QUERYING Subscriber\n");
 	}
 	struct node* current_node= q_to_query->head;
-	printf("HI %d\n", q_to_query->count);
+	//printf("HI %d\n", q_to_query->count);
 	for (int i =0; i < q_to_query->count; i++){
 		if (pub_or_sub){
 			printf("%d : publisher: %s \n",i, current_node->command_file);
@@ -1122,6 +1140,7 @@ line_buffer = (char *)malloc(bufsize * sizeof(char));
 
 char * original_line = line_buffer;
 
+/*
 srand(time(0));
 
 for(int i = 0; i<10; i++){
@@ -1134,6 +1153,7 @@ for(int i = 0; i<10; i++){
 
 	printf("topic ID:%s len of topic: %d\n", topic_ids[i], topic_lens[i] );
 	}
+	*/
 
 int continue_parsing = 1; 
 
@@ -1151,7 +1171,6 @@ while(continue_parsing){
 	}
 
 	if (line_buffer[num_characters-1] == '\n'){
-			printf("HERE1\n");
 			line_buffer[num_characters-1] = '\0';
 			num_characters -= 1;
 	}
@@ -1207,29 +1226,35 @@ while(continue_parsing){
 
 	switch(get_value_from_string_key(tokens[0])) {
 				case CREATE:
-					//printf("Create topic: %s len: %s num: %s\n", tokens[3], tokens[4], tokens[2]);
+					printf("Create topic: %s \n", tokens[3]);
 					num = atoi(tokens[2]);
 					len_num = atoi(tokens[4]);
 					strcpy(topic_queues[num].name_of_topic, tokens[3]);
 					topic_queues[num].exists = 1; 
 					topic_queues[num].max = len_num;
-					printf("hi %s\n",topic_queues[num].name_of_topic);
+					//printf("hi %s\n",topic_queues[num].name_of_topic);
+					//printf("hi2 %d\n", topic_queues[num].exists);
 					break; ///////////////////////////////////////////////////
 
 				case QUERY:
 					printf("%s\n", tokens[1]);
 					if (strncmp(tokens[1], subscribers_string, 4) == 0){
-						printf("QUERY SUBS\n");
+						//printf("QUERY SUBS\n");
 						query_stuff(&sub_queue,0);
 					}
 					if (strncmp(tokens[1], topics_string, 4) == 0)
 					{
 						printf("QUERY TOPICS\n");
+						for (int i =0; i< MAXTOPICS; i++){
+							if (topic_queues[i].exists == 1){
+								printf("%s\n", topic_queues[i].name_of_topic);
+							}
+						}
 
 					}
 					if (strncmp(tokens[1], publishers_string, 4) == 0)
 					{
-						printf("QUERY PUBS\n");
+						//printf("QUERY PUBS\n");
 						query_stuff(&pub_queue,1);
 					}
 
