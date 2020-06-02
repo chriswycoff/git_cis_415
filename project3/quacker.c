@@ -31,6 +31,7 @@ volatile int num_of_commands = NUMCOMMANDS;
 
 volatile int num_of_commands_counter = NUMCOMMANDS;
 
+volatile int THE_DELTA = 5; 
 /*-----------------define command keys----------------------------------------------------*/
 
 #define A_NULL 0
@@ -639,6 +640,7 @@ void handle_publisher_test_3(char *command_file, struct threadargs* my_arguments
 ///// END PUBLISHER TESTS ////////////////////////////////////////////////
 
 void handle_publisher(char *command_file, struct threadargs* my_arguments){
+	/*
 	printf("PUB Handler being called %s\n", command_file);
 	if (((my_arguments->id % 4) == 0)){
 		handle_publisher_test_1(command_file,my_arguments);
@@ -650,6 +652,14 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 	if (((my_arguments->id % 6) == 0)){
 		handle_publisher_test_3(command_file,my_arguments);
 	}
+	*/
+	size_t bufsize = 1000; 
+	char * pub_line_buffer;
+	pub_line_buffer = (char *)malloc( bufsize * sizeof(char));
+	free(pub_line_buffer);
+
+
+
 }
 
 
@@ -991,7 +1001,7 @@ void * cleanup_thread_function(void * params){
 						int how_old_in_seconds = cleanup_time_stamp.tv_sec - specific_queue->entries[index].timestamp.tv_sec;
 						printf("Entry: %d is %d seconds old\n", specific_queue->entries[index].entryNum, how_old_in_seconds);
 						// for reference int dequeue(struct topic_queue * a_topic_queue)
-						if (how_old_in_seconds >= TEST_DELTA){
+						if (how_old_in_seconds >= THE_DELTA){
 							printf("Cleanup dequing\n");
 							dequeue(specific_queue);
 
@@ -1223,6 +1233,10 @@ while(continue_parsing){
 	char pub_compare_string[] = "\"publisher.txt\"\0";
 	char test_line[300];
 
+	int delta_num;
+
+	int start_program = 0;
+
 
 	switch(get_value_from_string_key(tokens[0])) {
 				case CREATE:
@@ -1247,7 +1261,8 @@ while(continue_parsing){
 						printf("QUERY TOPICS\n");
 						for (int i =0; i< MAXTOPICS; i++){
 							if (topic_queues[i].exists == 1){
-								printf("%s\n", topic_queues[i].name_of_topic);
+								printf("%s length: %d \n", topic_queues[i].name_of_topic, topic_queues[i].max);
+
 							}
 						}
 
@@ -1357,21 +1372,28 @@ while(continue_parsing){
 					break; ///////////////////////////////////////////////////
 
 				case DELTA:
+					delta_num = atoi(tokens[1]);
+					printf("Called delta: %d\n",delta_num);
+					THE_DELTA = delta_num;
 
-					
 					break; ///////////////////////////////////////////////////
 
 				case A_NULL:
 					break; ///////////////////////////////////////////////////
 
 				case START:
+					start_program = 1; 
 					break; ///////////////////////////////////////////////////
 
 				default:
 					printf("Error unrecognized command!!!!!!!\n");
 
 			}
-			
+			if (start_program){
+				printf("Starting Program\n");
+				sleep(1);
+				break;
+			}
 
 }
 
@@ -1382,12 +1404,9 @@ free(original_line);
 
 //exit(0);
 
-//sleep(1);
+sleep(1);
 
 ////////////////////// End File Parsing for main command file ///////////////////////
-
-
-
 
 	//// BEGIN TESTING AREA /////
 
