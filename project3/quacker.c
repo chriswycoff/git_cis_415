@@ -1319,7 +1319,7 @@ while(continue_parsing){
 						pub_sub_enqueue(&sub_queue, tester_string2);
 						}
 
-						close(fp);
+						fclose(fp);
 
 					}
 					if (strncmp(tokens[1], publishers_string, 4) == 0){
@@ -1366,7 +1366,7 @@ while(continue_parsing){
 						pub_sub_enqueue(&pub_queue, final_publisher_command_file);
 					}
 					// close the file pointer
-					close(fp);
+					fclose(fp);
 
 					}
 					break; ///////////////////////////////////////////////////
