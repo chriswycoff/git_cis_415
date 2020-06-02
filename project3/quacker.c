@@ -653,10 +653,10 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 		handle_publisher_test_3(command_file,my_arguments);
 	}
 	*/
-	size_t bufsize = 1000; 
-	char * pub_line_buffer;
-	pub_line_buffer = (char *)malloc( bufsize * sizeof(char));
-	free(pub_line_buffer);
+	//size_t bufsize = 1000; 
+	//char * pub_line_buffer;
+	//pub_line_buffer = (char *)malloc( bufsize * sizeof(char));
+	//free(pub_line_buffer);
 
 
 
