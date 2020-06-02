@@ -653,10 +653,10 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 		handle_publisher_test_3(command_file,my_arguments);
 	}
 	*/
-	//size_t bufsize = 1000; 
-	//char * pub_line_buffer;
-	//pub_line_buffer = (char *)malloc( bufsize * sizeof(char));
-	//free(pub_line_buffer);
+	size_t bufsize = 1000; 
+	char * pub_line_buffer;
+	pub_line_buffer = (char *)malloc( bufsize * sizeof(char));
+	free(pub_line_buffer);
 
 
 
@@ -1319,7 +1319,7 @@ while(continue_parsing){
 						pub_sub_enqueue(&sub_queue, tester_string2);
 						}
 
-
+						close(fp);
 
 					}
 					if (strncmp(tokens[1], publishers_string, 4) == 0){
@@ -1365,8 +1365,8 @@ while(continue_parsing){
 						pub_sub_enqueue(&pub_queue, final_publisher_command_file);
 						pub_sub_enqueue(&pub_queue, final_publisher_command_file);
 					}
-
-
+					// close the file pointer
+					close(fp);
 
 					}
 					break; ///////////////////////////////////////////////////
