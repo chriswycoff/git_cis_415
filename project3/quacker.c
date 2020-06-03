@@ -1550,9 +1550,6 @@ while(continue_parsing){
 
 // end parsing
 
-
-free(original_line);
-
 //exit(0);
 
 sleep(1);
@@ -1858,6 +1855,7 @@ sleep(1);
 	////////////// END SUB THREAD CLEANUP /////////////////
 
 	printf("times_executed: %d\n", times_executed); //wow that is a lot
+	free(original_line);
 	exit_function();
 }
 ////// END MAIN /////////////////////////////////////////////////////
