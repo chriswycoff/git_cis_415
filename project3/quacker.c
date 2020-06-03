@@ -492,9 +492,6 @@ void exit_function(){
 
 int take_in_main_command_file(char * command_array[]){
 
-
-
-
 	return 1; 
 }
 
@@ -763,7 +760,9 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 			atoi(tokens[1]);
 			int success = 0;
 			while(!success){
+				//pthread_mutex_lock(&topic_queue_mutexes[atoi(tokens[1])]);
 				success = enqueue(&pub_vessel_for_enqueue, &topic_queues[atoi(tokens[1])]);
+				//pthread_mutex_unlock(&topic_queue_mutexes[atoi(tokens[1])]);
 				if (success == 0){
 					sched_yield();
 					sleep(1);
@@ -1034,6 +1033,7 @@ void handle_subscriber_test_3(char *command_file, struct threadargs* my_argument
 ////// BEGIN SUBSCRIBER Handler FUNCTION ////////////////////////////////////////
 
 void handle_subscriber(char* command_file, struct threadargs* my_arguments){
+	/*
 	printf("Handler being called %s\n", command_file);
 	printf("SUB Handler being called %s\n", command_file);
 	
@@ -1047,6 +1047,137 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 	if (((my_arguments->id % 6) == 0)){
 		handle_subscriber_test_3(command_file,my_arguments);
 	}
+	*/
+	int last_entries[MAXENTRIES];
+
+	for (int i = 0; i< MAXENTRIES; i++){
+		last_entries[i] = 0;
+	}
+
+
+	struct timespec ts;
+
+	struct topicEntry sub_vessel_for_get_entry;
+
+	char a_url[200];
+	char a_caption[200];
+
+	char get_string[200] = "get\0";
+	char sleep_string[200] = "sleep\0";
+	int continue_parsing = 1; 
+
+	int incase_counter = 0; 
+
+	int num_characters;
+
+
+	size_t bufsize = 1000; 
+	//char * pub_line_buffer;
+
+
+	pthread_mutex_lock(&malloc_mutex);
+	//line_buffer = (char *)malloc( bufsize * sizeof(char));
+	FILE *fp ;
+	fp = fopen(command_file, "r");
+	pthread_mutex_unlock(&malloc_mutex);
+
+	if (fp == NULL){
+		printf("dint work\n");
+		}
+
+
+	while(continue_parsing){
+		num_characters = getline(&line_buffer, &bufsize, fp);
+
+
+		if (num_characters == -1){
+			break;
+		}
+
+		//printf("FROM PUB %s\n",line_buffer);
+		if (line_buffer[num_characters-1] == '\n'){
+				line_buffer[num_characters-1] = '\0';
+				num_characters -= 1;
+		}
+
+		//printf("the line: ", line_buffer, num_characters);
+		//printf("%s\n", line_buffer);
+
+		char* tokens[2048];
+
+		char *token;
+
+		token = (char *) strtok_r(line_buffer, " ", &line_buffer);
+
+		int token_counter = 0;
+
+		tokens[token_counter]= token;
+
+		//gather tokens below
+		while(token != NULL){
+			//printf("T%d: %s\n", token_counter, token);
+			token = (char *) strtok_r(NULL, " ",&line_buffer);
+			token_counter += 1; 
+			tokens[token_counter]= token;
+		}
+		
+		//printf("%s\n",tokens[0]);
+
+		if (strcmp(tokens[0],get_string) == 0){
+				//printf("HALLEUEYA %s\n",tokens[0] );
+				//printf("%d\n",atoi(tokens[1]) );
+				//printf("%s\n",tokens[2] );
+				//printf("%s\n",tokens[3] );
+			//pub_vessel_for_enqueue.photoURL
+			//pub_vessel_for_enqueue.photoCaption
+			// getEntry(int lastEntry, struct topicEntry *a_topic_entry, int topic_id){
+			int result;
+			//pthread_mutex_lock(&topic_queue_mutexes[atoi(tokens[1])]);
+			result = getEntry(last_entries[atoi(tokens[1])],&sub_vessel_for_get_entry,atoi(tokens[1]));
+			//pthread_mutex_unlock(&topic_queue_mutexes[atoi(tokens[1])]);
+			if (result == 1){
+				last_entries[atoi(tokens[1])] += 1;
+			}
+			if (result > 1){
+				last_entries[atoi(tokens[1])] += result;
+			}
+		}
+		//printf("%s\n",tokens[0] );
+		if (strcmp(tokens[0],sleep_string) == 0){
+			ts.tv_sec = atoi(tokens[1]) / 1000;
+    		ts.tv_nsec = (atoi(tokens[1]) % 1000) * 1000000;
+    		printf("sub calling sleep!!!!!!\n");
+    		nanosleep(&ts, &ts);
+    		printf("sub JUST slept!!!!!!\n");
+    	}
+			/*
+		for (int i = 0; i< token_counter; i++){
+			printf(tokens[i]);
+			printf("\n");
+			if (strcmp(tokens[i],put_string) == 0){
+				printf("HALLEUEYA %s\n",tokens[i] );
+			}
+			if (strcmp(tokens[i],put_string) == 0){
+				printf("OH JEEZ %s\n",tokens[i] );
+			}
+		}
+		*/
+
+		incase_counter+=1;
+
+		if (incase_counter > 30){
+			break;
+		}
+
+		
+
+	}
+	//printf("GOTTTT HERRRRREE\n");
+	pthread_mutex_lock(&free_mutex);
+	//free(pub_line_buffer);
+	fclose(fp);
+	pthread_mutex_unlock(&free_mutex);
+
 	
 	
 }
@@ -1458,16 +1589,8 @@ while(continue_parsing){
 						num_characters = getline(&line_buffer, &bufsize, fp);
 
 						printf("the line :%s\n", line_buffer);
-						for (int i = 0; i < 2; i++){
-						pub_sub_enqueue(&sub_queue, final_subscriber_command_file);
-						pub_sub_enqueue(&sub_queue, final_subscriber_command_file);
-						char tester_string1[] = "AAATESTER1_tester.txt";
-						pub_sub_enqueue(&sub_queue, tester_string1);
-						pub_sub_enqueue(&sub_queue, final_subscriber_command_file);
-						pub_sub_enqueue(&sub_queue, final_subscriber_command_file);
-						pub_sub_enqueue(&sub_queue, final_subscriber_command_file);
-						char tester_string2[] = "some_tester.txt";
-						pub_sub_enqueue(&sub_queue, tester_string2);
+						for (int i = 0; i < 1; i++){
+							pub_sub_enqueue(&sub_queue, final_subscriber_command_file);
 						}
 
 						fclose(fp);
