@@ -1,5 +1,5 @@
 get 1
-sleep 500
+sleep 1000
 get 2
 get 2
 sleep 500

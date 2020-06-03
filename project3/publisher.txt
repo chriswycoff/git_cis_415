@@ -1,10 +1,10 @@
 put 1 "someurl" "somecaption"
-sleep 500
+sleep 100
 put 2 "someurl2" "somecaption"
 put 2 "someurl3" "somecaption"
-sleep 500
+sleep 100
 put 3 "someurl4" "somecaption"
 put 3 "someurl5" "somecaption"
 put 3 "someurl6" "somecaption"
-sleep 500
+sleep 100
 stop

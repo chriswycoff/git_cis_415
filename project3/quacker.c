@@ -1141,6 +1141,10 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 			if (result > 1){
 				last_entries[atoi(tokens[1])] += result;
 			}
+			if (result != 0){
+				printf("GOT THIS URL:%s OF THE TOPIC: %s FROM ENTRYNUM: %d \n", sub_vessel_for_get_entry.photoURL,topic_queues[atoi(tokens[1])].name_of_topic, sub_vessel_for_get_entry.entryNum);
+			}
+
 		}
 		//printf("%s\n",tokens[0] );
 		if (strcmp(tokens[0],sleep_string) == 0){
