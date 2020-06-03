@@ -15,7 +15,7 @@ int exit_function(int status, char * line_buffer, char ***the_args, char** the_p
 
 void signal_handler(int sig, siginfo_t * siginfo, void *context);
 
-void display_status(long tgid);
+int display_status(long tgid);
 
 void get_exec_time(long tgid);
 
