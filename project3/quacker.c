@@ -666,11 +666,11 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 
 
 	size_t bufsize = 1000; 
-	char * pub_line_buffer;
+	//char * pub_line_buffer;
 
 
 	pthread_mutex_lock(&malloc_mutex);
-	pub_line_buffer = (char *)malloc( bufsize * sizeof(char));
+	//line_buffer = (char *)malloc( bufsize * sizeof(char));
 	FILE *fp ;
 	fp = fopen(command_file, "r");
 	pthread_mutex_unlock(&malloc_mutex);
@@ -685,16 +685,16 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 
 
 	while(continue_parsing){
-		num_characters = getline(&pub_line_buffer, &bufsize, fp);
+		num_characters = getline(&line_buffer, &bufsize, fp);
 
 
 		if (num_characters == -1){
 			break;
 		}
 
-		printf("FROM PUB %s\n",pub_line_buffer);
-		if (pub_line_buffer[num_characters-1] == '\n'){
-				pub_line_buffer[num_characters-1] = '\0';
+		printf("FROM PUB %s\n",line_buffer);
+		if (line_buffer[num_characters-1] == '\n'){
+				line_buffer[num_characters-1] = '\0';
 				num_characters -= 1;
 		}
 
@@ -705,7 +705,7 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 
 		char *token;
 
-		token = (char *) strtok_r(pub_line_buffer, " ", &pub_line_buffer);
+		token = (char *) strtok_r(line_buffer, " ", &line_buffer);
 
 		int token_counter = 0;
 
@@ -714,7 +714,7 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 		//gather tokens below
 		while(token != NULL){
 			//printf("T%d: %s\n", token_counter, token);
-			token = (char *) strtok_r(NULL, " ",&pub_line_buffer);
+			token = (char *) strtok_r(NULL, " ",&line_buffer);
 			token_counter += 1; 
 			tokens[token_counter]= token;
 		}
@@ -752,7 +752,7 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 
 	}
 	pthread_mutex_lock(&free_mutex);
-	free(pub_line_buffer);
+	//free(pub_line_buffer);
 	
 
 	fclose(fp);
