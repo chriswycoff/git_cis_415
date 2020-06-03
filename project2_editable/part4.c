@@ -661,6 +661,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 				waitpid(the_ids[fork_iterator], &status, WNOHANG| WUNTRACED| WCONTINUED);
 
 				if(WIFEXITED(status)){
+					printf("EXITED %d \n", the_ids[fork_iterator]);
 					if (process_status[fork_iterator] == 2){
 						
 					} // for terminated
