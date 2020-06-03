@@ -86,7 +86,7 @@ void signal_handler(int sig, siginfo_t * siginfo, void *context){
 }
 
 
-void display_status(long tgid) {
+int display_status(long tgid) {
     char path[40], line[100], *p;
     FILE* statusf;
 
@@ -94,7 +94,7 @@ void display_status(long tgid) {
 
     statusf = fopen(path, "r");
     if(!statusf)
-        return;
+        return 0;
 
     while(fgets(line, 100, statusf)) {
         if(strncmp(line, "State:", 6) != 0)
@@ -108,6 +108,7 @@ void display_status(long tgid) {
     }
 
     fclose(statusf);
+    return 1;
 }
 
 void get_exec_time(long tgid) {
@@ -611,6 +612,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 			    perror("opendir(/proc)");
 			    return 1;
 			}
+			int the_status = 1;
 
 			while((ent = readdir(proc))) {
 			    if(!isdigit(*ent->d_name))
@@ -621,12 +623,23 @@ From Grayson Guan to Everyone: (01:53 PM)
 			    	    if (tgid == the_ids[fork_iterator]){
 			    	    	printf("\n");
 			    	    	printf("Program %s \n" , the_programs[fork_iterator]);
-			    	    	display_status(tgid);
+			    	    	the_status = display_status(tgid);
 			    	    	get_exec_time(tgid);
 			    	    	display_memory(tgid);
 			    	    	display_io_write(tgid);
 			    	    	display_io_read(tgid);
 			    	    	printf("\n");
+			    	    }
+			    	    	if (the_status == 0){
+			    	    	if (process_status[fork_iterator] == 2){
+						
+							} // for terminated
+							else{
+								num_process_running -= 1;
+								process_status[fork_iterator] = 2;
+
+							}
+
 			    	    }
 
 			    }
@@ -657,7 +670,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 	
 			
 			for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
-	
+				/*
 				waitpid(the_ids[fork_iterator], &status, WNOHANG| WUNTRACED| WCONTINUED);
 
 				if(WIFEXITED(status)){
@@ -673,6 +686,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 						
 
 				}
+				*/
 
 				/*
 				wno_hang_number = waitpid(the_ids[fork_iterator], &status, WNOHANG);
