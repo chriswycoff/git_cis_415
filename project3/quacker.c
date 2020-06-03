@@ -692,7 +692,7 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 			break;
 		}
 
-		printf("FROM PUB %s\n",line_buffer);
+		//printf("FROM PUB %s\n",line_buffer);
 		if (line_buffer[num_characters-1] == '\n'){
 				line_buffer[num_characters-1] = '\0';
 				num_characters -= 1;
