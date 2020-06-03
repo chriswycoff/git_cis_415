@@ -7,6 +7,7 @@
 #include <semaphore.h>
 #include <sys/time.h>
 #include <time.h>
+#include <errno.h>
 #include <unistd.h>
 #include <string.h>
 
@@ -656,6 +657,34 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 	}
 	*/
 
+		/*
+	if (strncmp(tokens[1], subscribers_string, 4) == 0){
+		printf("Add subscriber\n");
+		char subscriber_command_file[200];
+		strcpy(subscriber_command_file, tokens[2]);
+		subscriber_command_file[strlen(subscriber_command_file)-1] = '\0';
+		printf("the file called: %s\n", subscriber_command_file);
+		printf("strlen: %d \n", (int)strlen(subscriber_command_file));
+		//printf("same?: %d\n",strcmp(sub_compare_string,subscriber_command_file) );
+
+		// logic to remove the quotes
+		char final_subscriber_command_file[200];
+		for (int i = 0; i < (int)strlen(subscriber_command_file); i++ ){
+			if (i != 0){
+				final_subscriber_command_file[i-1] = subscriber_command_file[i];
+			}
+			if (i == (int)strlen(subscriber_command_file)-1){
+				final_subscriber_command_file[i-1] = '\0';
+			}
+		}
+		*/
+	struct timespec ts;
+
+	struct topicEntry pub_vessel_for_enqueue;
+
+	char a_url[200];
+	char a_caption[200];
+
 	char put_string[200] = "put\0";
 	char sleep_string[200] = "sleep\0";
 	int continue_parsing = 1; 
@@ -719,16 +748,40 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 			tokens[token_counter]= token;
 		}
 		
-
 		//printf("%s\n",tokens[0]);
 
 		if (strcmp(tokens[0],put_string) == 0){
-				printf("HALLEUEYA %s\n",tokens[0] );
-				printf("%d\n",atoi(tokens[1]) );
-				printf("%s\n",tokens[2] );
-				printf("%s\n",tokens[3] );
+				//printf("HALLEUEYA %s\n",tokens[0] );
+				//printf("%d\n",atoi(tokens[1]) );
+				//printf("%s\n",tokens[2] );
+				//printf("%s\n",tokens[3] );
+			//pub_vessel_for_enqueue.photoURL
+			//pub_vessel_for_enqueue.photoCaption
+			strcpy(pub_vessel_for_enqueue.photoURL, tokens[2]);
+
+			strcpy(pub_vessel_for_enqueue.photoCaption, tokens[3]);
+			atoi(tokens[1]);
+			int success = 0;
+			while(!success){
+				success = enqueue(&pub_vessel_for_enqueue, &topic_queues[atoi(tokens[1])]);
+				if (success == 0){
+					sched_yield();
+					sleep(1);
+				}
+				if(DONE){
+					break;
+				}
 			}
 
+		}
+		//printf("%s\n",tokens[0] );
+		if (strcmp(tokens[0],sleep_string) == 0){
+			ts.tv_sec = atoi(tokens[1]) / 1000;
+    		ts.tv_nsec = (atoi(tokens[1]) % 1000) * 1000000;
+    		printf("calling sleep!!!!!!\n");
+    		nanosleep(&ts, &ts);
+    		printf("JUST sleped!!!!!!\n");
+    	}
 			/*
 		for (int i = 0; i< token_counter; i++){
 			printf(tokens[i]);

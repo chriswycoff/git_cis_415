@@ -6,5 +6,5 @@ add publisher "publisher.txt"
 query publishers
 add subscriber "subscriber.txt"
 query subscribers
-delta 2
+delta 5
 start
