@@ -653,12 +653,98 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 		handle_publisher_test_3(command_file,my_arguments);
 	}
 	*/
+
+	char put_string[200] = "put\0";
+	char sleep_string[200] = "sleep\0";
+	int continue_parsing = 1; 
+
+	int incase_counter = 0; 
+
+	int num_characters;
+
+
 	size_t bufsize = 1000; 
 	char * pub_line_buffer;
 	pub_line_buffer = (char *)malloc( bufsize * sizeof(char));
+
+
+	FILE *fp ;
+
+	fp = fopen(command_file, "r");
+
+	if (fp == NULL){
+		printf("dint work\n");
+		}
+
+
+	while(continue_parsing){
+		num_characters = getline(&pub_line_buffer, &bufsize, fp);
+
+
+		if (num_characters == -1){
+			break;
+		}
+
+		printf("FROM PUB %s\n",pub_line_buffer);
+		if (pub_line_buffer[num_characters-1] == '\n'){
+				pub_line_buffer[num_characters-1] = '\0';
+				num_characters -= 1;
+		}
+
+		//printf("the line: ", line_buffer, num_characters);
+		//printf("%s\n", line_buffer);
+
+		char* tokens[2048];
+
+		char *token;
+
+		token = (char *) strtok_r(pub_line_buffer, " ", &pub_line_buffer);
+
+		int token_counter = 0;
+
+		tokens[token_counter]= token;
+
+		//gather tokens below
+		while(token != NULL){
+			//printf("T%d: %s\n", token_counter, token);
+			token = (char *) strtok_r(NULL, " ",&pub_line_buffer);
+			token_counter += 1; 
+			tokens[token_counter]= token;
+		}
+		
+
+		//printf("%s\n",tokens[0]);
+
+		if (strcmp(tokens[0],put_string) == 0){
+				printf("HALLEUEYA %s\n",tokens[0] );
+				printf("%d\n",atoi(tokens[1]) );
+				printf("%s\n",tokens[2] );
+				printf("%s\n",tokens[3] );
+			}
+
+			/*
+		for (int i = 0; i< token_counter; i++){
+			printf(tokens[i]);
+			printf("\n");
+			if (strcmp(tokens[i],put_string) == 0){
+				printf("HALLEUEYA %s\n",tokens[i] );
+			}
+			if (strcmp(tokens[i],put_string) == 0){
+				printf("OH JEEZ %s\n",tokens[i] );
+			}
+		}
+		*/
+
+		incase_counter+=1;
+
+		if (incase_counter > 30){
+			break;
+		}
+
+		
+
+	}
 	free(pub_line_buffer);
-
-
 
 }
 
@@ -1355,14 +1441,14 @@ while(continue_parsing){
 						
 						num_characters = getline(&line_buffer, &bufsize, fp);
 
-						printf("the line :%s\n", line_buffer);
-					for (int i = 0; i < 4; i++){
-						pub_sub_enqueue(&pub_queue, final_publisher_command_file);
-						pub_sub_enqueue(&pub_queue, final_publisher_command_file);
-						pub_sub_enqueue(&pub_queue, final_publisher_command_file);
-						char tester_string2[] = "some_tester.txt";
-						pub_sub_enqueue(&pub_queue, tester_string2);
-						pub_sub_enqueue(&pub_queue, final_publisher_command_file);
+						//printf("the line :%s\n", line_buffer);
+					for (int i = 0; i < 1; i++){
+						//pub_sub_enqueue(&pub_queue, final_publisher_command_file);
+						//pub_sub_enqueue(&pub_queue, final_publisher_command_file);
+						//pub_sub_enqueue(&pub_queue, final_publisher_command_file);
+						//char tester_string2[] = "some_tester.txt";
+						//pub_sub_enqueue(&pub_queue, tester_string2);
+						//pub_sub_enqueue(&pub_queue, final_publisher_command_file);
 						pub_sub_enqueue(&pub_queue, final_publisher_command_file);
 					}
 					// close the file pointer
