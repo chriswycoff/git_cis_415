@@ -745,6 +745,7 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 
 	}
 	free(pub_line_buffer);
+	fclose(fp);
 
 }
 
