@@ -671,11 +671,13 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 
 	pthread_mutex_lock(&malloc_mutex);
 	pub_line_buffer = (char *)malloc( bufsize * sizeof(char));
+	FILE *fp ;
+	fp = fopen(command_file, "r");
 	pthread_mutex_unlock(&malloc_mutex);
 
-	FILE *fp ;
+	
 
-	fp = fopen(command_file, "r");
+	
 
 	if (fp == NULL){
 		printf("dint work\n");
