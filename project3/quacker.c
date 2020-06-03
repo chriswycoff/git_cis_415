@@ -186,7 +186,9 @@ pthread_mutex_t pub_left_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 pthread_mutex_t sub_left_mutex = PTHREAD_MUTEX_INITIALIZER;
 
+pthread_mutex_t malloc_mutex = PTHREAD_MUTEX_INITIALIZER;
 
+pthread_mutex_t free_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 ////// START Variables for file IO /////////////////////////////////////////////////
 
@@ -665,8 +667,11 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 
 	size_t bufsize = 1000; 
 	char * pub_line_buffer;
-	pub_line_buffer = (char *)malloc( bufsize * sizeof(char));
 
+
+	pthread_mutex_lock(&malloc_mutex);
+	pub_line_buffer = (char *)malloc( bufsize * sizeof(char));
+	pthread_mutex_unlock(&malloc_mutex);
 
 	FILE *fp ;
 
@@ -744,8 +749,12 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 		
 
 	}
+	pthread_mutex_lock(&free_mutex);
 	free(pub_line_buffer);
+	
+
 	fclose(fp);
+	pthread_mutex_unlock(&free_mutex);
 
 }
 
