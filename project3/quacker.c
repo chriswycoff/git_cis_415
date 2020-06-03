@@ -1548,7 +1548,7 @@ while(continue_parsing){
 						printf("QUERY TOPICS\n");
 						for (int i =0; i< MAXTOPICS; i++){
 							if (topic_queues[i].exists == 1){
-								printf("%s length: %d \n", topic_queues[i].name_of_topic, topic_queues[i].max);
+								//printf("%s length: %d \n", topic_queues[i].name_of_topic, topic_queues[i].max);
 
 							}
 						}
@@ -1568,8 +1568,8 @@ while(continue_parsing){
 						char subscriber_command_file[200];
 						strcpy(subscriber_command_file, tokens[2]);
 						subscriber_command_file[strlen(subscriber_command_file)-1] = '\0';
-						printf("the file called: %s\n", subscriber_command_file);
-						printf("strlen: %d \n", (int)strlen(subscriber_command_file));
+						//printf("the file called: %s\n", subscriber_command_file);
+						//printf("strlen: %d \n", (int)strlen(subscriber_command_file));
 						//printf("same?: %d\n",strcmp(sub_compare_string,subscriber_command_file) );
 
 						// logic to remove the quotes
@@ -1593,7 +1593,7 @@ while(continue_parsing){
 						}
 						num_characters = getline(&line_buffer, &bufsize, fp);
 
-						printf("the line :%s\n", line_buffer);
+						//printf("the line :%s\n", line_buffer);
 						for (int i = 0; i < 1; i++){
 							pub_sub_enqueue(&sub_queue, final_subscriber_command_file);
 						}
@@ -1607,8 +1607,8 @@ while(continue_parsing){
 						char publisher_command_file[200];
 						strcpy(publisher_command_file, tokens[2]);
 						publisher_command_file[strlen(publisher_command_file)-1] = '\0';
-						printf("the file called: %s\n", publisher_command_file);
-						printf("strlen: %d \n", (int)strlen(publisher_command_file));
+						//printf("the file called: %s\n", publisher_command_file);
+						//printf("strlen: %d \n", (int)strlen(publisher_command_file));
 						//printf("same?: %d\n",strcmp(sub_compare_string,publisher_command_file));
 
 						// logic to remove the quotes
@@ -1652,7 +1652,7 @@ while(continue_parsing){
 
 				case DELTA:
 					delta_num = atoi(tokens[1]);
-					printf("Called delta: %d\n",delta_num);
+					printf("ADDED DELTA: %d\n",delta_num);
 					THE_DELTA = delta_num;
 
 					break; ///////////////////////////////////////////////////

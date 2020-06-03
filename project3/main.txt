@@ -11,6 +11,7 @@ add subscriber "subscriber.txt"
 add subscriber "subscriber.txt"
 add subscriber "subscriber.txt"
 add subscriber "subscriber2.txt"
+add subscriber "subscriber3.txt"
 query subscribers
 delta 5
 start

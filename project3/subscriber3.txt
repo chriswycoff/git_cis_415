@@ -6,5 +6,11 @@ sleep 30000
 get 3
 get 1
 get 3
+get 3
+get 1
+get 3
+get 3
+get 1
+get 3
 sleep 500
 stop
