@@ -628,6 +628,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 			    	    	display_io_read(tgid);
 			    	    	printf("\n");
 			    	    }
+
 			    }
 			    
 			}
@@ -656,14 +657,19 @@ From Grayson Guan to Everyone: (01:53 PM)
 	
 			
 			for (int fork_iterator = 0; fork_iterator < number_of_programs; fork_iterator++ ){
-		
-
-				
+	
 				waitpid(the_ids[fork_iterator], &status, WNOHANG| WUNTRACED| WCONTINUED);
 
-				if(WIFEXITED(status) !=0 && process_status[fork_iterator] != 2){
-					process_status[fork_iterator] = 2; // for terminated
-					num_process_running -= 1;
+				if(WIFEXITED(status)){
+					if (process_status[fork_iterator] == 2){
+						
+					} // for terminated
+					else{
+						num_process_running -= 1;
+						process_status[fork_iterator] = 2;
+
+					}
+						
 
 				}
 
@@ -677,6 +683,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 				}
 				*/
+					}
 
 			}
 
