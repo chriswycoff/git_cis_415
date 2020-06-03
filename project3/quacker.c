@@ -1124,6 +1124,7 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 		//printf("%s\n",tokens[0]);
 
 		if (strcmp(tokens[0],get_string) == 0){
+			printf("here now\n");
 				//printf("HALLEUEYA %s\n",tokens[0] );
 				//printf("%d\n",atoi(tokens[1]) );
 				//printf("%s\n",tokens[2] );
