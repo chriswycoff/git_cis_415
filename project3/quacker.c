@@ -1920,7 +1920,7 @@ sleep(1);
 	pthread_mutex_lock(&sub_queue_mutex);
 	pthread_cond_signal(&sub_queue_cond);
 	pthread_mutex_unlock(&sub_queue_mutex);
-	sleep(10);
+	sleep(30);
 	DONE = 1;
 	pthread_mutex_unlock(&done_mutex);
 	
