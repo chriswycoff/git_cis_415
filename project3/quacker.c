@@ -781,6 +781,7 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
     		nanosleep(&ts, &ts);
     		printf("JUST sleped!!!!!!\n");
     	}
+    	printf("GETS HERE 1111\n");
 			/*
 		for (int i = 0; i< token_counter; i++){
 			printf(tokens[i]);
