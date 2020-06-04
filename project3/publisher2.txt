@@ -2,6 +2,8 @@ put 1 "helloworld.jpg" "wow is this is?"
 sleep 10000
 put 2 "someurl2" "somecaption"
 put 2 "someurl3" "somecaption"
+put 4 "nice_picture_for_four" "somecaption"
+put 4 "nice_picture_for_four" "somecaption"
 sleep 2000
 put 3 "nice_picture1" "somecaption"
 put 3 "nice_picture2" "somecaption"
@@ -12,4 +14,5 @@ put 3 "nice_picture6" "somecaption"
 put 3 "nice_picture7" "somecaption"
 put 3 "nice_picture8" "somecaption"
 put 3 "nice_picture10" "somecaption"
+
 stop

@@ -1025,7 +1025,6 @@ void handle_subscriber_test_3(char *command_file, struct threadargs* my_argument
 	if (success){
 		printf("GOT THIS in test 3.2:%s FROM ENTRY: %d \n", vessel_for_enqueue_3.photoURL,vessel_for_enqueue_3.entryNum);
 	}
-	
 
 }
 

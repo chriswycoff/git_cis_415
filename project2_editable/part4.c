@@ -630,7 +630,8 @@ From Grayson Guan to Everyone: (01:53 PM)
 			    	    	display_io_read(tgid);
 			    	    	printf("\n");
 			    	    }
-			    	    	if (the_status == 0){
+			    	    /*
+			    	    if (the_status == 0){
 			    	    	if (process_status[fork_iterator] == 2){
 						
 							} // for terminated
@@ -641,6 +642,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 							}
 
 			    	    }
+			    	    */
 
 			    }
 			    
@@ -684,11 +686,10 @@ From Grayson Guan to Everyone: (01:53 PM)
 
 					}
 						
-
 				}
 				*/
 
-				/*
+				
 				wno_hang_number = waitpid(the_ids[fork_iterator], &status, WNOHANG);
 
 
@@ -697,7 +698,7 @@ From Grayson Guan to Everyone: (01:53 PM)
 					num_process_running -= 1;
 
 				}
-				*/
+				
 					
 
 			}
