@@ -16,8 +16,8 @@
 
 #define URLSIZE 100
 #define CAPSIZE 100
-#define MAXENTRIES 10
-#define MAXTOPICS 4
+#define MAXENTRIES 15
+#define MAXTOPICS 10
 #define NUMPROXIES 10
 #define TEST_DELTA 4
 #define UNUSED(x) (void)(x)
