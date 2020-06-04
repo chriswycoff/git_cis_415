@@ -14,5 +14,4 @@ put 3 "nice_picture6" "somecaption"
 put 3 "nice_picture7" "somecaption"
 put 3 "nice_picture8" "somecaption"
 put 3 "nice_picture10" "somecaption"
-
 stop

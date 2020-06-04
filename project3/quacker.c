@@ -692,11 +692,11 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 
 
 	size_t bufsize = 1000; 
-	//char * pub_line_buffer;
+	char * pub_line_buffer;
 
 
 	pthread_mutex_lock(&malloc_mutex);
-	//line_buffer = (char *)malloc( bufsize * sizeof(char));
+	pub_line_buffer = (char *)malloc( bufsize * sizeof(char));
 	FILE *fp ;
 	fp = fopen(command_file, "r");
 	pthread_mutex_unlock(&malloc_mutex);
@@ -711,7 +711,7 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 
 
 	while(continue_parsing){
-		num_characters = getline(&line_buffer, &bufsize, fp);
+		num_characters = getline(&pub_line_buffer, &bufsize, fp);
 
 
 		if (num_characters == -1){
@@ -719,19 +719,19 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 		}
 
 		//printf("FROM PUB %s\n",line_buffer);
-		if (line_buffer[num_characters-1] == '\n'){
-				line_buffer[num_characters-1] = '\0';
+		if (pub_line_buffer[num_characters-1] == '\n'){
+				pub_line_buffer[num_characters-1] = '\0';
 				num_characters -= 1;
 		}
 
-		//printf("the line: ", line_buffer, num_characters);
-		//printf("%s\n", line_buffer);
+		printf("the line: ", pub_line_buffer, num_characters);
+		//printf("%s\n", pub_line_buffer);
 
 		char* tokens[2048];
 
 		char *token;
 
-		token = (char *) strtok_r(line_buffer, " ", &line_buffer);
+		token = (char *) strtok_r(pub_line_buffer, " ", &pub_line_buffer);
 
 		int token_counter = 0;
 
@@ -740,7 +740,7 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 		//gather tokens below
 		while(token != NULL){
 			//printf("T%d: %s\n", token_counter, token);
-			token = (char *) strtok_r(NULL, " ",&line_buffer);
+			token = (char *) strtok_r(NULL, " ",&pub_line_buffer);
 			token_counter += 1; 
 			tokens[token_counter]= token;
 		}
@@ -781,7 +781,7 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
     		nanosleep(&ts, &ts);
     		printf("JUST sleped!!!!!!\n");
     	}
-    	printf("GETS HERE 1111\n");
+    	printf("GETS HERE 1111 %s \n", command_file);
 			/*
 		for (int i = 0; i< token_counter; i++){
 			printf(tokens[i]);
@@ -805,8 +805,7 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 
 	}
 	pthread_mutex_lock(&free_mutex);
-	//free(pub_line_buffer);
-	
+	free(pub_line_buffer);
 
 	fclose(fp);
 	pthread_mutex_unlock(&free_mutex);
@@ -1072,11 +1071,11 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 
 
 	size_t bufsize = 1000; 
-	//char * pub_line_buffer;
+	char * sub_line_buffer;
 
 
 	pthread_mutex_lock(&malloc_mutex);
-	//line_buffer = (char *)malloc( bufsize * sizeof(char));
+	sub_line_buffer= (char *)malloc( bufsize * sizeof(char));
 	FILE *fp ;
 	fp = fopen(command_file, "r");
 	pthread_mutex_unlock(&malloc_mutex);
@@ -1087,7 +1086,7 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 
 
 	while(continue_parsing){
-		num_characters = getline(&line_buffer, &bufsize, fp);
+		num_characters = getline(&sub_line_buffer, &bufsize, fp);
 
 
 		if (num_characters == -1){
@@ -1095,8 +1094,8 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 		}
 
 		//printf("FROM PUB %s\n",line_buffer);
-		if (line_buffer[num_characters-1] == '\n'){
-				line_buffer[num_characters-1] = '\0';
+		if (sub_line_buffer[num_characters-1] == '\n'){
+				sub_line_buffer[num_characters-1] = '\0';
 				num_characters -= 1;
 		}
 
@@ -1107,7 +1106,7 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 
 		char *token;
 
-		token = (char *) strtok_r(line_buffer, " ", &line_buffer);
+		token = (char *) strtok_r(sub_line_buffer, " ", &sub_line_buffer);
 
 		int token_counter = 0;
 
@@ -1116,7 +1115,7 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 		//gather tokens below
 		while(token != NULL){
 			//printf("T%d: %s\n", token_counter, token);
-			token = (char *) strtok_r(NULL, " ",&line_buffer);
+			token = (char *) strtok_r(NULL, " ",&sub_line_buffer);
 			token_counter += 1; 
 			tokens[token_counter]= token;
 		}
@@ -1179,7 +1178,7 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 	}
 	//printf("GOTTTT HERRRRREE\n");
 	pthread_mutex_lock(&free_mutex);
-	//free(pub_line_buffer);
+	free(sub_line_buffer);
 	fclose(fp);
 	pthread_mutex_unlock(&free_mutex);
 
