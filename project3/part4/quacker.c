@@ -384,7 +384,8 @@ int getEntry(int lastEntry, struct topicEntry *a_topic_entry, int topic_id){
 	*/
 	//printf("CALLING getEntry\n");
 	pthread_mutex_lock(&topic_queue_mutexes[topic_id]);
-	struct topic_queue * specific_queue = &topic_queues[topic_id];
+	struct topic_queue * specific_queue = NULL;
+	specific_queue = &topic_queues[topic_id];
 
 	if (specific_queue->count < 0){
 		printf("ERROR \n");
@@ -677,6 +678,7 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 			}
 		}
 		*/
+
 	struct timespec ts;
 
 	struct topicEntry pub_vessel_for_enqueue;
@@ -756,10 +758,11 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 				//printf("%s\n",tokens[3] );
 			//pub_vessel_for_enqueue.photoURL
 			//pub_vessel_for_enqueue.photoCaption
+			printf("Proxy thread %d - type: Publisher - Executed command: put\n",my_arguments->id);
 			strcpy(pub_vessel_for_enqueue.photoURL, tokens[2]);
 
 			strcpy(pub_vessel_for_enqueue.photoCaption, tokens[3]);
-			atoi(tokens[1]);
+			//atoi(tokens[1]);
 			int success = 0;
 			while(!success){
 				//pthread_mutex_lock(&topic_queue_mutexes[atoi(tokens[1])]);
@@ -779,9 +782,8 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 		if (strcmp(tokens[0],sleep_string) == 0){
 			ts.tv_sec = atoi(tokens[1]) / 1000;
     		ts.tv_nsec = (atoi(tokens[1]) % 1000) * 1000000;
-    		printf("calling sleep!!!!!!\n");
+    		printf("Proxy thread %d - type: Publisher - Executed command: sleep\n",my_arguments->id);
     		nanosleep(&ts, &ts);
-    		printf("JUST sleped!!!!!!\n");
     	}
     	//printf("GETS HERE 1111 %s \n", command_file);
 			/*
@@ -1129,6 +1131,7 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 		//printf("%s\n",tokens[0]);
 
 		if (strcmp(tokens[0],get_string) == 0){
+			printf("Proxy thread %d - type: Subscriber - Executed command: get\n",my_arguments->id);
 			//printf("here now\n");
 				//printf("HALLEUEYA %s\n",tokens[0] );
 				//printf("%d\n",atoi(tokens[1]) );
@@ -1156,9 +1159,8 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 		if (strcmp(tokens[0],sleep_string) == 0){
 			ts.tv_sec = atoi(tokens[1]) / 1000;
     		ts.tv_nsec = (atoi(tokens[1]) % 1000) * 1000000;
-    		printf("sub calling sleep!!!!!!\n");
+			printf("Proxy thread %d - type: Subscriber - Executed command: sleep\n",my_arguments->id);
     		nanosleep(&ts, &ts);
-    		printf("sub JUST slept!!!!!!\n");
     	}
 			/*
 		for (int i = 0; i< token_counter; i++){
@@ -1240,14 +1242,14 @@ struct threadargs* my_arguments = (struct threadargs *)params;
 ////// BEGIN ClEANUP THREAD FUNCTION //////////////////////////////////////////
 
 void * cleanup_thread_function(void * params){
-	int number_entried_dequeue;
+	//int number_entried_dequeue;
 	UNUSED(params);
 	while(!DONE){ 
 		printf("Calling Cleanup\n");
 		//sleep(2);
 		sleep(1);
 		for (int i=0; i<MAXTOPICS; i++) {
-			number_entried_dequeue = 0;
+			//number_entried_dequeue = 0;
 			pthread_mutex_lock(&topic_queue_mutexes[i]);
 			/// determine how many to dequeue ///
 			/*

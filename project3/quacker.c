@@ -1036,7 +1036,7 @@ void handle_subscriber_test_3(char *command_file, struct threadargs* my_argument
 ////// BEGIN SUBSCRIBER Handler FUNCTION ////////////////////////////////////////
 
 void handle_subscriber(char* command_file, struct threadargs* my_arguments){
-	UNUSED(my_arguments);
+	
 	/*
 	printf("Handler being called %s\n", command_file);
 	printf("SUB Handler being called %s\n", command_file);
@@ -1052,6 +1052,24 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 		handle_subscriber_test_3(command_file,my_arguments);
 	}
 	*/
+	char dest[100];
+	char src[100];
+
+  	strcpy(src, ".html");
+  	strcpy(dest, command_file);
+
+  	strcat(dest, src);
+
+  	FILE * htmlfp;
+
+	htmlfp = fopen(dest, "w+");
+
+	fputs(top_of_html, htmlfp);
+	fputs("\n", htmlfp);
+	fputs(style_of_html, htmlfp);
+	fputs("\n", htmlfp);
+	fputs(bottom_of_html, htmlfp);
+	fputs("\n", htmlfp);
 
 	int last_entries[MAXENTRIES];
 
