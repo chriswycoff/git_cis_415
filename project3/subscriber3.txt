@@ -14,4 +14,8 @@ get 3
 get 1
 get 3
 sleep 500
+sleep 900
+get 4
+get 4
+get 4
 stop

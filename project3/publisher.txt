@@ -2,9 +2,12 @@ put 1 "someurl" "somecaption"
 sleep 100
 put 2 "someurl2" "somecaption"
 put 2 "someurl3" "somecaption"
-sleep 100
+sleep 10000
 put 3 "someurl4" "somecaption"
 put 3 "someurl5" "somecaption"
+put 3 "wow.img" "wow"
+put 3 "arighty.png" "okay_dokey"
 put 3 "someurl6" "somecaption"
+put 5 "finalimage.img" "finaly_got_here"
 sleep 100
 stop

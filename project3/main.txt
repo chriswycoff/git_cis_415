@@ -11,8 +11,13 @@ query publishers
 add subscriber "subscriber.txt"
 add subscriber "subscriber.txt"
 add subscriber "subscriber.txt"
+add publisher "publisher.txt"
+add publisher "publisher.txt"
+create topic 5 "topic 5" 1
+query topics
+query publishers
 add subscriber "subscriber2.txt"
 add subscriber "subscriber3.txt"
 query subscribers
-delta 5
+delta 9
 start

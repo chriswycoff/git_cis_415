@@ -703,8 +703,6 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 
 	
 
-	
-
 	if (fp == NULL){
 		printf("dint work\n");
 		}
@@ -724,7 +722,7 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 				num_characters -= 1;
 		}
 
-		printf("the line: ", pub_line_buffer, num_characters);
+		//printf("the line: ", pub_line_buffer, num_characters);
 		//printf("%s\n", pub_line_buffer);
 
 		char* tokens[2048];
@@ -781,7 +779,7 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
     		nanosleep(&ts, &ts);
     		printf("JUST sleped!!!!!!\n");
     	}
-    	printf("GETS HERE 1111 %s \n", command_file);
+    	//printf("GETS HERE 1111 %s \n", command_file);
 			/*
 		for (int i = 0; i< token_counter; i++){
 			printf(tokens[i]);
@@ -806,7 +804,6 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 	}
 	pthread_mutex_lock(&free_mutex);
 	free(pub_line_buffer);
-
 	fclose(fp);
 	pthread_mutex_unlock(&free_mutex);
 
@@ -1172,8 +1169,6 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 		if (incase_counter > 30){
 			break;
 		}
-
-		
 
 	}
 	//printf("GOTTTT HERRRRREE\n");
