@@ -677,7 +677,6 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 			}
 		}
 		*/
-
 	struct timespec ts;
 
 	struct topicEntry pub_vessel_for_enqueue;
@@ -757,7 +756,6 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 				//printf("%s\n",tokens[3] );
 			//pub_vessel_for_enqueue.photoURL
 			//pub_vessel_for_enqueue.photoCaption
-			printf("Proxy thread %d - type: Publisher - Executed command: put\n",my_arguments->id);
 			strcpy(pub_vessel_for_enqueue.photoURL, tokens[2]);
 
 			strcpy(pub_vessel_for_enqueue.photoCaption, tokens[3]);
@@ -781,8 +779,9 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 		if (strcmp(tokens[0],sleep_string) == 0){
 			ts.tv_sec = atoi(tokens[1]) / 1000;
     		ts.tv_nsec = (atoi(tokens[1]) % 1000) * 1000000;
-    		printf("Proxy thread %d - type: Publisher - Executed command: sleep\n",my_arguments->id);
+    		printf("calling sleep!!!!!!\n");
     		nanosleep(&ts, &ts);
+    		printf("JUST sleped!!!!!!\n");
     	}
     	//printf("GETS HERE 1111 %s \n", command_file);
 			/*
