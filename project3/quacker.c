@@ -693,10 +693,12 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 
 	size_t bufsize = 1000; 
 	char * pub_line_buffer;
+	char * pub_original_line;
 
 
 	pthread_mutex_lock(&malloc_mutex);
 	pub_line_buffer = (char *)malloc( bufsize * sizeof(char));
+	pub_original_line= pub_line_buffer;
 	FILE *fpp ;
 	fpp = fopen(command_file, "r");
 	pthread_mutex_unlock(&malloc_mutex);
@@ -803,7 +805,7 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 
 	}
 	pthread_mutex_lock(&free_mutex);
-	free(pub_line_buffer);
+	free(pub_original_line);
 	fclose(fpp);
 	pthread_mutex_unlock(&free_mutex);
 
@@ -1069,10 +1071,12 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 
 	size_t bufsize = 1000; 
 	char * sub_line_buffer;
+	char * sub_original_line;
 
 
 	pthread_mutex_lock(&malloc_mutex);
 	sub_line_buffer= (char *)malloc( bufsize * sizeof(char));
+	sub_original_line = sub_line_buffer;
 	FILE *fps ;
 	fps = fopen(command_file, "r");
 	pthread_mutex_unlock(&malloc_mutex);
@@ -1173,7 +1177,7 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 	}
 	//printf("GOTTTT HERRRRREE\n");
 	pthread_mutex_lock(&free_mutex);
-	free(sub_line_buffer);
+	free(sub_original_line);
 	fclose(fps);
 	pthread_mutex_unlock(&free_mutex);
 
