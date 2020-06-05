@@ -697,19 +697,19 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 
 	pthread_mutex_lock(&malloc_mutex);
 	pub_line_buffer = (char *)malloc( bufsize * sizeof(char));
-	FILE *fp ;
-	fp = fopen(command_file, "r");
+	FILE *fpp ;
+	fpp = fopen(command_file, "r");
 	pthread_mutex_unlock(&malloc_mutex);
 
 	
 
-	if (fp == NULL){
+	if (fpp == NULL){
 		printf("dint work\n");
 		}
 
 
 	while(continue_parsing){
-		num_characters = getline(&pub_line_buffer, &bufsize, fp);
+		num_characters = getline(&pub_line_buffer, &bufsize, fpp);
 
 
 		if (num_characters == -1){
@@ -795,7 +795,7 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 
 		incase_counter+=1;
 
-		if (incase_counter > 30){
+		if (incase_counter > 2000){
 			break;
 		}
 
@@ -804,7 +804,7 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 	}
 	pthread_mutex_lock(&free_mutex);
 	free(pub_line_buffer);
-	fclose(fp);
+	fclose(fpp);
 	pthread_mutex_unlock(&free_mutex);
 
 }
@@ -1073,17 +1073,17 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 
 	pthread_mutex_lock(&malloc_mutex);
 	sub_line_buffer= (char *)malloc( bufsize * sizeof(char));
-	FILE *fp ;
-	fp = fopen(command_file, "r");
+	FILE *fps ;
+	fps = fopen(command_file, "r");
 	pthread_mutex_unlock(&malloc_mutex);
 
-	if (fp == NULL){
+	if (fps == NULL){
 		printf("dint work\n");
 		}
 
 
 	while(continue_parsing){
-		num_characters = getline(&sub_line_buffer, &bufsize, fp);
+		num_characters = getline(&sub_line_buffer, &bufsize, fps);
 
 
 		if (num_characters == -1){
@@ -1166,7 +1166,7 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 
 		incase_counter+=1;
 
-		if (incase_counter > 30){
+		if (incase_counter > 2000){
 			break;
 		}
 
@@ -1174,7 +1174,7 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 	//printf("GOTTTT HERRRRREE\n");
 	pthread_mutex_lock(&free_mutex);
 	free(sub_line_buffer);
-	fclose(fp);
+	fclose(fps);
 	pthread_mutex_unlock(&free_mutex);
 
 	
@@ -1498,7 +1498,7 @@ while(continue_parsing){
 
 	incase_counter+=1;
 
-	if (incase_counter > 30){
+	if (incase_counter > 2000){
 		break;
 	}
 
