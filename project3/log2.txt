@@ -1,0 +1,213 @@
+HELLO WORLD My int is 1
+Calling Cleanup
+Main SERVER Unlocking
+PUB Handler being called command_file1.txt
+PUB Handler TEST 1 called!!!!! from thread: 4
+using : command_file1.txt
+PUB Handler being called command_file2.txt
+PUB Handler TEST 2 called!!!!! from thread: 5
+using : command_file2.txt
+PUB Handler being called command_file3.txt
+PUB Handler being called command_file1.txt
+PUB Handler being called command_file2.txt
+PUB Handler TEST 1 called!!!!! from thread: 8
+using : command_file2.txt
+PUB Handler being called command_file3.txt
+PUB Handler being called command_file1.txt
+PUB Handler TEST 2 called!!!!! from thread: 5
+using : command_file1.txt
+PUB Handler being called command_file2.txt
+PUB Handler TEST 3 called!!!!! from thread: 6
+using : command_file2.txt
+FINALLY ABLE TO ENQUEUE THIIS HERE
+PUB Handler being called command_file3.txt
+PUB Handler TEST 1 called!!!!! from thread: 4
+using : command_file3.txt
+PUB Handler being called command_file1.txt
+PUB Handler being called command_file2.txt
+PUB Handler being called command_file3.txt
+PUB Handler TEST 1 called!!!!! from thread: 8
+using : command_file3.txt
+PUB Handler being called command_file1.txt
+Entry: 1 is 0 seconds old
+Entry: 2 is 0 seconds old
+Entry: 3 is 0 seconds old
+Entry: 4 is 0 seconds old
+PUB Handler being called command_file2.txt
+Entry: 1 is 0 seconds old
+Entry: 2 is 0 seconds old
+Entry: 3 is 0 seconds old
+Entry: 4 is 0 seconds old
+Entry: 5 is 0 seconds old
+Entry: 6 is 0 seconds old
+Entry: 7 is 0 seconds old
+Calling Cleanup
+Main SERVER Unlocking
+Main SERVER Unlocking
+Grabbed sub command: command_file1.txt
+Handler being called command_file1.txt
+SUB Handler being called command_file1.txt
+Grabbed sub command: command_file2.txt
+Handler being called command_file2.txt
+SUB Handler being called command_file2.txt
+SUB Handler TEST 1 called!!!!! from thread: 4
+using : command_file2.txt
+Grabbed sub command: command_file3.txt
+Handler being called command_file3.txt
+SUB Handler being called command_file3.txt
+SUB Handler TEST 2 called!!!!! from thread: 5
+using : command_file3.txt
+GOT THIS:picture from the vessel 2 FROM ENTRY: 2 
+PUB Handler being called command_file3.txt
+PUB Handler TEST 2 called!!!!! from thread: 5
+using : command_file3.txt
+PUB Handler being called command_file1.txt
+PUB Handler TEST 1 called!!!!! from thread: 4
+using : command_file1.txt
+PUB Handler being called command_file2.txt
+PUB Handler being called command_file3.txt
+Grabbed sub command: command_file1.txt
+Handler being called command_file1.txt
+SUB Handler being called command_file1.txt
+Grabbed sub command: command_file2.txt
+Handler being called command_file2.txt
+SUB Handler being called command_file2.txt
+Grabbed sub command: command_file3.txt
+Handler being called command_file3.txt
+SUB Handler being called command_file3.txt
+SUB Handler TEST 1 called!!!!! from thread: 8
+using : command_file3.txt
+PUB Handler being called command_file1.txt
+PUB Handler TEST 1 called!!!!! from thread: 8
+using : command_file1.txt
+PUB Handler being called command_file2.txt
+Grabbed sub command: command_file1.txt
+Handler being called command_file1.txt
+SUB Handler being called command_file1.txt
+SUB Handler TEST 1 called!!!!! from thread: 0
+using : command_file1.txt
+Grabbed sub command: command_file2.txt
+Handler being called command_file2.txt
+SUB Handler being called command_file2.txt
+Grabbed sub command: command_file3.txt
+Handler being called command_file3.txt
+SUB Handler being called command_file3.txt
+Grabbed sub command: command_file1.txt
+Handler being called command_file1.txt
+SUB Handler being called command_file1.txt
+SUB Handler TEST 2 called!!!!! from thread: 5
+using : command_file1.txt
+GOT THIS:picture from the vessel 2 FROM ENTRY: 2 
+Entry: 1 is 1 seconds old
+Entry: 2 is 1 seconds old
+Entry: 3 is 1 seconds old
+Entry: 4 is 1 seconds old
+Entry: 5 is 0 seconds old
+Entry: 6 is 0 seconds old
+Entry: 1 is 1 seconds old
+Entry: 2 is 1 seconds old
+Entry: 3 is 1 seconds old
+Entry: 4 is 1 seconds old
+Entry: 5 is 1 seconds old
+Entry: 6 is 1 seconds old
+Entry: 7 is 1 seconds old
+Entry: 8 is 0 seconds old
+Calling Cleanup
+Entry: 1 is 2 seconds old
+Entry: 2 is 2 seconds old
+Entry: 3 is 2 seconds old
+Entry: 4 is 2 seconds old
+Entry: 5 is 1 seconds old
+Entry: 6 is 1 seconds old
+Entry: 1 is 2 seconds old
+Entry: 2 is 2 seconds old
+Entry: 3 is 2 seconds old
+Entry: 4 is 2 seconds old
+Entry: 5 is 2 seconds old
+Entry: 6 is 2 seconds old
+Entry: 7 is 2 seconds old
+Entry: 8 is 1 seconds old
+Calling Cleanup
+Entry: 1 is 3 seconds old
+Entry: 2 is 3 seconds old
+Entry: 3 is 3 seconds old
+Entry: 4 is 3 seconds old
+Entry: 5 is 2 seconds old
+Entry: 6 is 2 seconds old
+Entry: 1 is 3 seconds old
+Entry: 2 is 3 seconds old
+Entry: 3 is 3 seconds old
+Entry: 4 is 3 seconds old
+Entry: 5 is 3 seconds old
+Entry: 6 is 3 seconds old
+Entry: 7 is 3 seconds old
+Entry: 8 is 2 seconds old
+Calling Cleanup
+Entry: 1 is 4 seconds old
+Cleanup dequing
+Calling dequeue
+Entry: 2 is 4 seconds old
+Cleanup dequing
+Calling dequeue
+Entry: 3 is 4 seconds old
+Cleanup dequing
+Calling dequeue
+Entry: 4 is 4 seconds old
+Cleanup dequing
+Calling dequeue
+Entry: 5 is 3 seconds old
+Entry: 6 is 3 seconds old
+Entry: 1 is 4 seconds old
+Cleanup dequing
+Calling dequeue
+Entry: 2 is 4 seconds old
+Cleanup dequing
+Calling dequeue
+Entry: 3 is 4 seconds old
+Cleanup dequing
+Calling dequeue
+Entry: 4 is 4 seconds old
+Cleanup dequing
+Calling dequeue
+Entry: 5 is 4 seconds old
+Cleanup dequing
+Calling dequeue
+Entry: 6 is 4 seconds old
+Cleanup dequing
+Calling dequeue
+Entry: 7 is 4 seconds old
+Cleanup dequing
+Calling dequeue
+Entry: 8 is 3 seconds old
+Calling Cleanup
+Entry: 5 is 4 seconds old
+Cleanup dequing
+Calling dequeue
+Entry: 6 is 4 seconds old
+Cleanup dequing
+Calling dequeue
+Entry: 8 is 4 seconds old
+Cleanup dequing
+Calling dequeue
+Calling Cleanup
+Calling Cleanup
+Calling Cleanup
+Calling Cleanup
+Calling Cleanup
+Calling Cleanup
+Calling Cleanup
+Calling Cleanup
+Calling Cleanup
+GOT THIS:BEFORE FROM ENTRY: 1748591440 
+GOT THIS:BEFORE FROM ENTRY: 1748591456 
+GOT THIS:BEFORE FROM ENTRY: 1748591424 
+SUB Handler TEST 2 called!!!!! from thread: 0
+using : command_file1.txt
+GOT THIS:BEFORE FROM ENTRY: 1748591424 
+SUB Handler TEST 3 called!!!!! from thread: 0
+using : command_file1.txt
+GOT THIS:BEFORE FROM ENTRY: 1748591424 
+GOT THIS:BEFORE FROM ENTRY: 1748591424 
+GOT TO FINAL GET ENTRY3
+GOT THIS:BEFORE FROM ENTRY: 1748591424 
+times_executed: 56705146
