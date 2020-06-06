@@ -6,7 +6,6 @@ put 2 "lecture" "sofun"
 sleep 10000
 put 3 "project" "realgreat"
 put 3 "sunlight" "vitamind"
-sleep 10000
 put 3 "wow.img" "wow"
 put 3 "arighty.png" "okay_dokey"
 put 3 "someurl6" "somecaption"

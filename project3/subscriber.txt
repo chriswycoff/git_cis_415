@@ -9,8 +9,6 @@ get 5
 get 3
 sleep 500
 get 5
-get 1
-sleep 5000
 get 5
 get 1
 get 3
