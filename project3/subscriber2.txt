@@ -1,10 +1,10 @@
+sleep 1000
 get 2
 sleep 1000
 get 1
 get 2
 sleep 3000
 get 3
-sleep 15000
 get 4
 get 1
 get 3
