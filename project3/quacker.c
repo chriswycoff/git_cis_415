@@ -242,6 +242,7 @@ int i; //, j, k;
 		topic_queues[i].head = 0;	// head index
 		topic_queues[i].tail = 0;	// tail index
 		topic_queues[i].entries = (struct topicEntry *) malloc(sizeof(struct topicEntry) * MAXENTRIES);
+		topic_queues[i].entries[i].entryNum = -1;
 	}
 
 	// create the buffer semaphores
