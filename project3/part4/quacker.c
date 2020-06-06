@@ -1931,7 +1931,7 @@ sleep(1);
 
 	// logic to finish the program
 	for(int i = 0; i < 100; i++){
-		if (number_of_file_issued_commands > 0){
+		if (number_of_file_issued_commands <= 0){
 		DONE = 1;
 		}
 		sleep(1);

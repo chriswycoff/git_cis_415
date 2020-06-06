@@ -1410,10 +1410,11 @@ void * cleanup_thread_function(void * params){
 						gettimeofday(&cleanup_time_stamp, NULL); 
 						//printf("time here %ld \n",cleanup_time_stamp.tv_sec);
 						int how_old_in_seconds = cleanup_time_stamp.tv_sec - specific_queue->entries[index].timestamp.tv_sec;
-						printf("Entry: %d is %d seconds old\n", specific_queue->entries[index].entryNum, how_old_in_seconds);
+						//printf("Entry: %d is %d seconds old\n", specific_queue->entries[index].entryNum, how_old_in_seconds);
 						// for reference int dequeue(struct topic_queue * a_topic_queue)
 						if (how_old_in_seconds >= THE_DELTA){
 							printf("Cleanup dequing\n");
+							printf("Entry: %d is %d seconds old\n", specific_queue->entries[index].entryNum, how_old_in_seconds);
 							dequeue(specific_queue);
 
 						}
@@ -1462,7 +1463,7 @@ void * cleanup_thread_function(void * params){
 		}
 	}
 
-
+	printf("CLEANUP DONE\n");
 	return NULL;
 }
 
@@ -2049,7 +2050,8 @@ sleep(1);
 
 	// logic to finish the program
 	for(int i = 0; i < 100; i++){
-		if (number_of_file_issued_commands > 0){
+		if (number_of_file_issued_commands <= 0){
+			printf("THINKING THAT IM DONE\n");
 		DONE = 1;
 		}
 		sleep(1);

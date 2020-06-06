@@ -1,11 +1,18 @@
-sleep 1000
+sleep 2000
 get 1
 sleep 1000
 get 2
 get 2
 sleep 500
 get 3
+get 5
 get 3
+sleep 500
+get 5
+get 1
+sleep 5000
+get 5
+get 1
 get 3
 sleep 500
 stop
