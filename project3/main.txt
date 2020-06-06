@@ -9,8 +9,6 @@ query publishers
 add publisher "publisher2.txt"
 query publishers
 add subscriber "subscriber.txt"
-add subscriber "subscriber.txt"
-add subscriber "subscriber.txt"
 add publisher "publisher.txt"
 add publisher "publisher.txt"
 create topic 5 "topic5" 1

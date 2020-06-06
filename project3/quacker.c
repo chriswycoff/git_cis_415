@@ -54,12 +54,17 @@ volatile int number_of_file_issued_commands = 0;
 /*---------------------------------------------------------------------------*/
 // START HTML STUFF //
 
-char top_of_html[200] = "<!DOCTYPE html><html><head><meta http-equiv=\"refresh\" content=\".1\">";
+char top_of_html[200] = "<!DOCTYPE html><html><head><meta http-equiv=\"refresh\" content=\"3\">";
 
 char style_of_html[300] = "<style>table, th, td {border: 1px solid black;border-collapse: collapse;}th,td{padding: 5px;}th{text-align: left;}</style></head><body>";
 
-char bottom_of_html[200] = "HELLOWORLD</body></html>";
+char h1_html_1[300] = "<h1>Subscriber: ";
+char h1_html_2[300] = "</h1>";
 
+char bottom_of_html[200] = "</body></html>";
+
+char first_part_of_table1[200] = "<h2>Topic Name: ";
+char first_part_of_table2[200] = "</h2> <table style=\"width:100%\">";
 // END HTML STUFF //
 /*---------------------------------------------------------------------------*/
 
@@ -1052,24 +1057,56 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 		handle_subscriber_test_3(command_file,my_arguments);
 	}
 	*/
-	char dest[100];
-	char src[100];
+	int got_counter = 0;
+
+	int got_topics_ids[200];
+	char got_topics[200][200];
+	char got_urls[200][200];
+	char got_captions[200][200];
+
+
+	//strcpy(got_topics[0], "HELLO WOLRD");
+	//printf("%s\n", got_topics[0]);
+	//sleep(1);
+
+
+	char html_buffer_scan[1000];
+	int topic_ids[200];
+
+	char dest[200];
+	char src[200];
+
+	char html_file_name[200];
 
   	strcpy(src, ".html");
   	strcpy(dest, command_file);
-
   	strcat(dest, src);
+  	strcpy(html_file_name,dest);
 
   	FILE * htmlfp;
-
-	htmlfp = fopen(dest, "w+");
-
+  	FILE * readhtmlfp;
+  	/*--------------------------------- write to html -----------------------------------------------------*/
+	htmlfp = fopen(html_file_name, "w+");
 	fputs(top_of_html, htmlfp);
 	fputs("\n", htmlfp);
 	fputs(style_of_html, htmlfp);
 	fputs("\n", htmlfp);
-	fputs(bottom_of_html, htmlfp);
 	fputs("\n", htmlfp);
+	strcpy(src, command_file);
+	strcpy(dest, h1_html_1);
+	strcat(dest, src);
+	strcat(dest,h1_html_2);
+	fputs(dest, htmlfp);
+	fputs("\n", htmlfp);
+	strcpy(src, bottom_of_html);
+	fputs(src,htmlfp);
+
+	fclose(htmlfp);
+	/*--------------------------------------------------------------------------------------*/
+
+	//char h1_html_1[300] = "<h1>Subsriber:";
+	//char h1_html_2[300] = "</h1>";
+
 
 	int last_entries[MAXENTRIES];
 
@@ -1081,7 +1118,6 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 	struct timespec ts;
 
 	struct topicEntry sub_vessel_for_get_entry;
-
 	//char a_url[200];
 	//char a_caption[200];
 
@@ -1169,8 +1205,60 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 				last_entries[atoi(tokens[1])] += result;
 			}
 			if (result != 0){
-				printf("GOT THIS URL:%s OF THE TOPIC: %s FROM ENTRYNUM: %d \n", sub_vessel_for_get_entry.photoURL,topic_queues[atoi(tokens[1])].name_of_topic, sub_vessel_for_get_entry.entryNum);
+				printf("GOT THIS URL:%s OF THE TOPIC: %s FROM ENTRYNUM: %d \n",
+				sub_vessel_for_get_entry.photoURL,topic_queues[atoi(tokens[1])].name_of_topic, 
+				sub_vessel_for_get_entry.entryNum);
+
+				strcpy(got_topics[got_counter],topic_queues[atoi(tokens[1])].name_of_topic);
+				strcpy(got_urls[got_counter],topic_queues[atoi(tokens[1])].name_of_topic);
+				strcpy(got_captions[got_counter],sub_vessel_for_get_entry.photoCaption);
+				got_topics_ids[got_counter] = topic_queues[atoi(tokens[1])].topic_id;
+
+/*--------------------------------- write to html -----------------------------------------------------*/
+				htmlfp = fopen(html_file_name, "w+");
+				fputs(top_of_html, htmlfp);
+				fputs("\n", htmlfp);
+				fputs(style_of_html, htmlfp);
+				fputs("\n", htmlfp);
+				fputs("\n", htmlfp);
+				strcpy(src, command_file);
+				strcpy(dest, h1_html_1);
+				strcat(dest, src);
+				strcat(dest,h1_html_2);
+				fputs(dest, htmlfp);
+				fputs("\n", htmlfp);
+				strcpy(src, bottom_of_html);
+				fputs(src,htmlfp);
+/// end header ///
+				int first = 1;
+				for(int  i = 0; i<=got_counter; i++){
+					first = 1;
+					for(int  j = 0; j<=got_counter; j++){
+						if (got_topics_ids[j] == i){
+							if (first){
+								printf("HELLO!!!! : %d %d \n", i, got_topics_ids[j]);
+								first = 0;
+								strcpy(dest, first_part_of_table1);
+								strcpy(src, first_part_of_table2);
+								strcat(dest,got_topics[j]);
+								strcat(dest,src);
+								fputs(dest, htmlfp);
+							}
+							//else{
+
+							//}
+						}
+
+					}
+				}
+
+
+				fclose(htmlfp);
+
+/*--------------------------------------------------------------------------------------*/
+				got_counter+=1;
 			}
+
 
 		}
 		//printf("%s\n",tokens[0] );
