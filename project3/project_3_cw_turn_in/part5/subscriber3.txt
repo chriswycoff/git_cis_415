@@ -1,0 +1,18 @@
+sleep 5000
+get 2
+sleep 1000
+get 1
+get 2
+sleep 8000
+get 3
+get 1
+get 3
+get 3
+sleep 8000
+get 4
+get 2
+get 3
+get 1
+get 3
+sleep 500
+stop

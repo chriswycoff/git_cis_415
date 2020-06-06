@@ -1,0 +1,23 @@
+create topic 1 "t1" 5
+create topic 2 "t2" 10
+create topic 3 "t3" 5
+create topic 4 "a_nice_4_topic" 2
+query topics
+add publisher "publisher.txt"
+add publisher "publisher.txt"
+query publishers
+add publisher "publisher2.txt"
+query publishers
+add subscriber "subscriber.txt"
+add subscriber "subscriber.txt"
+add subscriber "subscriber.txt"
+add publisher "publisher.txt"
+add publisher "publisher.txt"
+create topic 5 "topic5" 1
+query topics
+query publishers
+add subscriber "subscriber2.txt"
+add subscriber "subscriber3.txt"
+query subscribers
+delta 9
+start
