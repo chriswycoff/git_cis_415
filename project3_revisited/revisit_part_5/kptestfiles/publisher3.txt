@@ -1,0 +1,64 @@
+sleep 500
+put 1 "URL#12" "CAPTION#12"
+sleep 200
+put 2 "URL#14" "CAPTION#14"
+sleep 4000
+put 3 "URL#15" "CAPTION#15"
+put 3 "URL#15" "CAPTION#15"
+put 3 "URL#15" "CAPTION#15"
+put 3 "URL#15" "CAPTION#15"
+put 3 "URL#15" "CAPTION#15"
+sleep 4000
+put 3 "URL#15" "CAPTION#15"
+put 3 "URL#15" "CAPTION#15"
+sleep 500
+put 1 "URL#12" "CAPTION#12"
+sleep 200
+put 2 "URL#14" "CAPTION#14"
+sleep 4000
+put 3 "URL#15" "CAPTION#15"
+put 3 "URL#15" "CAPTION#15"
+put 1 "URL#12" "CAPTION#12"
+put 3 "URL#15" "CAPTION#15"
+put 3 "URL#15" "CAPTION#15"
+sleep 500
+put 1 "URL#12" "CAPTION#12"
+sleep 200
+put 2 "URL#14" "CAPTION#14"
+put 1 "URL#12" "CAPTION#12"
+sleep 4000
+put 3 "URL#15" "CAPTION#15"
+put 3 "URL#15" "CAPTION#15"
+sleep 7000
+put 3 "URL#15" "CAPTION#15"
+sleep 4000
+put 3 "URL#15" "CAPTION#15"
+put 3 "URL#15" "CAPTION#15"
+sleep 500
+put 1 "URL#12" "CAPTION#12"
+sleep 1200
+put 2 "URL#14" "CAPTION#14"
+put 1 "URL#12" "CAPTION#12"
+put 3 "URL#17" "CAPTION#17"
+sleep 4000
+put 3 "URL#15" "CAPTION#15"
+put 3 "URL#15" "CAPTION#15"
+sleep 4000
+put 3 "URL#15" "CAPTION#15"
+put 3 "URL#15" "CAPTION#15"
+sleep 7000
+put 3 "URL#15" "CAPTION#15"
+sleep 4000
+put 3 "URL#15" "CAPTION#15"
+put 3 "URL#15" "CAPTION#15"
+put 3 "URL#17" "CAPTION#17"
+sleep 4000
+put 3 "URL#15" "CAPTION#15"
+put 3 "URL#15" "CAPTION#15"
+sleep 7000
+put 3 "URL#15" "CAPTION#15"
+sleep 4000
+sleep 7000
+put 3 "URL#15" "CAPTION#15"
+sleep 4000
+stop
