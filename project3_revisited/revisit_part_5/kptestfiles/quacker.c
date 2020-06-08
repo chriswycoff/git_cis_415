@@ -1303,7 +1303,7 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 	}
 	//printf("GOTTTT HERRRRREE\n");
 	pthread_mutex_lock(&free_mutex);
-	free(sub_original_line);
+	//free(sub_original_line);
 	fclose(fps);
 	number_of_file_issued_commands -= 1;
 	pthread_mutex_unlock(&free_mutex);
