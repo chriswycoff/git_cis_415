@@ -1,0 +1,69 @@
+put 1 "URL#6.5" "CAPTION#6.5"
+put 2 "URL#7" "CAPTION#7"
+sleep 2300
+put 2 "URL#8" "CAPTION#8"
+sleep 2000
+put 3 "URL#9" "CAPTION#9"
+put 3 "URL#10" "CAPTION#10"
+sleep 8000
+put 3 "URL#11" "CAPTION#11"
+put 1 "URL#6.5" "CAPTION#6.5"
+put 2 "URL#7" "CAPTION#7"
+sleep 2300
+put 2 "URL#8" "CAPTION#8"
+sleep 2000
+put 3 "URL#9" "CAPTION#9"
+put 3 "URL#10" "CAPTION#10"
+sleep 2300
+put 1 "URL#6.5" "CAPTION#6.5"
+put 2 "URL#7" "CAPTION#7"
+sleep 2300
+put 1 "URL#6.5" "CAPTION#6.5"
+put 2 "URL#7" "CAPTION#7"
+put 2 "URL#8" "CAPTION#8"
+sleep 2000
+put 3 "URL#9" "CAPTION#9"
+sleep 8000
+put 3 "URL#11" "CAPTION#11"
+put 2 "URL#7" "CAPTION#7"
+sleep 2300
+put 2 "URL#8" "CAPTION#8"
+put 3 "URL#9" "CAPTION#9"
+put 3 "URL#10" "CAPTION#10"
+sleep 8000
+put 3 "URL#11" "CAPTION#11"
+put 1 "URL#6.5" "CAPTION#6.5"
+put 2 "URL#7" "CAPTION#7"
+sleep 2300
+put 2 "URL#8" "CAPTION#8"
+sleep 2000
+put 3 "URL#9" "CAPTION#9"
+put 3 "URL#10" "CAPTION#10"
+sleep 8000
+put 3 "URL#11" "CAPTION#11"
+put 1 "URL#6.5" "CAPTION#6.5"
+put 2 "URL#7" "CAPTION#7"
+sleep 2300
+put 2 "URL#8" "CAPTION#8"
+sleep 2000
+put 3 "URL#9" "CAPTION#9"
+put 3 "URL#10" "CAPTION#10"
+sleep 2300
+put 1 "URL#6.5" "CAPTION#6.5"
+put 2 "URL#7" "CAPTION#7"
+sleep 2300
+put 1 "URL#6.5" "CAPTION#6.5"
+put 2 "URL#7" "CAPTION#7"
+put 2 "URL#8" "CAPTION#8"
+sleep 2000
+put 3 "URL#9" "CAPTION#9"
+sleep 8000
+put 3 "URL#11" "CAPTION#11"
+put 2 "URL#7" "CAPTION#7"
+sleep 2300
+put 2 "URL#8" "CAPTION#8"
+put 3 "URL#9" "CAPTION#9"
+put 3 "URL#10" "CAPTION#10"
+sleep 8000
+put 3 "URL#11" "CAPTION#11"
+stop

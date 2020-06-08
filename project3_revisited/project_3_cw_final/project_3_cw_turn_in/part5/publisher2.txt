@@ -1,0 +1,23 @@
+put 1 "helloworld.jpg" "wow is this is?"
+sleep 1000
+put 2 "thankyou" "please"
+put 2 "youarewelcome" "gracious"
+put 4 "nice_picture_for_four" "fantastci"
+put 4 "another_four_picture" "great"
+sleep 3000
+put 3 "chocolate" "yum!!"
+put 3 "chris" "yum!!"
+put 1 "birdie" "barkbark"
+put 3 "nice_picture4" "somecaption"
+put 2 "nice_picture5" "somecaption"
+put 3 "garden" "green!"
+put 4 "nice_picture7" "somecaption"
+sleep 1000
+put 3 "nice_picture8" "somecaption"
+sleep 2000
+put 1 "cool_breese" "easy_breasey"
+put 3 "nice_picture10" "somecaption"
+sleep 2000
+put 2 "beach" "waves"
+put 1 "skynight" "star"
+stop
