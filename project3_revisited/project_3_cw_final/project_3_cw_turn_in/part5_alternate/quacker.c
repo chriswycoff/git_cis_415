@@ -743,8 +743,8 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 		//printf("the line: ", pub_line_buffer, num_characters);
 		//printf("%s\n", pub_line_buffer);
 
-		char* tokens[2048];
-
+	char tokens[200][200];
+		/*
 		char *token;
 
 		token = (char *) strtok_r(pub_line_buffer, " ", &pub_line_buffer);
@@ -762,6 +762,22 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 		}
 		
 		//printf("%s\n",tokens[0]);
+	*/
+
+	int digit_1;
+
+	if(pub_line_buffer[0] == 'p'){
+	sscanf(pub_line_buffer, "%s %d %s %s", tokens[0], &digit_1, tokens[1], tokens[2]);
+	}
+
+
+	if(pub_line_buffer[0] == 's'){
+	sscanf(pub_line_buffer, "%s %d",tokens[0], &digit_1);
+	}
+
+	printf("HEREEE !: %s\n", tokens[0]);
+	printf("the line: %s \n", pub_line_buffer);
+
 
 		if (strcmp(tokens[0],put_string) == 0){
 				//printf("HALLEUEYA %s\n",tokens[0] );
@@ -771,14 +787,14 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 			//pub_vessel_for_enqueue.photoURL
 			//pub_vessel_for_enqueue.photoCaption
 			printf("Proxy thread %d - type: Publisher - Executed command: put\n",my_arguments->id);
-			strcpy(pub_vessel_for_enqueue.photoURL, tokens[2]);
+			strcpy(pub_vessel_for_enqueue.photoURL, tokens[1]);
 
-			strcpy(pub_vessel_for_enqueue.photoCaption, tokens[3]);
+			strcpy(pub_vessel_for_enqueue.photoCaption, tokens[2]);
 			//atoi(tokens[1]);
 			int success = 0;
 			while(!success){
 				//pthread_mutex_lock(&topic_queue_mutexes[atoi(tokens[1])]);
-				success = enqueue(&pub_vessel_for_enqueue, &topic_queues[atoi(tokens[1])]);
+				success = enqueue(&pub_vessel_for_enqueue, &topic_queues[digit_1]);
 				//pthread_mutex_unlock(&topic_queue_mutexes[atoi(tokens[1])]);
 				if (success == 0){
 					sched_yield();
@@ -792,8 +808,8 @@ void handle_publisher(char *command_file, struct threadargs* my_arguments){
 		}
 		//printf("%s\n",tokens[0] );
 		if (strcmp(tokens[0],sleep_string) == 0){
-			ts.tv_sec = atoi(tokens[1]) / 1000;
-    		ts.tv_nsec = (atoi(tokens[1]) % 1000) * 1000000;
+			ts.tv_sec = digit_1 / 1000;
+    		ts.tv_nsec = (digit_1 % 1000) * 1000000;
     		printf("Proxy thread %d - type: Publisher - Executed command: sleep\n",my_arguments->id);
     		nanosleep(&ts, &ts);
     	}
@@ -1163,8 +1179,9 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 		//printf("the line: ", line_buffer, num_characters);
 		//printf("%s\n", line_buffer);
 
-		char* tokens[2048];
+		char tokens[200][200];
 
+		/*
 		char *token;
 
 		token = (char *) strtok_r(sub_line_buffer, " ", &sub_line_buffer);
@@ -1183,6 +1200,21 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 		
 		//printf("%s\n",tokens[0]);
 
+		*/
+	int digit_1;
+
+	if(sub_line_buffer[0] == 'g'){
+	sscanf(sub_line_buffer, "%s %d", tokens[0], &digit_1);
+	}
+
+
+	if(sub_line_buffer[0] == 's'){
+	sscanf(sub_line_buffer, "%s %d",tokens[0], &digit_1);
+	}
+
+	printf("HEREEE !: %s\n", tokens[0]);
+	printf("the line: %s \n", sub_line_buffer);
+
 		if (strcmp(tokens[0],get_string) == 0){
 			printf("Proxy thread %d - type: Subscriber - Executed command: get\n",my_arguments->id);
 			//printf("here now\n");
@@ -1195,23 +1227,23 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 			// getEntry(int lastEntry, struct topicEntry *a_topic_entry, int topic_id){
 			int result;
 			//pthread_mutex_lock(&topic_queue_mutexes[atoi(tokens[1])]);
-			result = getEntry(last_entries[atoi(tokens[1])],&sub_vessel_for_get_entry,atoi(tokens[1]));
+			result = getEntry(last_entries[digit_1],&sub_vessel_for_get_entry,digit_1);
 			//pthread_mutex_unlock(&topic_queue_mutexes[atoi(tokens[1])]);
 			if (result == 1){
-				last_entries[atoi(tokens[1])] += 1;
+				last_entries[digit_1] += 1;
 			}
 			if (result > 1){
-				last_entries[atoi(tokens[1])] += result;
+				last_entries[digit_1] += result;
 			}
 			if (result != 0){
 				printf("GOT THIS URL:%s OF THE TOPIC: %s FROM ENTRYNUM: %d \n",
-				sub_vessel_for_get_entry.photoURL,topic_queues[atoi(tokens[1])].name_of_topic, 
+				sub_vessel_for_get_entry.photoURL,topic_queues[digit_1].name_of_topic, 
 				sub_vessel_for_get_entry.entryNum);
 
-				strcpy(got_topics[got_counter],topic_queues[atoi(tokens[1])].name_of_topic);
+				strcpy(got_topics[got_counter],topic_queues[digit_1].name_of_topic);
 				strcpy(got_urls[got_counter],sub_vessel_for_get_entry.photoURL);
 				strcpy(got_captions[got_counter],sub_vessel_for_get_entry.photoCaption);
-				got_topics_ids[got_counter] = topic_queues[atoi(tokens[1])].topic_id;
+				got_topics_ids[got_counter] = topic_queues[digit_1].topic_id;
 
 /*--------------------------------- write to html -----------------------------------------------------*/
 				htmlfp = fopen(html_file_name, "w+");
@@ -1276,8 +1308,8 @@ void handle_subscriber(char* command_file, struct threadargs* my_arguments){
 		}
 		//printf("%s\n",tokens[0] );
 		if (strcmp(tokens[0],sleep_string) == 0){
-			ts.tv_sec = atoi(tokens[1]) / 1000;
-    		ts.tv_nsec = (atoi(tokens[1]) % 1000) * 1000000;
+			ts.tv_sec = digit_1 / 1000;
+    		ts.tv_nsec = (digit_1 % 1000) * 1000000;
 			printf("Proxy thread %d - type: Subscriber - Executed command: sleep\n",my_arguments->id);
     		nanosleep(&ts, &ts);
     	}
@@ -1594,6 +1626,7 @@ while(continue_parsing){
 	}
 
 	if (line_buffer[num_characters-1] == '\n'){
+		printf("hi\n");
 			line_buffer[num_characters-1] = '\0';
 			num_characters -= 1;
 	}
@@ -1658,6 +1691,9 @@ while(continue_parsing){
 
 	int digit_2;
 
+	char publisher_command_file[200];
+	memset(publisher_command_file, 0, 200);
+
 	if(line_buffer[0] == 'c'){
 	sscanf(line_buffer, "%s %s %d %s %d", tokens[0], tokens[1], &digit_1 ,tokens[2], &digit_2);
 	}
@@ -1710,7 +1746,6 @@ while(continue_parsing){
 						for (int i =0; i< MAXTOPICS; i++){
 							if (topic_queues[i].exists == 1){
 								printf("%s length: %d \n", topic_queues[i].name_of_topic, topic_queues[i].max);
-
 							}
 						}
 
@@ -1728,7 +1763,7 @@ while(continue_parsing){
 						printf("Add subscriber\n");
 						char subscriber_command_file[200];
 						strcpy(subscriber_command_file, tokens[2]);
-						subscriber_command_file[strlen(subscriber_command_file)-1] = '\0';
+						subscriber_command_file[strlen(tokens[2])-1] = '\0';
 						number_of_file_issued_commands += 1;
 						//printf("the file called: %s\n", subscriber_command_file);
 						//printf("strlen: %d \n", (int)strlen(subscriber_command_file));
@@ -1741,7 +1776,7 @@ while(continue_parsing){
 								final_subscriber_command_file[i-1] = subscriber_command_file[i];
 							}
 						}
-						final_subscriber_command_file[strlen(subscriber_command_file)] = '\0';
+						final_subscriber_command_file[strlen(subscriber_command_file)-1] = '\0';
 						//
 						/// this will go into thread function
 						FILE *fp ;
@@ -1764,10 +1799,10 @@ while(continue_parsing){
 					if (strncmp(tokens[1], publishers_string, 4) == 0){
 						
 						printf("Add Publisher\n");
-						char publisher_command_file[200];
 						printf("test1: %s\n", publisher_command_file);
 						strcpy(publisher_command_file, tokens[2]);
-						publisher_command_file[strlen(publisher_command_file)-1] = '\0';
+						printf("test1.2: %s\n", publisher_command_file);
+						publisher_command_file[strlen(tokens[2])-1] = '\0';
 						number_of_file_issued_commands += 1;
 
 						printf("test2: %s\n", publisher_command_file);
@@ -1782,7 +1817,8 @@ while(continue_parsing){
 								final_publisher_command_file[i-1] = publisher_command_file[i];
 							}
 						}
-						final_publisher_command_file[strlen(publisher_command_file)] = '\0';
+						/// whats the deal here *******
+						final_publisher_command_file[strlen(publisher_command_file)-1] = '\0';
 						//
 						printf("test3: %s\n", final_publisher_command_file);
 						
